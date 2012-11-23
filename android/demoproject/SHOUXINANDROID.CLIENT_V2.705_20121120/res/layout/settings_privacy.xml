@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/wallpaper"
+    android:orientation="vertical" >
+
+    <!-- Top Title -->
+
+    <include layout="@layout/topbar" />
+
+    <android.skymobi.messenger.widget.CornerListView
+        android:id="@+id/item_privacy"
+        style="@style/settings_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:layout_marginTop="18dip" >
+    </android.skymobi.messenger.widget.CornerListView>
+    <TextView android:id="@+id/nearuser_tip_off"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="5dip" 
+        android:textColor="#8E8E8E"
+        android:visibility="gone"
+        />
+
+</LinearLayout>

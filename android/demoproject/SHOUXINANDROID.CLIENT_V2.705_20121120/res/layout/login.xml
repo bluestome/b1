@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/wallpaper"
+    android:orientation="vertical" >
+
+    <include layout="@layout/topbar" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingLeft="21dp"
+        android:paddingRight="21dp"
+        android:paddingTop="30dp" >
+
+        <!-- 用户名 -->
+
+        <EditText
+            android:id="@+id/login_username_editor"
+            style="@style/nick_name_editor"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/login_username_hint"
+            android:maxLength="12"
+            android:singleLine="true" />
+
+        <!-- 密码 -->
+
+        <EditText
+            android:id="@+id/login_password_editor"
+            style="@style/nick_name_editor"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/login_password_hint"
+            android:maxLength="12"
+            android:password="true"
+            android:singleLine="true" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:gravity="right" >
+
+            <!-- 忘记密码 -->
+
+            <TextView
+                android:id="@+id/login_find_password"
+                style="@style/forget_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/item_forget"
+                android:text="@string/login_find_password" />
+        </LinearLayout>
+
+        <!-- 登陆 -->
+
+        <Button
+            android:id="@+id/login_login_btn"
+            style="@style/register_free_register"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/green_btn_bg"
+            android:text="@string/register_login" />
+
+        <!-- 免费激活 -->
+        <!--
+        <Button
+            android:id="@+id/login_register_btn"
+            style="@style/register_login"
+            android:layout_width="fill_parent"
+            android:layout_height="50dip"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/gray_btn_bg"
+            android:text="@string/register_free_register" />
+        -->
+    </LinearLayout>
+
+</LinearLayout>

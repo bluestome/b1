@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/nearuser_filter_bg"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/popup_menu"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="@color/popup_menu_divider"
+        android:dividerHeight="@dimen/divider_height"
+        android:fadingEdge="none" >
+    </ListView>
+    <!-- include layout="@layout/popup_menu_list"/ -->
+
+</LinearLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:gravity="center_vertical" >
+
+    <TextView
+        android:id="@+id/contacts_detail_title"
+        style="@style/contacts_detail_edit_editor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="5dp"
+        android:text="@string/contacts_detail_phone" />
+
+    <EditText
+        android:id="@+id/contacts_detail_content"
+        style="@style/contacts_detail_edit_editor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@+id/contacts_detail_third"
+        android:layout_toRightOf="@id/contacts_detail_title"
+        android:background="@drawable/edit_bg"
+        android:digits="0123456789"
+        android:maxLength="15"
+        android:hint="@string/contacts_detail_edit_necessary"
+        android:textColorHint="@color/contact_edit_hint_color"
+        android:inputType="phone"
+        android:singleLine="true" />
+
+    <ImageView
+        android:id="@+id/contacts_detail_third"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/contacts_detail_phone_del_btn_bg" />
+
+</RelativeLayout>

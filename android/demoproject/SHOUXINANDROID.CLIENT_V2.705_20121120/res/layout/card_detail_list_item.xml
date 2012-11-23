@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="42dip" 
+    android:minHeight="42dip"
+	android:gravity="center_vertical">
+	
+    	<TextView 
+    	android:id="@+id/card_detail_item_key"
+    	android:layout_width="0dip"
+    	android:layout_height="wrap_content"
+		style="@style/settings_item_text"
+    	android:singleLine="true"
+    	android:text="@string/card_detail_item_name"
+    	android:layout_weight="1"
+    	android:layout_marginLeft="3dip"
+    	android:layout_marginRight="0dip"
+    	android:layout_marginTop="5dip"
+    	android:layout_marginBottom="5dip"
+    	android:gravity="center"
+    	/> 
+		
+    	<TextView 
+    	android:id="@+id/card_detail_item_value"
+    	android:layout_width="0dip"
+    	android:layout_height="wrap_content"
+ 		style="@style/card_detail_item_name"
+    	android:singleLine="true"
+    	android:text="@string/card_detail_item_name"
+    	android:layout_weight="2"
+    	android:layout_marginLeft="3dip"
+    	android:layout_marginRight="6dip"
+    	android:layout_marginTop="5dip"
+    	android:layout_marginBottom="5dip"
+    	android:gravity="center|left"
+    	/> 
+</LinearLayout>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fastchat_msgs_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/fast_chat_time"
+        style="@style/chat_from_list_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="6dip"
+        android:layout_marginTop="6dip"
+        android:background="@drawable/fastchat_msg_date_bg"
+        android:gravity="center_horizontal" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:baselineAligned="false"
+        android:gravity="center" >
+
+        <LinearLayout
+            android:id="@+id/fastchat_msg_you"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:gravity="right" >
+
+            <ImageView
+                android:id="@+id/fastchat_from_read_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="8dip"
+                android:background="@drawable/fastchat_voice_not_read"
+                android:visibility="gone" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/fastchat_from_content"
+                    style="@style/chat_text"
+                    android:background="@drawable/fastchat_msg_you_bg" />
+
+                <ImageView
+                    android:id="@+id/fastchat_from_voice_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginRight="20dip"
+                    android:background="@drawable/fastchat_from_voice_play" />
+
+                <TextView
+                    android:id="@+id/fastchat_from_voice_length"
+                    style="@style/chat_text"
+                    android:layout_marginLeft="10dip"
+                    android:layout_gravity="center_vertical|left"/>
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fastchat_msg_me"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp" >
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/fastchat_to_content"
+                    style="@style/chat_text"
+                    android:background="@drawable/fastchat_msg_me_bg" />
+
+                <ImageView
+                    android:id="@+id/fastchat_to_voice_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:layout_marginLeft="20dip"
+                    android:background="@drawable/fastchat_to_voice_play" />
+
+                <TextView
+                    android:id="@+id/fastchat_to_voice_length"
+                    style="@style/chat_text"
+                    android:layout_marginRight="10dip"
+                    android:layout_gravity="center_vertical|right" />
+            </FrameLayout>
+
+            <android.skymobi.messenger.widget.fastchat.ClockView
+                android:id="@+id/fastchat_sending_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dip" />
+
+            <ImageView
+                android:id="@+id/fastchat_send_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dip"
+                android:background="@drawable/fastchat_send_failed" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

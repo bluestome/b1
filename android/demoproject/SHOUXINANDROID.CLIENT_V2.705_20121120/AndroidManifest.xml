@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="android.skymobi.messenger"
+    android:installLocation="auto" >
+
+    <!--
+    android:versionName="2.6.3"
+    android:versionCode="2603"
+    -->
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="8" />
+
+    <permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.WRITE_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RAISED_THREAD_PRIORITY" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
+
+    <!-- FreeSky SDK -->
+    <!-- 需要增加的权限-开始 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 结束 -->
+
+    <application
+        android:name=".MainApp"
+        android:icon="@drawable/ic_launcher"
+        android:killAfterRestore="true"
+        android:label="@string/app_name"
+        android:persistent="true"
+        android:theme="@style/app_style" >
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:permission="android.permission.BAIDU_LOCATION_SERVICE" >
+            <intent-filter>
+                <action android:name="com.baidu.location.service_v2.6c" >
+                </action>
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".LaunchActivity"
+            android:alwaysRetainTaskState="true"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.action.CREATE_SHORTCUT" />
+            </intent-filter>
+        </activity>
+
+        <!-- Activation Activity -->
+        <activity
+            android:name=".ui.RegisterActivity"
+            android:alwaysRetainTaskState="true"
+            android:screenOrientation="portrait" />
+
+        <!-- Activate Guide Activity -->
+        <activity
+            android:name=".ui.ActivateGuideActivity"
+            android:alwaysRetainTaskState="true"
+            android:screenOrientation="portrait" />
+
+        <!-- Description Activity -->
+        <activity
+            android:name=".ui.DescriptionActivity"
+            android:alwaysRetainTaskState="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <!-- Set Nice Name Activity -->
+        <activity
+            android:name=".ui.SetNickNameActivity"
+            android:alwaysRetainTaskState="true"
+            android:screenOrientation="portrait" />
+
+        <!-- Login view -->
+        <activity
+            android:name=".ui.LoginActivity"
+            android:alwaysRetainTaskState="true"
+            android:screenOrientation="portrait" />
+        <!-- 主界面 -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!-- Message List View -->
+        <activity
+            android:name=".ui.MessageListActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Contacts List -->
+        <activity
+            android:name=".ui.ContactsListActivity"
+            android:screenOrientation="portrait" />
+        <!-- 添加收件人 -->
+        <activity
+            android:name=".ui.ContactForMessageListActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <!-- 批量删除 -->
+        <activity
+            android:name=".ui.ContactMutilDeleteListActivity"
+            android:screenOrientation="portrait" />
+        <!-- 黑名单 -->
+        <activity
+            android:name=".ui.ContactBlackListActivity"
+            android:screenOrientation="portrait" />
+        <!-- 名片 -->
+        <activity
+            android:name=".ui.VcardListActivity"
+            android:screenOrientation="portrait" />
+        <!-- 黑名单详情 -->
+        <activity
+            android:name=".ui.ContactsBlackListDetailActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Contacts Detail -->
+        <activity
+            android:name=".ui.ContactsDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ContactsStrangerDetailActivity"
+            android:screenOrientation="portrait" />
+        <!-- Contacts New -->
+        <activity
+            android:name=".ui.ContactsDetailEditActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <!-- Find Friend -->
+        <activity
+            android:name=".ui.FindFriendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.FriendDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.FriendStrangerDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.SearchFriendActivity"
+            android:screenOrientation="portrait" />
+        <!-- View Image -->
+        <activity
+            android:name=".ui.ImageViewActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Crop Image -->
+        <activity
+            android:name=".ui.CropImageActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Settings -->
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.FriendListActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <!-- PersonalSettings -->
+        <activity
+            android:name=".ui.PersonalSettingsActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Commit Settings Info -->
+        <activity
+            android:name=".ui.SettingsCommitInfoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible" />
+
+        <!-- Message Notify Settings -->
+        <activity
+            android:name=".ui.SettingsPrivacyActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Message Notify Settings -->
+        <activity
+            android:name=".ui.SettingsMsgNotifyActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Change Password -->
+        <activity
+            android:name=".ui.SettingsChangePasswordActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Restore Contacts -->
+        <activity
+            android:name=".ui.ContactsRestoreActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- List of Restore Contacts -->
+        <activity
+            android:name=".ui.ContactsRestoreListActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Bind Phone Number -->
+        <activity
+            android:name=".ui.SettingsBindActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Traffic -->
+        <activity
+            android:name=".ui.SettingsTrafficActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- About -->
+        <activity
+            android:name=".ui.AboutActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Group Sending Contacts -->
+        <activity
+            android:name=".ui.ContactsGroupSendActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- ChatActivity -->
+        <activity
+            android:name=".ui.ChatActivity"
+            android:configChanges="keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.PickPhraseActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Card Detail Activity -->
+        <activity
+            android:name=".ui.CardDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.NearUserActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <!-- MessageListMultiDelete Activity -->
+        <activity
+            android:name=".ui.MessageMultiDeleteListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.TopActivity"
+            android:screenOrientation="portrait" />
+        <!-- Help Activity -->
+        <activity
+            android:name=".ui.HelpActivity"
+            android:screenOrientation="portrait" />
+        <!-- quick chat -->
+        <activity
+            android:name=".ui.FastChatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.TestFastChatActivity"
+            android:screenOrientation="portrait" />
+        <!--
+        <provider
+            android:name=".provider.SocialMessengerProvider"
+            android:authorities="com.skymobi.android.messenger" />
+        -->
+        <!-- Core Service -->
+        <service android:name=".service.LifeService" />
+
+        <!-- Device Boot completed receiver -->
+        <receiver android:name=".broadcast.DeviceBootReceiver" >
+            <intent-filter android:priority="2147483647" >
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
+        <!-- FreeSky SDK Begin-->
+        <service android:name="com.skymobi.freesky.service.FsSdkService"></service>
+        
+        <receiver android:name="com.skymobi.freesky.basic.BasicReceiver">
+          	<intent-filter>
+          		<action android:name="FREESKY_SDK_MID_BROADCAST"/>
+          	</intent-filter>
+ 		</receiver>
+ 		
+        <receiver android:name="com.skymobi.fsutil.cmmn.CmmnNet">
+          	<intent-filter>
+          		<action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+          	</intent-filter>           
+ 		</receiver>
+        
+         <!-- FreeSky SDK End-->
+        
+        <!-- 结束 -->
+        <!--  -->
+        <!-- <meta-data android:value="false" android:name="isAccess"></meta-data> -->
+        <meta-data
+            android:name="isDebug"
+            android:value="true" >
+        </meta-data>
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="4f9a31d45270156a8e000029" >
+        </meta-data>
+
+        <!-- must be one line -->
+        <meta-data  android:name="UMENG_CHANNEL" android:value="5000" /> 
+        <meta-data  android:name="SKYMOBI_CHANNEL" android:value="5000" />
+    </application>
+
+</manifest>

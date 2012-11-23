@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/wallpaper" >
+
+    <!-- Top Title -->
+
+    <include layout="@layout/topbar" />
+
+    <!-- 详情 -->
+
+    <ScrollView
+        android:id="@+id/contacts_detail_scrollview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/top_bar"
+        android:fadingEdge="none"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="10dp" >
+
+            <!-- 头像栏显示区 -->
+
+            <LinearLayout
+                android:id="@+id/contacts_detail_header_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal" >
+
+                <!-- 头像 -->
+
+                <ImageView
+                    android:id="@+id/contacts_detail_head"
+                    android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:background="@drawable/default_head_bg" />
+
+                <LinearLayout
+                     android:id="@+id/contact_header_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:orientation="vertical" >
+
+                    <!-- 昵称 -->
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            android:id="@+id/contacts_detail_nick_name"
+                            style="@style/contacts_detail_shouxin_nick"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <ImageView
+                            android:id="@+id/contacts_detail_sex_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/male" />
+                    </LinearLayout>
+                    <!-- 手信号 -->
+
+                    <TextView
+                        android:id="@+id/contacts_detail_name"
+                        style="@style/contacts_detail_shouxin_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 推荐理由 -->
+
+            <LinearLayout
+                android:id="@+id/friend_recommend_reason"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/pop_backgroud"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:visibility="gone" >
+
+                <TextView
+                    android:id="@+id/friend_recommend_item"
+                    style="@style/friend_reason"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/friend_reason" />
+
+                <TextView
+                    android:id="@+id/friend_recommend_detail"
+                    style="@style/friend_recommend_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dip" />
+            </LinearLayout>
+
+            <!-- 手机联系人详情 -->
+
+            <LinearLayout
+                android:id="@+id/contacts_detail_local"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/contacts_detail_four_corners_bg"
+                android:orientation="vertical" />
+
+            <!-- 打电话 发短信 -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:layout_marginRight="13dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+
+                    <!-- 打电话 -->
+
+                    <FrameLayout
+                        android:id="@+id/contacts_detail_call_layout"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1" >
+
+                        <Button
+                            android:id="@+id/contacts_detail_call"
+                            android:layout_width="fill_parent"
+                            android:layout_height="50dip"
+                            android:background="@drawable/green_btn_bg" />
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_gravity="center"
+                            android:gravity="center" >
+
+                            <ImageView
+                                android:id="@+id/contacts_detail_call_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/contacts_detail_call_normal" />
+
+                            <TextView
+                                android:id="@+id/contacts_detail_call_text"
+                                style="@style/contacts_detail_shouxin_send_message"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="@string/contacts_detail_call" />
+                        </LinearLayout>
+                    </FrameLayout>
+
+                    <!-- 发消息 -->
+
+                    <FrameLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" >
+
+                        <Button
+                            android:id="@+id/contacts_detail_send_message"
+                            android:layout_width="fill_parent"
+                            android:layout_height="50dip"
+                            android:background="@drawable/green_btn_bg"
+                            android:textColor="@color/contacts_detail_btn_color" />
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_gravity="center"
+                            android:gravity="center" >
+
+                            <ImageView
+                                android:id="@+id/contacts_detail_send_message_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/contacts_detail_message_normal" />
+
+                            <TextView
+                                android:id="@+id/contacts_detail_send_message_text"
+                                style="@style/contacts_detail_shouxin_send_message"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="@string/contacts_detail_send_message" />
+                        </LinearLayout>
+                    </FrameLayout>
+                </LinearLayout>
+
+                <!-- 发送名片/ 删除 -->
+
+                <LinearLayout
+                    android:id="@+id/contacts_detail_3in1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/contacts_detail_3in1_bg"
+                    android:gravity="center"
+                    android:padding="0dip" >
+
+                    <!-- 发送名片 -->
+
+                    <LinearLayout
+                        android:id="@+id/contacts_detail_send_vcard"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@drawable/contacts_detail_3in1_btn_bg"
+                        android:gravity="center"
+                        android:orientation="vertical" >
+
+                        <ImageView
+                            android:id="@+id/contacts_detail_send_vcard_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/contacts_detail_vcard_normal" />
+
+                        <TextView
+                            style="@style/contacts_detail_shouxin_send_vcard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/contacts_detail_send_card" />
+                    </LinearLayout>
+
+                    <include
+                        android:layout_gravity="left"
+                        layout="@layout/contacts_detail_item_separator_horizontal" />
+                    <!-- 添加联系人 -->
+
+                    <LinearLayout
+                        android:id="@+id/friend_detail_add"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@drawable/contacts_detail_3in1_btn_bg"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="0dip"
+                        android:visibility="gone" >
+
+                        <ImageView
+                            android:id="@+id/contacts_detail_add_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/contacts_detail_add_normal" />
+
+                        <TextView
+                            style="@style/contacts_detail_shouxin_send_vcard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/friend_add_contact" />
+                    </LinearLayout>
+
+                    <!-- 删除 -->
+
+                    <LinearLayout
+                        android:id="@+id/contacts_detail_delete"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@drawable/contacts_detail_3in1_btn_bg"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="0dip" >
+
+                        <ImageView
+                            android:id="@+id/contacts_detail_delete_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/contacts_detail_delete_normal" />
+
+                        <TextView
+                            style="@style/contacts_detail_shouxin_send_vcard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/contacts_detail_delete" />
+                    </LinearLayout>
+                    <!-- 加入黑名单 -->
+
+                    <include
+                        android:layout_gravity="left"
+                        layout="@layout/contacts_detail_item_separator_horizontal" />
+
+                    <LinearLayout
+                        android:id="@+id/contacts_detail_blacklist"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@drawable/contacts_detail_3in1_btn_bg"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="0dip" >
+
+                        <ImageView
+                            android:id="@+id/contacts_detail_blacklist_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/contacts_detail_black_remove" />
+
+                        <TextView
+                            android:id="@+id/contacts_detail_blacklist_remove"
+                            style="@style/contacts_detail_shouxin_send_vcard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/contacts_detail_blacklist" />
+                    </LinearLayout>
+                    <!-- 邀请 -->
+
+                    <LinearLayout
+                        android:id="@+id/contacts_detail_invite"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@drawable/contacts_detail_3in1_btn_bg"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="0dip" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/contacts_detail_invite_normal" />
+
+                        <TextView
+                            style="@style/contacts_detail_shouxin_send_vcard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/contacts_detail_invite" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 手信联系人信息 -->
+
+            <LinearLayout
+                android:id="@+id/contacts_detail_shouxin"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:paddingBottom="10dp" >
+
+                <!-- 签名 -->
+
+                <LinearLayout
+                    android:id="@+id/contacts_detail_shouxin_signature"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/contacts_detail_four_corners_bg"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/contacts_detail_signature_title"
+                        style="@style/contacts_detail_local_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/contacts_detail_signature_title" />
+
+                    <TextView
+                        android:id="@+id/contacts_detail_signature_content"
+                        style="@style/contacts_detail_local_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <!-- 姓名 -->
+
+                <LinearLayout
+                    android:id="@+id/contacts_detail_shouxin_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/contacts_detail_four_corners_bg"
+                    android:orientation="vertical" />
+
+                <!-- 号码 -->
+
+                <LinearLayout
+                    android:id="@+id/contacts_detail_shouxin_account"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/contacts_detail_four_corners_bg"
+                    android:orientation="vertical" />
+
+                <!-- 生日 -->
+
+                <LinearLayout
+                    android:id="@+id/contacts_detail_shouxin_birthday"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/contacts_detail_four_corners_bg"
+                    android:orientation="vertical" />
+
+                <!-- 手信详情END -->
+            </LinearLayout>
+
+            <!-- END -->
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

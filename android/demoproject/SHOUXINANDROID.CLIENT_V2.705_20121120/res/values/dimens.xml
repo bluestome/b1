@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="findfriend_item_textSize">15.0sp</dimen>
+    <!-- topbar -->
+    <dimen name="popup_menu_width">150.0dip</dimen>
+    <dimen name="divider_height">1.0px</dimen>
+    <dimen name="popup_menu_item_height">40.0dip</dimen>
+    
+    <dimen name="popup_menu_right_xoff">5.0dip</dimen>
+    <dimen name="popup_menu_right_yoff">2.0dip</dimen>
+    
+    <dimen name="popup_menu_left_xoff">20.0dip</dimen>
+    <dimen name="popup_menu_left_yoff">11.0dip</dimen>
+    <dimen name="popup_menu_left_offest">13.0dip</dimen>
+    <dimen name="popup_menu_right_offest">35.0dip</dimen>
+</resources>

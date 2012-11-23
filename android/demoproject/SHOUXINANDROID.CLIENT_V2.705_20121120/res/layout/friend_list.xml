@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/wallpaper" >
+
+	<!-- Top Title -->
+    <include layout="@layout/topbar" />
+	
+    <!--可能认识的人列表 -->
+    <ListView
+        android:id="@+id/friend_listview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/top_bar"
+        android:choiceMode="singleChoice"
+		android:cacheColorHint="#00000000"
+        android:divider="@color/message_list_separate"
+        android:dividerHeight="1.0px"
+        android:fadingEdge="none"
+        android:fastScrollEnabled="true"
+        android:smoothScrollbar="true"
+        android:clickable="true">
+    </ListView>
+
+    <RelativeLayout
+        android:id="@+id/friend_null_listview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/top_bar"
+        android:layout_marginTop="40dip"
+        android:visibility="gone" >
+
+        <TextView
+            style="@style/friend_null_listview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/friend_null_listview" />
+    </RelativeLayout>
+
+</RelativeLayout>

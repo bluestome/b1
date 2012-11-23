@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/search_input_bg">
+
+    <EditText
+        android:id="@+id/contacts_list_item_search"
+        android:layout_width="fill_parent"
+        android:layout_height="35dip"
+		style="@style/contacts_search_input"
+        android:paddingLeft="10dip"
+        android:layout_marginTop="10dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="30dip"
+        android:layout_marginBottom="10dip"
+        android:hint="@string/contacts_list_search_hint"
+        android:drawableLeft="@drawable/search_icon"
+        android:drawablePadding="10dip"
+        android:background="@drawable/search_input"
+        android:inputType="textEmailAddress"/>
+</LinearLayout>

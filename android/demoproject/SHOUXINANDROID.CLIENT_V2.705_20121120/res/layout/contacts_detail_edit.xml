@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/wallpaper"
+    android:focusable="true"
+    android:focusableInTouchMode="true" >
+
+    <!-- Top Title -->
+
+    <include layout="@layout/topbar" />
+
+    <!-- 详情 -->
+
+    <ScrollView
+        android:id="@+id/contacts_detail_scrollview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/contacts_detail_edit_opt_layout"
+        android:layout_below="@+id/top_bar"
+        android:fadingEdge="none" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <!-- 头像栏显示区 -->
+
+            <LinearLayout
+                android:id="@+id/contacts_detail_header_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <!-- 头像 -->
+
+                <ImageView
+                    android:id="@+id/contacts_detail_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/default_head_bg" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:orientation="vertical" >
+
+                    <!-- 昵称 -->
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            android:id="@+id/contacts_detail_nick_name"
+                            style="@style/contacts_detail_shouxin_nick"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <ImageView
+                            android:id="@+id/contacts_detail_sex_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/male" />
+                    </LinearLayout>
+                    <!-- 手信号 -->
+
+                    <TextView
+                        android:id="@+id/contacts_detail_shouxin_name"
+                        style="@style/contacts_detail_shouxin_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+            <!-- 头像结束 -->
+
+
+            <!-- 姓名 备注 -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/contacts_detail_four_corners_bg"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="10dp" >
+
+                <!-- 姓名 -->
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        android:id="@+id/contacts_detail_name"
+                        style="@style/contacts_detail_edit_editor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/contacts_detail_name" />
+
+                    <EditText
+                        android:id="@+id/contacts_detail_name_editor"
+                        style="@style/contacts_detail_edit_editor"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/contacts_detail_name"
+                        android:background="@drawable/edit_bg"
+                        android:hint="@string/contacts_detail_edit_necessary"
+                        android:singleLine="true"
+                        android:maxLength="35"
+                        android:textColorHint="@color/contact_edit_hint_color" />
+                </RelativeLayout>
+                <!-- 备注 -->
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        android:id="@+id/contacts_detail_note"
+                        style="@style/contacts_detail_edit_editor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/contacts_detail_note" />
+
+                    <EditText
+                        android:id="@+id/contacts_detail_note_editor"
+                        style="@style/contacts_detail_edit_editor"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/contacts_detail_note"
+                        android:background="@drawable/edit_bg"
+                        android:singleLine="true" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!-- 电话 -->
+
+            <LinearLayout
+                android:id="@+id/contacts_detail_phones"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/contacts_detail_four_corners_bg"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="10dp" >
+
+                <RelativeLayout
+                    android:id="@+id/contacts_detail_edit_first_phone"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        android:id="@+id/contacts_detail_title"
+                        style="@style/contacts_detail_edit_editor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/contacts_detail_phone" />
+
+                    <EditText
+                        android:id="@+id/contacts_detail_content"
+                        style="@style/contacts_detail_edit_editor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginTop="5dp"
+                        android:layout_toLeftOf="@+id/contacts_detail_edit_del"
+                        android:layout_toRightOf="@id/contacts_detail_title"
+                        android:background="@drawable/edit_bg"
+                        android:digits="0123456789"
+                        android:maxLength="15"
+                        android:hint="@string/contacts_detail_edit_necessary"
+                        android:inputType="phone"
+                        android:singleLine="true"
+                        android:textColorHint="@color/contact_edit_hint_color" />
+
+                    <ImageView
+                        android:id="@+id/contacts_detail_edit_del"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/contacts_detail_phone_del_btn_bg" />
+                </RelativeLayout>
+            </LinearLayout>
+            <!-- 添加电话 -->
+
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1" >
+
+                <Button
+                    android:id="@+id/contacts_detail_edit_addphone"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/green_btn_bg" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/contacts_detail_phone_new" />
+
+                    <TextView
+                        style="@style/confirm_button_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/contacts_detail_edit_addphone" />
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

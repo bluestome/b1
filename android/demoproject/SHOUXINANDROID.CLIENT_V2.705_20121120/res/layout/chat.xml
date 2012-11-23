@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/chat_bg"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:id="@+id/first_chat_guide"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/first_chat_guide" />
+
+            <Button
+                android:id="@+id/first_chat_guide_btn"
+                android:layout_width="150dip"
+                android:layout_height="80dip"
+                android:layout_gravity="right|bottom"
+                android:background="@color/transparent" />
+        </FrameLayout>
+        <!-- top bar -->
+
+        <include layout="@layout/topbar" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0.0dip"
+            android:layout_weight="1.0"
+            android:orientation="vertical" >
+
+            <ProgressBar
+                android:id="@+id/chat_progressbar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <include layout="@layout/chat_listview" />
+        </LinearLayout>
+        <!-- input bar layout -->
+
+        <include layout="@layout/chat_input_bar" />
+        <!-- smiley input layout -->
+
+
+        <!-- <include layout="@layout/chat_smiley_input" /> -->
+
+        <LinearLayout
+            android:id="@+id/chatting_app_panel"
+            android:layout_width="fill_parent"
+            android:layout_height="200.0dip"
+            android:background="@color/smiley_panel_bg"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/smiley_panel_bg_divider" />
+
+            <GridView
+                android:id="@+id/chatting_app_grid"
+                android:layout_width="fill_parent"
+                android:layout_height="0.0dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="15dip"
+                android:layout_weight="1.0"
+                android:cacheColorHint="#00000000"
+                android:fadingEdgeLength="0.0dip"
+                android:gravity="center_horizontal"
+                android:listSelector="@drawable/trans"
+                android:numColumns="4" />
+        </LinearLayout>
+
+        <android.skymobi.messenger.ui.chat.SmileyPanel
+            android:id="@+id/chatting_smiley_panel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/chat_hhalf_board"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/hhalftransparent"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:visibility="gone" >
+    </LinearLayout>
+
+</FrameLayout>

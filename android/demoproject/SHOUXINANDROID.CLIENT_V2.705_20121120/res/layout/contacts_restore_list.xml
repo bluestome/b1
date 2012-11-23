@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/wallpaper" >
+
+    <!-- Top Title -->
+    <include layout="@layout/topbar" />
+    
+    <!-- 恢复说明 -->
+    <TextView
+        android:id="@+id/restore_tip"
+        style="@style/contacts_restore_tip"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"        
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_below="@+id/top_bar"
+        android:background="@color/contacs_restore_list_tip" />
+    
+    <!-- 联系人列表 -->
+    <ListView
+        android:id="@+id/contacts_listview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/restore_tip"
+        android:layout_above="@+id/restore_restore_buttons"
+        android:cacheColorHint="#00000000"
+        android:divider="@color/message_list_separate"
+        android:dividerHeight="0dp"
+        android:fadingEdgeLength="2px" >        
+    </ListView>
+    
+    
+    <!-- 恢复/全选按钮 -->
+    <LinearLayout
+        android:id="@+id/restore_restore_buttons"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/maintab_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="5dip" >
+
+        <Button
+            android:id="@+id/restore_restore_btn"
+            style="@style/list_delete_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/contacts_edit_save_btn_bg"
+            android:gravity="center"
+            android:enabled="false"
+            android:text="@string/restore_restore" />
+
+        <Button
+            android:id="@+id/restore_selectall_btn"
+            style="@style/list_delete_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/contacts_edit_save_btn_bg"
+            android:gravity="center"
+            android:text="@string/contacts_select_all_contacts" />
+    </LinearLayout>
+
+
+</RelativeLayout>

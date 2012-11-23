@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:id="@+id/network_status"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_bar"
+        android:background="@drawable/net_status_bg"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dip"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/net_status_iv"
+            android:layout_width="20dip"
+            android:layout_height="20dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/net_unconnect" />
+
+        <ProgressBar
+            android:id="@+id/net_progressbar"
+            android:layout_width="20dip"
+            android:layout_height="20dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:indeterminateDrawable="@drawable/net_processbar_bg" />
+
+        <TextView
+            android:id="@+id/net_status_tv"
+            style="@style/network_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/net_reconnect" />
+    </LinearLayout>
+
+</merge>

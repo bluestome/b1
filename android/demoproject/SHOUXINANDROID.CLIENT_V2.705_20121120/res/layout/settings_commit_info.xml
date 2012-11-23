@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/wallpaper"
+    android:orientation="vertical" >
+    
+    <!-- Top Title -->
+    <include layout="@layout/topbar" />
+    <EditText
+        android:id="@+id/settings_info_editor"
+        style="@style/change_password_editor"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dip"
+        android:layout_marginLeft="28dip"
+        android:layout_marginRight="28dip"
+        android:background="@drawable/edit_bg"
+        android:gravity="top|left" 
+        android:minLines="3"
+        android:maxLines="8"/>
+
+    <!-- 
+    <Button
+        android:id="@+id/settings_commit_btn"
+        style="@style/settings_commit_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"        
+        android:layout_marginTop="18dip"
+        android:layout_marginLeft="28dip"
+        android:layout_marginRight="28dip"
+        android:text="@string/settings_commit"
+        android:background="@drawable/green_btn_bg" />
+     -->     
+</LinearLayout>

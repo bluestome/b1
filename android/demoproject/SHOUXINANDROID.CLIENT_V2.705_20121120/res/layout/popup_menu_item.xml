@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/popup_menu_item_bg"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="3.0dip" >
+
+    <TextView
+        android:id="@+id/popup_menu_item"
+        style="@style/popupmenu_item_textview"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/popup_menu_item_height"
+        android:gravity="center" />
+
+</LinearLayout>

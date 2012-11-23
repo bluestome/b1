@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/phrase_list_item_bg"
+    android:gravity="center_vertical"
+    android:orientation="horizontal" 
+    android:baselineAligned="false">
+
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0"
+        android:padding="10dp" >
+        <TextView
+            android:id="@+id/pick_phrase"
+            style="@style/pick_phrase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pick_phrase_default"
+            android:lineSpacingExtra="2.0dip" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp" >
+
+        <Button
+            android:id="@+id/pick_phrase_btn"
+            style="@style/pick_phrase_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="34dip"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="7.0dip"
+            android:background="@drawable/gray_btn_bg"
+            android:gravity="center"
+            android:text="@string/pick_phrase_btn" />
+    </RelativeLayout>
+
+</LinearLayout>

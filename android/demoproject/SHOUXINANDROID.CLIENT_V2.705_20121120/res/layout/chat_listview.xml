@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <android.skymobi.messenger.widget.ChatListView
+            android:id="@+id/chat_listview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@null"
+            android:stackFromBottom="true"
+            android:fadingEdge="none"
+            android:fastScrollEnabled="true"
+            android:listSelector="@android:color/transparent"
+        	android:smoothScrollbar="true"
+            />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@null" >
+
+            <TextView
+                android:id="@+id/speaker_mode_toast"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:background="@color/halftransparent"
+                android:gravity="center_horizontal"
+                android:padding="3.0dip"
+                android:textColor="@color/white"
+                android:textSize="20dip"
+                android:textStyle="bold"
+                android:visibility="gone" />
+            
+            <TextView
+                android:id="@+id/blacklist_toast"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:background="@color/halftransparent"
+                android:gravity="center_horizontal"
+                android:padding="3.0dip"
+                android:textColor="@color/white"
+                android:textSize="18dip"
+                android:textStyle="bold"
+                android:visibility="gone" />
+        </RelativeLayout>
+        <include layout="@layout/chat_input_select"/>
+        <include layout="@layout/chat_record_board"/>"
+    </FrameLayout>
+
+</merge>

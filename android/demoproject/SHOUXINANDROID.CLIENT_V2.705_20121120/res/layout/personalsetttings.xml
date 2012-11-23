@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/wallpaper"
+    android:orientation="vertical" >
+
+    <!-- Top Title -->
+
+    <include layout="@layout/topbar" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fadingEdge="none"
+        android:fillViewport="true" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <!-- 头像 -->
+
+            <android.skymobi.messenger.widget.CornerListView
+                android:id="@+id/item_setheadphoto"
+                style="@style/settings_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginRight="10.0dip"
+                android:layout_marginTop="13dip"
+                android:scrollbars="none" >
+            </android.skymobi.messenger.widget.CornerListView>
+
+            <!-- 昵称&性别 -->
+
+            <android.skymobi.messenger.widget.CornerListView
+                android:id="@+id/item_nickname_sex"
+                style="@style/settings_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginRight="10.0dip"
+                android:layout_marginTop="8dip" >
+            </android.skymobi.messenger.widget.CornerListView>
+
+            <!-- 其它 -->
+
+            <android.skymobi.messenger.widget.CornerListView
+                android:id="@+id/item_otherinfo"
+                style="@style/settings_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginRight="10.0dip"
+                android:layout_marginTop="8dip" >
+            </android.skymobi.messenger.widget.CornerListView>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

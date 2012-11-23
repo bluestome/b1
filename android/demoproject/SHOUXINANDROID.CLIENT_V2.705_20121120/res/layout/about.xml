@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/wallpaper"
+    android:orientation="vertical" >
+    
+    <!-- Top Title -->
+    <include layout="@layout/topbar" />
+    
+    <LinearLayout
+        android:id="@+id/layout_new_version"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"         
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="18dip"
+        android:paddingLeft="13dip"
+        android:paddingRight="8dip"
+        android:paddingTop="13dip"
+        android:paddingBottom="10dip"
+        android:background="@drawable/corner_list_item_single_normal">
+        
+        <LinearLayout
+            android:id="@+id/layout_newVersion_display"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/about_new_version"
+                android:text="@string/new_version" />
+            <TextView
+                android:id="@+id/text_new_version"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                style="@style/about_new_version_num"
+                android:layout_weight="1.0" />
+
+            <TextView
+                android:id="@+id/text_file_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/about_file_size" />
+        </LinearLayout>
+        
+        <Button
+            android:id="@+id/settings_update_btn"
+            style="@style/settings_commit_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/green_btn_bg"
+            android:text="@string/update" />
+        <Button android:id="@+id/settings_check_btn"
+            style="@style/settings_commit_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/green_btn_bg"
+            android:text="@string/app_check"
+            android:visibility="gone"/>
+    </LinearLayout>
+    <!-- 当前版本 -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"
+        android:layout_marginTop="25dip"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/about_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cur_version" />
+        
+        <TextView
+            android:id="@+id/text_cur_version_number"
+            style="@style/about_cur_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    
+    <!-- 客服邮箱 -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"
+        android:layout_marginTop="10dip"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/about_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/customer_service_email" />
+        
+        <TextView
+            android:id="@+id/text_cs_email"
+            style="@style/about_cur_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/customer_service_email_value" />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"
+        android:layout_marginBottom="10dip">
+        <TextView
+            style="@style/about_corp_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/corporation" />
+    </RelativeLayout>
+            
+</LinearLayout>

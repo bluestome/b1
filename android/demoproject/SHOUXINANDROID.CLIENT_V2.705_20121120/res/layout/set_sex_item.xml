@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="42dip" 
+    android:minHeight="42dip">
+    
+    <TextView
+        android:id="@+id/text_setheadphoto"
+        style="@style/personalsettings_item_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="13.0dip"
+        android:text="@string/settings_sex"/>
+
+    <RadioGroup
+        android:id="@+id/radiogroup_setsex"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15.0dip"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/text_male"
+            style="@style/settings_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/settings_male" />
+
+        <RadioButton
+            android:id="@+id/radiomale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15.0dip"
+            android:layout_weight="1.0"
+            android:button="@drawable/radiobutton_bg"/>
+
+        <TextView
+            android:id="@+id/text_female"
+            style="@style/settings_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/settings_female" />
+        
+        <RadioButton
+            android:id="@+id/radiofemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15.0dip"
+            android:button="@drawable/radiobutton_bg"/>
+    </RadioGroup>
+
+</LinearLayout>

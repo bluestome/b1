@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+
+	<property name="module.name" value="手信" />
+	<property name="module.version" value="2705" />
+	<property name="module.versionName" value = "2.7.05(beta)"/>
+	<!-- The local.properties file is created and updated by the 'android' tool.
+         It contains the path to the SDK. It should *NOT* be checked into
+         Version Control Systems. -->
+	<property file="local.properties" />
+
+	<!-- The ant.properties file can be created by you. It is only edited by the
+         'android' tool to add properties to it.
+         This is the place to change some Ant specific build properties.
+         Here are some properties you may want to change/update:
+
+         source.dir
+             The name of the source directory. Default is 'src'.
+         out.dir
+             The name of the output directory. Default is 'bin'.
+
+         For other overridable properties, look at the beginning of the rules
+         files in the SDK, at tools/ant/build.xml
+
+         Properties related to the SDK location or the project target should
+         be updated using the 'android' tool with the 'update' action.
+
+         This file is an integral part of the build system for your
+         application and should be checked into Version Control Systems.
+
+         -->
+	<property file="ant.properties" />
+
+	<!-- The project.properties file is created and updated by the 'android'
+         tool, as well as ADT.
+
+         This contains project specific properties such as project target, and library
+         dependencies. Lower level build properties are stored in ant.properties
+         (or in .classpath for Eclipse projects).
+
+         This file is an integral part of the build system for your
+         application and should be checked into Version Control Systems. -->
+	<loadproperties srcFile="project.properties" />
+
+	<!-- quick check on sdk.dir -->
+	<fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through an env var" unless="sdk.dir" />
+
+	<!-- hudson properties -->
+	<property environment="env" />
+	<tstamp prefix="build.">
+		<format property="timeStamp" pattern="yyyyMMdd-HHmmss" />
+	</tstamp>
+
+	<target name="hudson-dist-revision" if="env.SVN_REVISION">
+		<property name="dist.revision" value="${env.SVN_REVISION}" />
+	</target>
+
+	<target name="default-dist-revision" unless="env.SVN_REVISION">
+		<property name="dist.revision" value="unformal" />
+	</target>
+
+	<target name="hudson-dist-build-number" if="env.BUILD_NUMBER">
+		<property name="dist.build.number" value="${env.BUILD_NUMBER}" />
+	</target>
+
+	<target name="default-dist-build-number" unless="env.BUILD_NUMBER">
+		<property name="dist.build.number" value="unknown" />
+	</target>
+
+	<target name="hudson-dist-build-id" if="env.BUILD_ID">
+		<property name="dist.build.id" value="${env.BUILD_ID}" />
+	</target>
+
+	<target name="default-dist-build-id" unless="env.BUILD_ID">
+		<property name="dist.build.id" value="${build.timeStamp}" />
+	</target>
+
+	<target name="-prefix-release-name" if="projectName">
+		<property
+            name="ant.project.name"
+            value="${module.name}-${module.version}-${module.versionName}-${dist.build.id}-scm-${dist.revision}-[${projectName}]" />
+	</target>
+	
+	<target name="-prefix-default-release-name" unless="projectName">
+		<property
+            name="ant.project.name"
+            value="${module.name}-${module.version}-${module.versionName}-${dist.build.id}-scm-${dist.revision}" />
+	</target>
+	
+	<target name="-pre-build" depends="hudson-dist-revision
+		                ,default-dist-revision
+		                ,hudson-dist-build-number
+		                ,default-dist-build-number
+		                ,hudson-dist-build-id
+		                ,default-dist-build-id
+		                ,-prefix-default-release-name
+						,-prefix-release-name
+		    	">
+		<echo> versionName: ${version.name} </echo>
+		<!-- change AndroidManifest.xml 
+		<replaceregexp file="AndroidManifest.xml" 
+				 	match="android:versionCode=&quot;(.*)&quot;"
+					replace="android:versionCode=&quot;${versionCode}&quot;"
+					byline="false"/>
+
+		<replaceregexp file="AndroidManifest.xml"
+				 	match="android.versionName=&quot;(.*)&quot;"
+					replace="android.versionName=&quot;${versionCode}&quot;"
+					byline="false"/>-->
+	</target>
+
+	<!-- extension targets. Uncomment the ones where you want to do custom work
+     in between standard targets -->
+	<!--
+    <target name="-pre-build">
+    </target>
+    <target name="-pre-compile">
+    </target>
+
+    /* This is typically used for code obfuscation.
+       Compiled code location: ${out.classes.absolute.dir}
+       If this is not done in place, override ${out.dex.input.absolute.dir} */
+    <target name="-post-compile">
+    </target>
+	-->
+
+	<!-- Import the actual build file.
+
+         To customize existing targets, there are two options:
+         - Customize only one target:
+             - copy/paste the target into this file, *before* the
+               <import> task.
+             - customize it to your needs.
+         - Customize the whole content of build.xml
+             - copy/paste the content of the rules files (minus the top node)
+               into this file, replacing the <import> task.
+             - customize to your needs.
+
+         ***********************
+         ****** IMPORTANT ******
+         ***********************
+         In all cases you must update the value of version-tag below to read 'custom' instead of an integer,
+         in order to avoid having your file be overridden by tools such as "android update project"
+    -->
+	<!-- version-tag: 1 -->
+	<!-- env.BUILD_ID}-${env.BUILD_NUMBER -->
+	<property name="version.code" value="${module.version}" />
+	<property name="version.name" value="${module.versionName}"/>
+	<import file="${sdk.dir}/tools/ant/build.xml" />
+
+	<target name="initAntContrib">
+        <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+    </target>
+
+    <target name="build-muliti-apk" depends="clean,initAntContrib">
+        <foreach
+            list="${params}"
+            param="projectName"
+            delimiter=";"
+            target="build-one-project" >
+        </foreach>
+    </target>
+   
+    <target name="build-one-project" >
+         <echo>build project: ${projectName}</echo>
+         <propertyregex  property="channel_id" input="${projectName}" regexp="(.*)," select="\1"/>
+         <propertyregex  property="channel_string_id" input="${projectName}" regexp=",(.*)" select="\1"/>
+         <echo>${channel_id}</echo>
+         <echo>${channel_string_id}</echo>
+         <replaceregexp file="assets/skymobi_a"
+             match="(.*)"
+             replace="${channel_string_id}"
+             byline="true"
+             encoding="UTF-8"
+             />
+		 <replaceregexp
+            file="AndroidManifest.xml"
+            match="android:name=&quot;UMENG_CHANNEL&quot; android:value=&quot;(.*)&quot;" 
+            replace="android:name=&quot;UMENG_CHANNEL&quot; android:value=&quot;${channel_id}&quot;"
+            byline="true"
+            encoding="UTF-8"/>
+		 <replaceregexp
+            file="AndroidManifest.xml"
+            match="android:name=&quot;SKYMOBI_CHANNEL&quot; android:value=&quot;(.*)&quot;" 
+            replace="android:name=&quot;SKYMOBI_CHANNEL&quot; android:value=&quot;${channel_id}&quot;"
+            byline="true"
+            encoding="UTF-8"/>
+         <antcall target="release"/>
+    </target>
+</project>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="13dip"
+    android:paddingRight="8dip" >
+    
+    <TextView
+        android:id="@+id/text_traffic_name"
+        style="@style/personalsettings_item_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0" />
+
+    <TextView
+        android:id="@+id/text_traffic_value"
+        style="@style/settings_item_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

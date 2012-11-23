@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/wallpaper"
+    android:orientation="vertical" >
+
+    <!-- Top Title -->
+
+    <include layout="@layout/topbar" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="14dip"
+        android:src="@drawable/contacts_restore_direction" />
+
+    <Button
+        android:id="@+id/contacts_restore_btn"
+        style="@style/settings_commit_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="13dip"
+        android:layout_marginRight="13dip"
+        android:layout_marginTop="27dip"
+        android:background="@drawable/green_btn_bg"
+        android:text="@string/restore_restore" />
+
+</LinearLayout>

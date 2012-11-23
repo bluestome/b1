@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Global -->
+    <string name="app_name">手信</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="about">关于</string>
+    <string name="tip">提示</string>
+    <string name="iknow">我知道了</string>
+    <string name="save">保存</string>
+    <string name="quit_msg">退出手信后是否在后台接收消息？</string>
+    <string name="quit_ok">接收</string>
+    <string name="quit_cancel">不接收</string>
+    <string name="logout_dialog_msg">你确定要注销帐号 %1$s吗？</string>
+    <string name="logout_fail">注销失败，请检查网络</string>
+    <string name="logout_success">注销成功</string>
+    <string name="ticketout">帐号已在别处登录，请检查帐号安全或重新登录</string>
+    <string name="send_sms_again">重发</string>
+    <string name="network_error">联网失败，请检查网络</string>
+    <string name="network_timeout">网络超时，请重试</string>
+    <string name="no_sdcard_mount">确保SD卡存在并且没有处于挂载状态</string>
+    <string name="update_now">更新</string>
+    <string name="update_later">暂不更新</string>
+    <string name="retry">重试</string>
+    <string name="bound">绑定</string>
+    <string name="rebound">换绑</string>
+    <string name="apk_download_success">新版本已经下载成功，是否立即安装？</string>
+    <string name="install_now">安装</string>
+    <string name="install_later">暂不安装</string>
+    <string name="download_now">系统正在更新......</string>
+    <string name="download_error">更新失败，请重试！</string>
+    <string name="download_now_toast">亲,不要再点了,偶正在给力下载中......</string>
+    <string name="net_error">网络异常！</string>
+    <string name="sdcard_full">T卡已满，请检查T卡！</string>
+    <string name="shortcut">是否需要创建桌面快捷方式？</string>
+    <string name="invite">邀请</string>
+
+    <!-- notification -->
+    <string name="notifi_content">条未读消息</string>
+    <string name="notifi_content_fastchat">条未读传声筒消息</string>
+    <string name="notifiy_down_file">正在下载手信</string>
+    <string name="download_progress">正在下载手信</string>
+    <string name="download_success">手信下载成功</string>
+    <string name="download_failed">手信下载失败</string>
+
+    <!-- MainTab -->
+    <string name="main_tab_message">消息</string>
+    <string name="main_tab_contact">联系人</string>
+    <string name="main_tab_findfriend">找朋友</string>
+    <string name="main_tab_settings">设置</string>
+
+    <!-- Message  List -->
+    <string name="message_new">新建消息</string>
+    <string name="message_list_title">消息</string>
+    <string name="net_unconnect">联网失败，请检查当前网络状况！</string>
+    <string name="net_status">联网失败，请检查当前网络状况！</string>
+    <string name="net_reconnect">连接中，请稍候&#8230;</string>
+    <string name="message_list_dialog_content">删除选中的消息会同时删除本地短信收件箱中对应的短信记录，是否确认删除？</string>
+    <string name="message_list_btn_confirm">删除</string>
+    <string name="message_list_btn_cancel">取消</string>
+    <string name="message_list_dialog_wait">正在删除，请稍候</string>
+    <string name="message_list_card_item">[名片]</string>
+    <string name="message_list_voice_item">[语音]</string>
+    <string name="message_list_picture_item">[图片]</string>
+    <string name="message_list_frd_item">[推荐好友]</string>
+    <string name="message_list_sync_sms">正在关联短信</string>
+    <string name="message_list_sync_wait">正在初始化会话列表，请稍等！</string>
+    <string name="message_list_sync_contacts">正在关联通讯录</string>
+    <string name="message_list_delete">删除</string>
+    <string name="message_list_selectall">全选</string>
+    <string name="message_list_selectnone">全不选</string>
+    <string name="message_list_send_notice">请至少选择一个收件人！</string>
+    <string name="message_list_nomessage">暂无消息记录</string>
+
+    <!-- message_multi_delete_list -->
+    <string name="message_multi_delete_title">批量删除消息</string>
+    <!-- Contacts Detail -->
+    <string name="contacts_detail_title">详细资料</string>
+    <string name="contacts_detail_call">拨号</string>
+    <string name="contacts_detail_send_message">发消息</string>
+    <string name="contacts_detail_invite">邀请开通手信</string>
+    <string name="contacts_detail_send_card">给TA发名片</string>
+    <string name="contacts_detail_delete">删除</string>
+    <string name="contacts_detail_blacklist">加黑名单</string>
+    <string name="contacts_detail_signature_title">签名</string>
+    <string name="contacts_detail_name">姓名</string>
+    <string name="contacts_detail_phone">电话</string>
+    <string name="contacts_detail_note">备注</string>
+    <string name="contacts_detail_birthday">生日</string>
+    <string name="contacts_detail_hometown">地区</string>
+    <string name="contacts_detail_school">学校</string>
+    <string name="contacts_detail_corporation">单位</string>
+    <string name="contacts_detail_shouxin_number">帐号</string>
+    <string name="contacts_detail_shouxin_account">帐号  :  %1$s</string>
+    <string name="contacts_detail_status_online">在线</string>
+    <string name="contacts_detail_not_shouxin">未开通手信</string>
+    <string name="contacts_detail_delete_tip">是否确认删除此联系人？</string>
+    <string name="contacts_detail_blacklist_tip">是否确认将此联系人加入黑名单？</string>
+    <string name="contacts_detail_blacklist_remove_tip">是否确认将此联系人解除黑名单？</string>
+    <string name="contacts_detail_invite_content">我在用手信给你发短信，非常方便，还能语音对讲！赶紧装一个！软件地址：http://s.mopo.com/d.do？n=</string>
+    <string name="contacts_detail_edit_necessary">必填</string>
+    <string name="contacts_detail_edit_addphone">添加电话</string>
+    <string name="contacts_detail_edit_need_phone">联系人需要提供电话号码！</string>
+    <string name="contacts_detail_edit_save">保存</string>
+    <string name="contacts_detail_edit_need_phone_and_name">联系人需要提供姓名和电话号码！</string>
+    <string name="contacts_list_del_tip">删除该联系人</string>
+    <string name="contacts_list_del_waiting">正在删除联系人，请稍等！</string>
+    <string name="contacts_detail_loading">正在载入联系人信息，请稍等！</string>
+
+    <!-- 举报 -->
+    <string name="inform_menu">举报TA</string>
+    <string name="inform_dialog_title">请选择举报类型：</string>
+    <string name="inform_harass">骚扰信息</string>
+    <string name="inform_sexy">色情信息</string>
+    <string name="inform_spam">垃圾广告</string>
+    <string name="inform_wronginfo">资料不当</string>
+    <string name="inform_thanks">感谢您的举报，我们会在核实信息后进行处理。</string>
+    <string name="inform_failed">举报失败，请重试</string>
+
+    <!-- Contacts List -->
+    <string name="contacts_list_search_hint">搜索联系人</string>
+    <string name="contacts_list_title">联系人</string>
+    <string name="contacts_list_number_tip">您共有 %1$s 个联系人</string>
+    <string name="contacts_list_zore">您未添加联系人</string>
+    <!-- <string name="contacts_list_sync_ing">正在初始化联系人，请稍等！</string> -->
+    <string name="contacts_list_delete_confirm">删除该联系人会同时删除手机通讯录中对应的联系人，是否确认删除？</string>
+    <string name="contacts_list_btn_confirm">删除</string>
+    <string name="contacts_list_btn_cancel">取消</string>
+    <string name="contacts_list_del_sucess">删除成功！</string>
+    <string name="contacts_list_del_failed">删除失败！</string>
+    <string name="contacts_list_blacklist_waitting">正在加入黑名单！</string>
+    <string name="contacts_list_blacklist_remove_waitting">正在解除黑名单！</string>
+    <string name="contacts_list_blacklist_sucess">加入黑名单成功！</string>
+    <string name="contacts_list_blacklist_failed">加入黑名单失败！</string>
+    <string name="contacts_list_blacklist_unblack_sucess">解除黑名单成功！</string>
+    <string name="contacts_list_blacklist_unblack_failed">解除黑名单失败！</string>
+    <string name="contacts_list_new_sucess">已成功将%1$s保存为联系人！</string>
+    <string name="contacts_list_online">您的好友%1$s已上线！</string>
+    <string name="contacts_list_offline">您的好友%1$s已下线！</string>
+    <string name="contacts_list_sub_item_number"> %1$s (在线)</string>
+    <string name="contacts_list_is_exist">该联系人已经存在</string>
+    <string name="contacts_list_sync_failed">联系人同步失败</string>
+    <string name="contacts_list_all">全部联系人</string>
+    <string name="contacts_list_allonline">在线联系人</string>
+    <string name="contacts_list_newcontact">新增联系人</string>
+
+    <!-- Contacts Edit -->
+    <string name="contacts_detail_edit_title">编辑资料</string>
+    <string name="contacts_detail_edit_menu">编辑资料</string>
+    <string name="contacts_detail_saving">正在保存请稍候！</string>
+    <string name="contacts_detail_edit_title_new">新增联系人</string>
+    <string name="contacts_detail_edit_no_input">请输入姓名和电话</string>
+
+    <!-- 批量删除联系人 -->
+    <string name="contacts_multi_del_title">批量删除联系人</string>
+    <string name="contacts_search_ok_btn_text">确定(%1$s)</string>
+    <string name="contacts_multi_del_btn_text">删除(%1$s)</string>
+    <string name="contacts_multi_del_local_confirm">删除选中的联系人会同时删除手机通讯录中对应的联系人，是否确认删除？</string>
+    <string name="contacts_multi_del_confirm">确认要删除选中的联系人？</string>
+    <string name="contacts_multi_del_notice">请至少选择一个联系人！</string>
+
+    <!-- 黑名单管理 -->
+    <string name="contacts_black_list_failed">操作失败</string>
+    <string name="contacts_black_list_remove">解除黑名单</string>
+    <string name="contacts_black_list_delete">从该组删除</string>
+    <string name="contacts_black_list_clear">确定清空黑名单列表？</string>
+    <string name="contacts_black_list_clear_waiting">正在清空黑名单</string>
+    <string name="contacts_black_list_clear_menu">清空</string>
+    <string name="contacts_black_list_firstadd_tip">您将不再接收到该联系人向你发送的网络消息，此功能无法屏蔽通过运营商发送的短信</string>
+
+    <!-- FindFriend -->
+    <string name="findfriend_title">找朋友</string>
+    <string name="search_friend_title">查找联系人</string>
+    <string name="friend_know">可能认识的人</string>
+    <string name="friend_later_more">查看附近的人</string>
+    <string name="friend_list_syncing">手信小助手正在为您寻找可能认识的人，请稍候！</string>
+    <string name="findfriend_later_more">亲爱的手信用户，更多好用、好玩的找朋友功能将在后续推出，敬请期待哦！</string>
+    <string name="friend_detail_send_message">打招呼</string>
+    <string name="friend_add_contact">加为联系人</string>
+    <string name="friend_reason">推荐理由:</string>
+    <string name="friend_detail_syncing">正在获取详细资料，请稍等！</string>
+    <string name="friend_detail_getError">获取详细资料失败</string>
+    <string name="friend_save_success">保存成功</string>
+    <string name="friend_save_failed">保存失败</string>
+    <string name="friend_recommendReason">TA和我有<Data><![CDATA[<font color="#F23A1C">%1$s</font>]]></Data>个共同好友</string>
+    <string name="friend_detailReason">%1$s有我联系人中<Data><![CDATA[<font color="#F23A1C">%2$s</font>]]></Data>等<Data><![CDATA[<font color="#F23A1C">%3$s</font>]]></Data>人的联系方式</string>
+    <string name="friend_detailReason_less">%1$s有我联系人中<Data><![CDATA[<font color="#F23A1C">%2$s</font>]]></Data>的联系方式</string>
+    <string name="friend_detailReason_havePhones">        %1$s有我和我联系人中<Data><![CDATA[<font color="#F23A1C">%2$s</font>]]></Data>等<Data><![CDATA[<font color="#F23A1C">%3$s</font>]]></Data>人的联系方式</string>
+    <string name="friend_detailReason_havePhones_less">        %1$s有我和我联系人中<Data><![CDATA[<font color="#F23A1C">%2$s</font>]]></Data>的联系方式</string>
+    <string name="friend_recommendReason_flag">TA和我有</string>
+    <string name="friend_detailReason_flag">我和我</string>
+    <string name="friend_regex_flag">等(\\d+)个</string>
+    <string name="friend_regex_split">、</string>
+    <string name="friend_null_listview">暂时没有可能认识的人哦，\n\u0020\u0020邀请朋友一起来手信吧！</string>
+    <string name="search_friend">精确查找</string>
+    <string name="search_friend_hint">输入手机号/帐号搜朋友 </string>
+    <string name="search_friend_no_account">请输入手机号/帐号搜朋友</string>
+    <string name="search_friend_syncing">搜索中请稍候&#8230;</string>
+    <string name="search_friend_iscontact">TA已经是您的联系人！</string>
+    <string name="search_friend_isBlackStranger">TA是您黑名单中的陌生人！</string>
+    <string name="search_friend_isBlackContact">TA是您黑名单中的联系人！</string>
+    <string name="search_friend_fail">查找联系人失败，请重试！</string>
+    <string name="search_friend_not_found">该用户不存在</string>
+
+    <!-- Crop -->
+    <string name="crop_title">剪切图片</string>
+    <string name="crop_rechoose">重选</string>
+    <string name="crop_recapture">重拍</string>
+
+    <!-- Settings -->
+    <string name="settings_title">设置</string>
+    <string name="settings_edit">编辑</string>
+    <string name="settings_name">帐号:</string>
+    <string name="settings_nickname_default">未设置</string>
+    <string name="settings_signature">签名</string>
+    <string name="settings_signature_default">未填写</string>
+    <string name="settings_bind">手机绑定</string>
+    <string name="settings_changepassword">密码修改</string>
+    <string name="settings_contacts_restore">联系人恢复</string>
+    <string name="settings_recommendme">推荐给其他人</string>
+    <string name="settings_sharelbs">分享地理位置</string>
+    <string name="settings_privacy">隐私设置</string>
+    <string name="settings_msg_notify">消息提醒</string>
+    <string name="settings_blacklist_mgr">黑名单管理</string>
+    <string name="settings_network_statistic">流量统计</string>
+    <string name="settings_feedback">反馈</string>
+    <string name="settings_help">帮助</string>
+    <string name="settings_about">关于</string>
+    <string name="settings_exit">退出</string>
+    <string name="settings_logout">注销</string>
+    <string name="settings_personal">个人设置</string>
+    <string name="settings_setheadphoto">修改头像</string>
+    <string name="settings_nickname">昵称</string>
+    <string name="settings_male">男</string>
+    <string name="settings_female">女</string>
+    <string name="settings_sex">性别</string>
+    <string name="settings_from_camera">拍照</string>
+    <string name="settings_from_gallery">从相册选择</string>
+    <string name="settings_photo_picker_notfound">没有找到相关应用</string>
+    <string name="settings_commit">提交</string>
+    <string name="settings_nickname_tip">请输入昵称</string>
+    <string name="settings_school_tip">请输入学校名称</string>
+    <string name="settings_corporation_tip">请输入单位名称</string>
+    <string name="settings_signature_tip">请输入签名</string>
+    <string name="settings_feedback_tip">请输入您想反馈的意见和建议</string>
+    <string name="settings_notify_sound">声音</string>
+    <string name="settings_notify_vibrate">振动</string>
+    <string name="settings_change_password">修改密码</string>
+    <string name="settings_old_password_hint">旧密码</string>
+    <string name="settings_new_password_hint">新密码6–12位字符</string>
+    <string name="settings_confirm_password_hint">确认新密码</string>
+    <string name="settings_waitting">正在提交，请等待！</string>
+    <string name="settings_bind_number">绑定手机:</string>
+    <string name="settings_bind_local">绑定本地手机</string>
+    <string name="settings_rebind_local">换绑本地手机</string>
+    <string name="year">年</string>
+    <string name="month">月</string>
+    <string name="day">日</string>
+    <string name="setting_birthday_error_more">不能选择当天过后的日期，请重新选择!</string>
+    <string name="setting_birthday_error_less">不能选择早于当天100年前的日期，请重新选择!</string>
+    
+    <string name="settings_enter_text_empty">输入不能为空</string>
+    <string name="settings_feedback_success">反馈已经收到，谢谢您的反馈！</string>
+    <string name="settings_userinfo_success">您的信息修改成功</string>
+    <string name="settings_recommend_success">是否推荐的设置已经生效</string>
+    <string name="settings_modify_pwd_success">修改密码成功</string>
+    <string name="settings_modify_pwd_fail">修改密码失败</string>
+    <string name="settings_modify_pwd_error1">旧密码输入错误</string>
+    <string name="settings_modify_pwd_error2">新密码字数太少</string>
+    <string name="settings_modify_pwd_error3">新密码字数太多</string>
+    <string name="settings_modify_pwd_error4">新密码不符合规定（只允许包含字母、数字、*#）</string>
+    <string name="settings_modify_pwd_error5">新密码确认有误</string>
+    <string name="settings_uploading_headphoto">正在上传头像，请等待！</string>
+    <string name="settings_upload_headphoto_success">上传头像成功</string>
+    <string name="settings_traffic_current_month">当月手信流量统计</string>
+    <string name="settings_traffic_gprs">GPRS流量</string>
+    <string name="settings_traffic_wifi">Wi-Fi流量</string>
+    <string name="settings_sync_wait">正在初始化，请稍等！</string>
+    <string name="settings_version_isNewest">安装的已经是最新版本！</string>
+    <string name="settings_blacklist_no_list">没有可以清空的联系人！</string>
+    <string name="setting_nickname_illegal">昵称不合法！</string>
+
+    <!-- Contacts restore -->
+    <string name="restore_restore">恢复</string>
+    <string name="restore_restore_multi_btn_text">恢复(%1$s)</string>
+    <string name="restore_check_contacts">正在检查联系人</string>
+    <string name="restore_contacts_choose">选择恢复联系人</string>
+    <string name="restore_contacts_choose_tip">当前可恢复%1$s前删除的联系人，请选择恢复：</string>
+    <string name="restore_contacts_none">没有可以恢复的联系人！</string>
+    <string name="restore_sync_title">正在恢复&#8230;</string>
+    <string name="restore_success">成功恢复%1$s位联系人</string>
+    <string name="restore_no_network">网络未连接！</string>
+
+    <!-- Change bind -->
+    <string name="change_bind_sms_sending">短信发送中，请稍候……</string>
+    <string name="change_bind_sms_send_failed">短信发送不成功，换绑失败！</string>
+    <string name="change_bind_sms_send_success">短信发送成功，请等待原手机回复验证短信</string>
+    <string name="change_bind_success">换绑本地手机成功</string>
+
+    <!-- Description Activity -->
+    <string name="menu_exit">退出</string>
+
+    <!-- Register Activity -->
+    <string name="register_first_use">第一次使用手信？</string>
+    <string name="register_free_register">免费激活</string>
+    <string name="register_login">登        录</string>
+    <string name="register_login1">登录</string>
+    <string name="login_now">立即登录</string>
+    <string name="register_user_protocol"><u>用户协议</u></string>
+    <string name="register_copyright"></string>
+    <string name="register_send_message_tip">激活会发送一条短信用于绑定手机号</string>
+    <string name="register_binding_reason">方便手机号直接登录以及找回密码</string>
+    <string name="register_protocol_nochecked_tip">请勾选用户协议</string>
+    <string name="register_no_useful_net_title">没有可用网络</string>
+    <string name="register_no_useful_net_message">是否对网络进行设置？</string>
+    <string name="register_waitting">正在激活，请等待！</string>
+    <string name="register_error_msg">激活失败！</string>
+    <string name="bind_waitting">正在绑定，请等待！</string>
+    <string name="rebind_waitting">正在换绑，请等待！</string>
+    <string name="register_send_sms_failed">验证短信发送失败，请重试！</string>
+    <string name="register_already_register">您的手机已激活，请登录</string>
+    <string name="register_error_sms">获取激活通道失败，请稍后重试！</string>
+    <string name="register_accept_protocol">激活即表示您同意接受</string>
+
+    <!-- Set Nice Name -->
+    <string name="nice_name_title_pre">Hi ， %1$s</string>
+    <string name="nice_name_tip_message">       为了方便您的朋友找到您，建议您填写真实姓名哦！</string>
+    <string name="nice_name_tip_number">2–12个字</string>
+    <string name="nice_name_save">    保存    </string>
+    <string name="nice_name_letter">以后再说</string>
+    <string name="nice_name_not_match">您输入的昵称不合法，请重新输入！</string>
+    <string name="nice_name_no_input">请输入昵称</string>
+    <string name="nice_name_too_short">昵称过短，请重新输入！</string>
+    <string name="nice_name_too_long">昵称过长，请重新输入！</string>
+    <string name="nice_name_waitting_set">正在设置昵称，请等待！</string>
+    <string name="nick_name_title">完善个人信息</string>
+
+    <!-- Login -->
+    <string name="login_username_hint">请输入帐号/手机号</string>
+    <string name="login_password_hint">请输入密码</string>
+    <string name="login_find_password">忘记密码</string>
+    <string name="login_no_username">请输入帐号</string>
+    <string name="login_notexist_username">帐号不存在，请重试！</string>
+    <string name="login_no_password">请输入密码</string>
+    <string name="login_logining">登录中，请稍候……</string>
+    <string name="login_timeout">登录超时，请稍后再试！</string>
+    <string name="login_username_unbind_is_phone">您输入的手机号码未激活，请使用该手机号码的手机进行激活！</string>
+    <string name="login_register_by_username">您的帐号尚未激活，是否确认激活？</string>
+    <string name="login_imsi_not_same">是否换绑当前手机？如换绑原手机 %1$s 需回复验证短信。换绑后帐号与原手机解绑。本地手机与帐号%2$s解绑。</string>
+    <string name="login_username_unbind_imsi_bind">未绑定手机无法正常登录，请先绑定手机！绑定时手机会解除与帐号%1$s的绑定关系。</string>
+<!--     <string name="login_username_unbind_imsi_unbind">未绑定手机无法正常登录，请与本地手机绑定！</string>
+ -->
+    <string name="login_username_bind_imsi_unbind">是否换绑当前手机？如换绑原手机 %1$s 需回复验证短信。换绑后帐号与原手机解绑。</string>
+    <string name="login_bind_error">绑定失败，请稍后重试！</string>
+    <string name="login_account_error">该帐号/手机号不存在，请重试！</string>
+    <string name="login_account_error_imsi_bind">请使用本地手机号[%1$s]或帐号[%2$s]直接登录！</string>
+    <string name="login_account_error_password_notmatch">密码必须是6–12位字符</string>
+    <string name="login_i_know">我知道了</string>
+    <string name="login_free_register">激活</string>
+    <string name="login_error_freeze">您好，您的账号经核实存在个人信息不当等违规行为且逾期未及时改正，现已被冻结，如需解冻请联系客服：0571-87966766</string>
+    <string name="login_error_freeze_call">联系客服</string>
+<!--     <string name="login_free_register_timeout">激活超时，请稍后重试！</string>
+ -->
+    <string name="login_use_other_phone">请使用该号码的手机进行激活！</string>
+    <string name="autologin_net_error">联网失败，是否重连？</string>
+    <string name="autologin_password_error">密码错误，请重新登录！</string>
+    <string name="login_username_unbind_imsi_bind_toast">未绑定手机无法登录，请使用其他帐号登录！</string>
+    <string name="forget_password_unbound">请联系客服找回：\n冒泡客服热线：0571–87966766</string>
+    <string name="forget_password_isbound">确定重置本机所绑帐号密码？\n重置成功后，新密码将以短信形式发送至手机，请注意查收！</string>
+    <string name="forget_password_success">恭喜您找回密码成功\n帐号:%1$s\n手机号:%2$s\n密码:%3$s\n温馨提示：\n1、你的个人信息会以短信形式发送，请注意查收并牢记\n2、为了您的帐号安全，请及时选择设置->密码修改进行设置</string>
+    <string name="forget_password_waiting">密码找回进行中，请耐心等待！</string>
+    <string name="forget_password_reset_waiting">密码重置中，稍后密码将以短信形式发送至手机，请注意查收</string>
+    <string name="forget_password_no_simcard">请插入sim卡后再点击忘记密码</string>
+    <!-- About -->
+    <string name="title_about">关于手信</string>
+    <string name="version">版本：</string>
+    <string name="new_version">新版本：</string>
+    <string name="update">立即更新</string>
+    <string name="update_tip">更新提示</string>
+    <string name="app_check">检查更新</string>
+    <string name="is_checking">正在检查更新，请稍候！</string>
+    <string name="check_error">检查更新失败，请重试！</string>
+    <string name="cur_version">当前版本：</string>
+    <string name="customer_service_number">客服电话：</string>
+    <string name="customer_service_email">邮        箱：</string>
+    <string name="customer_service_number_value"><a href="tel:057187966766">0571-87966766</a></string>
+    <string name="customer_service_email_value"><a href="mailto:shouxin@sky-mobi.com">shouxin@sky-mobi.com</a></string>
+    <string name="corporation">杭州梵艺科技有限公司  版权所有</string>
+
+    <!-- Chat Activity -->
+    <string name="chat">聊天</string>
+    <string name="chat_enter_text">请输入信息</string>
+    <string name="chat_toast_speaker_on">已经换到扬声器模式</string>
+    <string name="chat_toast_speaker_off">已经换到听筒模式</string>
+    <string name="chat_toast_blacklist">你已将对方加入黑名单，不能发起聊天</string>
+    <string name="chat_enter_text_empty">输入不能为空</string>
+    <string name="chat_send">发送</string>
+    <string name="chat_input_text">文字</string>
+    <string name="chat_input_voice">语音</string>
+    <string name="chat_input_smiley">表情</string>
+    <string name="chat_input_phrase">短语</string>
+    <string name="chat_voice_record">按住说话</string>
+    <string name="chat_voice_length">s</string>
+    <string name="chat_to_voice">发送一条语音</string>
+    <string name="chat_from_voice">收到一条语音</string>
+    <string name="chat_record_voice_too_short">录音时间太短，请重试！</string>
+    <string name="chat_record_voice_too_long">录音时间还剩余 %1$s秒</string>
+    <string name="chat_cannot_send_voice">不能给非手信用户发语音，邀请他/她加入手信吧！</string>
+    <string name="chat_card_sub_item_titile_text">名片</string>
+    <string name="chat_card_sub_item_content_name">姓  名</string>
+    <string name="chat_card_sub_item_content_contact_1">电  话</string>
+    <string name="chat_card_sub_item_content_contact_2">帐  号</string>
+    <string name="chat_card_sub_item_content_name_value">杭州西湖</string>
+    <string name="chat_card_sub_item_content_contact_value">mp13605808937</string>
+    <string name="chat_drop_to_refresh">下拉查看更多聊天记录</string>
+    <string name="chat_realse_to_refresh">松开刷新</string>
+    <string name="chat_refresh">正在加载</string>
+    <string name="chat_no_contact_detail">没有此人的详情资料</string>
+    <string name="chat_temporary_limit">每日临时会话限10条，请尽快添加对方为联系人</string>
+    <string name="chat_temporary_limit_send">今日临时会话已达上限10条，对方没有将您添加为联系人不能继续聊天！</string>
+    <string name="chat_temporary_limit_recieve">您还没有将对方添加为联系人，对方无法回复您的消息！</string>
+    <string name="chat_hint_net">输入免费网络消息</string>
+    <string name="chat_hint_sms">输入手机短信</string>
+    <string name="chat_hint_msg">请输入消息</string>
+    <string name="chat_voice_invite">使用该功能需要对方开通手信，是否发短信邀请对方开通？</string>
+    <string name="chat_voice_invite_context">我在用手信给你发短信，非常方便，还能语音对讲！赶紧装一个！软件地址：http://s.mopo.com/d.do？n=</string>
+    <string name="chat_input_sms_hint">请输入手机短信</string>
+    <string name="chat_input_message_hint">请输入免费网络消息</string>
+    <string name="chat_menu_call">拨号</string>
+    <string name="chat_menu_send_vcard">给TA发名片</string>
+    <string name="chat_menu_add_addressee">添加收件人</string>
+    <string name="chat_menu_add_to_contact">加为联系人</string>
+    <string name="chat_menu_remove_black">解除黑名单</string>
+    
+    <!-- 底栏 -->
+    <string name="app_grid_item_smiley">表情</string>
+    <string name="app_grid_item_card">名片</string>
+    <string name="app_grid_item_phrase">短语</string>
+
+    <!-- Group sending Contacts Activity -->
+    <string name="groupsend_contacts_title">群发联系人</string>
+
+    <!-- Search Contacts Activity -->
+    <string name="search_contacts_title">精确查找</string>
+    <string name="search_contacts_send_vcard">发送名片</string>
+    <string name="search_contacts_vcard">搜索名片</string>
+    <string name="search_contacts_add">添加收件人</string>
+    <string name="search_contacts_name">联系人名字</string>
+    <string name="search_contacts_phones">联系人电话号码</string>
+    <string name="search_contacts_clear">清除</string>
+
+    <!-- Pick Phrase Activity -->
+
+    <string name="pick_phrase_title">常用短语</string>
+    <string name="pick_phrase_btn">选择</string>
+    <string name="pick_phrase_default">问世间，何为贵？山以青为贵，水以秀为贵，物以稀为贵，月以明为贵，人以正为贵，友以挚为贵，情以真为贵，我以你为贵！</string>
+    <string name="pick_phrase_title_btn">节日祝福</string>
+
+    <!-- Card detail Activity -->
+    <string name="card_detail_title">名片</string>
+    <string name="card_detail_add_contackts_btn">加为联系人</string>
+    <string name="card_detail_send_btn">发送名片</string>
+    <string name="card_detail_item_name">姓  名</string>
+    <string name="card_detail_item_phone">电  话</string>
+    <string name="card_detail_item_shouxin">帐  号</string>
+
+    <!-- Context Menu -->
+    <string name="message_delete_threads">删除该会话</string>
+    <string name="chat_delete_msg">删除</string>
+    <string name="chat_copy_msg">复制</string>
+    <string name="chat_forward_msg">转发</string>
+    <string name="chat_resend">重发</string>
+    <string name="chat_delete_voice">删除</string>
+    <string name="chat_save_voice">保存</string>
+    <string name="chat_delete_card">删除</string>
+    <string name="chat_delete_pic">删除</string>
+    <string name="chat_delete_video">删除</string>
+    <string name="chat_delete_frd">删除</string>
+
+    <!-- Options Menu -->
+    <string name="contacts_send_vcard">发送该名片</string>
+    <string name="contacts_show_vacard">查看联系人资料</string>
+    <string name="message_clear_all_threads">清空消息</string>
+    <string name="message_multi_delete_threads">批量删除</string>
+    <string name="message_clear_all_contacts">批量删除</string>
+    <string name="contacts_select_all_contacts">全选</string>
+    <string name="contacts_select_all_contacts_cancel">全不选</string>
+    <string name="quit">退出</string>
+    <string name="chat_speaker_on">听筒模式</string>
+    <string name="chat_speaker_off">扬声器模式</string>
+    <string name="chat_view_contacts">查看资料</string>
+
+    <!-- 拦截短信文案 -->
+    <string name="sms_content_org">杭州斯凯</string>
+    <string name="sms_bind_sucess_pre">绑定成功</string>
+    <string name="sms_register_sucess_pre">激活成功</string>
+    <string name="sms_register_sucess_pre_1">也可用号码</string>
+    <string name="sms_rebind_sucess_pre">换绑成功</string>
+    <string name="sms_rebind_sucess_pre_1">解除与</string>
+    <string name="sms_findpwd_failed">重置密码失败</string>
+    <string name="sms_findpwd_failed_1">通行证</string>
+    <string name="sms_findpwd_success">恭喜您找回密码成功</string>
+    <string name="sms_split_flag">【</string>
+
+    <!-- 附近的人 -->
+    <string name="nearuser_title">附近的人</string>
+    <string name="nearuser_title_female">附近的女生</string>
+    <string name="nearuser_title_male">附近的男生</string>
+    <string name="nearuser_waiting">正在为您寻找附近的人…</string>
+    <string name="nearuser_select_female">只看女生</string>
+    <string name="nearuser_select_male">只看男生</string>
+    <string name="nearuser_select_all">查看全部</string>
+    <string name="nearuser_clickforload">点击加载更多</string>
+    <string name="nearuser_get_net_err">网络异常，请检查连接！</string>
+    <string name="nearuser_get_location_err">获取不到位置信息</string>
+    <string name="nearuser_getuser_none">暂时没有附近的人，邀请朋友一起来手信吧！ </string>
+    <string name="nearuser_distance_tip">TA在您附近</string>
+    <string name="nearuser_ask_for_share">查看附近的人，需要打开分享地理位置功能。您也可以在设置>隐私设置中关闭。</string>
+    <string name="nearuser_tip_off">关闭分享地理位置功能，您将无法查看附近的人，对方也无法找到你。</string>
+    <string name="chat_online">(在线)</string>
+    <!-- 注解 -->
+    <string name="description_topbar_button">这是一个按钮</string>
+    <string name="no_sdcard_tip">存储卡已拔出！手信头像、语音功能暂且不能使用</string>
+    <string name="bounding">绑定中..</string>
+    <string name="bounding_detail_tip">正在绑定手机中..\n绑定完即可使用，请耐心等侯。</string>
+    <string name="un_bound_tip">帐号未绑定当前手机号\n绑定手机号可以：\n1、方便您找回密码，帐号更安全；\n2、手机号可登录手信，更便捷；\n3、更多功能使用（如，可能认识的人）；\n是否绑定？</string>
+    <string name="usefun_unbound_tip">该功能需要绑定手机才能使用\n绑定手机号可以：\n1、方便您找回密码，帐号更安全；\n2、手机号可登录手信，更便捷；\n3、更多功能使用（如，可能认识的人）；\n是否绑定？</string>
+
+    <!-- 强制填写昵称 -->
+    <string name="set_nick_sex_title">完善个人信息</string>
+    <string name="set_nick_tip">昵称建议填写真实姓名：</string>
+    <string name="set_nick_hint"> 您的昵称 2—12个字</string>
+    <string name="set_nick_real_reason">真实姓名可以让更多朋友找到你！</string>
+    <string name="nick_too_short">昵称太短了！</string>
+    <string name="nick_invalid">昵称不可包含特殊字符！</string>
+    <string name="update_userinfo_fail">您的昵称修改失败！</string>
+
+    <!-- 帮助 -->
+    <string name="help">帮助</string>
+    <string name="help_info"><textarea id="wysiwygTextarea" name="wysiwygContent" class="hidden tinymce-editor">&lt;p&gt;&lt;span style=&quot;color: rgb(255,0,0);&quot;&gt;&lt;strong&gt;Q1:&lt;/strong&gt;&lt;strong&gt;使用手信是否收费？&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(0,0,0);&quot;&gt;A:手信的语音消息、文字、表情、推荐短语等网络消息收发功能完全免费，使用这些功能手信本身不会收取任何费用，在发送消息时需要使用网络，产生的上网流量费用由网络运营商收取。建议您配合上网流量套餐使用。&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(255,0,0);&quot;&gt;&lt;strong&gt;Q2:&lt;/strong&gt;&lt;strong&gt;怎样给好友发免费信息？&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;A:若您的好友已经安装了手信：&lt;/p&gt;&lt;p&gt;(1)好友在线时，发信息免费，实时送达。&lt;/p&gt;&lt;p&gt;(2)好友手信不在线，但您的通讯录中储存了该好友的手机号码时，消息将以普通手机短信的形式实时送达对方，您选择的运营商将收取普通手机短信资费。&lt;/p&gt;&lt;p&gt;(3)好友手信不在线且您的通讯录中没有储存该好友手机号码，消息会以离线消息形式发送，对方会在下次登录手信时收到该信息；&lt;/p&gt;&lt;p&gt;通过手信&lt;strong&gt;发消息给未安装手信的通讯录好友&lt;/strong&gt;，消息将&lt;strong&gt;以普通手机短信的形式实时送达对方（您选择的运营商将收取普通手机短信资费）&lt;/strong&gt;，您可以根据&lt;strong&gt;聊天页面的信息输入框中消息类型提示&lt;/strong&gt;帮助您判断当前发送的是“&lt;strong&gt;免费网络消息&lt;/strong&gt;”还是需短信费的“手机短信”。&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(255,0,0);&quot;&gt;&lt;strong&gt;Q3:&lt;/strong&gt;&lt;/span&gt;&lt;strong&gt;&lt;span style=&quot;color: rgb(255,0,0);&quot;&gt;为什么手信在激活（注册）时要短信验证？&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;A:手信是一款基于手机的社交聊天工具，通过短信验证可以确定手机号码的真实性，帮您找到更多的朋友。同时验证之后您也可以用手机号码登录手信，也可以用手机找回密码，确保账号的安全性。&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(255,0,0);&quot;&gt;&lt;strong&gt;Q4&lt;/strong&gt;&lt;strong&gt;：退出手信后是否还可以继续接收消息？&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;A：退出手信时会提示是否继续接收消息，如果选择否，那么手信联系人发送给您的消息会在您下次登录时收到或者以手机短信的信息发送到您的手机上（当联系人有您的手机号码时，信息才会以手机短信发送）。&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(255,0,0);&quot;&gt;&lt;strong&gt;Q5&lt;/strong&gt;&lt;strong&gt;：如何区分联系人是否在使用手信和是否当前在线？&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;A:安装手信的用户会在联系人后面有手信联系人标识（蓝色水滴状），如果在线是蓝色的，不在线是灰色。&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(255,0,0);&quot;&gt;&lt;strong&gt;Q6&lt;/strong&gt;&lt;strong&gt;：如何找回密码&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;A：成功绑定手机的用户在登录界面点击“找回密码”，即可找回当前手信账号的密码，系统会以短信形式将密码发送到您的手机上，若未成功绑定手机则无法找回密码&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(255,0,0);&quot;&gt;&lt;strong&gt;Q7&lt;/strong&gt;&lt;strong&gt;：手信的好友推荐功能是否会暴露我的隐私？&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;A： 不会，手信只会通过您的已有的联系人关系推荐给您可能认识的人。在推荐联系人的时候，只会显示你的基本用户信息，用户也无法获取你的绑定手机号码和你的通讯录好友信息。 &lt;/p&gt;</textarea></string>
+
+    <!-- 测试快聊界面字符串 -->
+    <string name="fastchat_title">传声筒</string>
+    <string name="fastchat_btn_back">返回</string>
+    <string name="fastchat_btn_end"> 退出</string>
+    <string name="fastchat_btn_refresh">重新匹配</string>
+    <string name="fastchat_send">发送</string>
+    <string name="fastchat_connect_title">正在匹配&#8230;</string>
+    <string name="fastchat_connect_fail">联网失败，请检查网络</string>
+    <string name="fastchat_match_fail">暂时没有匹配到对象，请重新匹配试试&#8230;</string>
+    <string name="fastchat_leave">退出聊天后将不再保留当前聊天记录，确定退出？</string>
+    <string name="fastchat_already_leave">你被对方抛弃了&#8230;</string>
+    <string name="fastchat_match_success">匹配成功，和新朋友打个招呼吧！</string>
+    <string name="fastchat_cannot_send_voice">你被对方抛弃了，换个人聊吧！</string>
+ 	<string name="fastchat_menu_resend">重发</string>
+ 	
+    
+   <string name="add_friend_success">添加好友成功！</string>
+</resources>

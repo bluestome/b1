@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/wallpaper" >
+
+    <!-- Top Title -->
+
+    <include layout="@layout/topbar" />
+
+    <!-- 附近的人列表 -->
+
+    <LinearLayout
+        android:id="@+id/nearuser_tip_group"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/nearuser_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dip"
+            android:textColor="#8E8E8E"
+            android:textSize="17dip" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/nearuser_listview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/top_bar"
+        android:cacheColorHint="#00000000"
+        android:choiceMode="singleChoice"
+        android:divider="@color/message_list_separate"
+        android:dividerHeight="1.0px"
+        android:fadingEdge="none"
+        android:fastScrollEnabled="true"
+        android:smoothScrollbar="true">
+    </ListView>
+
+</RelativeLayout>

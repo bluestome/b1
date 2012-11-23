@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+    <RelativeLayout
+        android:id="@+id/message_list_top_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical" >
+        <ImageView
+            android:id="@+id/list_top_bar_bg"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/list_top_bg" />
+        <!-- 新建消息 -->
+        <ImageButton
+            android:id="@+id/message_list_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/list_top_bar_bg"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/top_bar_button_bg"
+            android:src="@drawable/message_list_new" />    
+        <!-- 标题 -->
+        <TextView
+            android:id="@+id/message_list_title"
+            style="@style/list_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+</merge>

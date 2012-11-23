@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/wallpaper" 
+    android:layout_gravity="center">
+
+    <!-- Top Title -->
+
+    <include layout="@layout/topbar" />
+
+    <android.skymobi.messenger.widget.CornerListView
+        android:id="@+id/card_detail_list"
+        style="@style/settings_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip" >
+    </android.skymobi.messenger.widget.CornerListView>
+
+    <LinearLayout
+        android:id="@+id/add_contacts_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+		android:layout_margin="10dip"
+        android:gravity="center" 
+        android:background="@drawable/green_btn_bg"
+        android:clickable="true">
+        	    
+        <TextView
+            android:id="@+id/add_contacts_btn_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/card_detail_btn"
+            android:text="@string/card_detail_add_contackts_btn" />
+    </LinearLayout>
+
+        <LinearLayout
+        android:id="@+id/send_card_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+		android:layout_margin="10dip"
+        android:gravity="center" 
+        android:background="@drawable/green_btn_bg"
+        android:clickable="true">
+        	    
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/card_detail_btn"
+            android:text="@string/card_detail_send_btn"/>
+    </LinearLayout>
+    
+</LinearLayout>
