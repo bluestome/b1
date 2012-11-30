@@ -1,0 +1,12 @@
+<resources>
+
+    <string name="app_name">图片扑捉</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">设置</string>
+    <string name="title_activity_main">主界面</string>
+    <string name="fileSize">文件大小:</string>
+    <string name="fileLength">0</string>
+    <string name="label_downloading">下载:</string>
+    <string name="fileDownloading">0</string>
+
+</resources>
