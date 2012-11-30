@@ -35,10 +35,13 @@ public class MainActivity extends Activity implements OnClickListener {
     TextView fileDownloading = null;
     TextView showLog = null;
     EditText rateText = null;
+    EditText downloadUrl = null;
     Button btnStart = null;
     Button btnPause = null;
     ScrollView scrollView = null;
     LinearLayout mLayout;
+    int i = 0;
+
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -53,11 +56,18 @@ public class MainActivity extends Activity implements OnClickListener {
                         }
                         break;
                     case 2:
+                        if ((i > 0) && (i % 50 == 0)) {
+                            showLog.setText("");
+                            // 调用系统垃圾回收一次
+                            System.gc();
+                            i = 0;
+                        }
                         int f = Integer.parseInt(fileDownloading.getText().toString().trim());
                         int f2 = (Integer) msg.obj;
                         String s2 = showLog.getText().toString();
                         showLog.setText(s2 + "\r\n当前获取:" + f2 + " bytes");
                         fileDownloading.setText(String.valueOf((f + f2)) + "\r\n");
+                        i++;
                         break;
                     case 3:
                         Toast.makeText(getContext(), "访问异常", Toast.LENGTH_LONG).show();
@@ -70,9 +80,14 @@ public class MainActivity extends Activity implements OnClickListener {
                         String old = showLog.getText().toString();
                         showLog.setText(old + log);
                         break;
+                    case 7:
+                        downloadUrl.setText(String.valueOf(msg.obj));
+                        break;
+                    case 99:
+                        fileDownloading.setText("0");
+                        break;
                     default:
                         super.handleMessage(msg);
-                        fileDownloading.setText("0");
                         break;
                 }
                 mHandler.post(new Runnable() {
@@ -100,6 +115,8 @@ public class MainActivity extends Activity implements OnClickListener {
         fileDownloading.setText("0");
 
         rateText = (EditText) findViewById(R.id.edit_rate);
+        downloadUrl = (EditText) findViewById(R.id.edit_download_url);
+        downloadUrl.setText("");
 
         scrollView = (ScrollView) findViewById(R.id.scrollView);
         mLayout = (LinearLayout) findViewById(R.id.linearlayout);
@@ -119,7 +136,7 @@ public class MainActivity extends Activity implements OnClickListener {
         @Override
         public void run() {
             int it = 2;
-            mHandler.sendEmptyMessage(-1);
+            mHandler.sendEmptyMessage(99);
             String rate = rateText.getText().toString();
             if (null == rate || rate.equals("")) {
                 rate = "2";
@@ -132,8 +149,16 @@ public class MainActivity extends Activity implements OnClickListener {
             long s1 = System.currentTimeMillis();
             Message msg = new Message();
             try {
-                nUrl = new URL(
-                        "http://www.6188.com/upload_6188s/flashAll/20121129/1354150405qsHrfp.jpg");
+                String url = downloadUrl.getText().toString();
+                if (null == url || url.equals("")) {
+                    url = getString(R.string.default_download_url);
+                    // "http://221.179.7.248/CSSPortal/attach/Widget/upload/ProductShowHall/5235534f-578e-4389-a1a3-208e6f2f2dc1-2010-09-08-05-47-39.jpg?nocache=1348198990423";
+                    msg = new Message();
+                    msg.what = 7;
+                    msg.obj = url;
+                    mHandler.sendMessage(msg);
+                }
+                nUrl = new URL(url);
                 long start = System.currentTimeMillis();
                 connection = (HttpURLConnection) nUrl.openConnection();
                 Log.d(TAG, "\tzhang 打开连接耗时：" + (System.currentTimeMillis() - start));
@@ -141,7 +166,6 @@ public class MainActivity extends Activity implements OnClickListener {
                 msg.obj = Html.fromHtml(getString(
                         R.string.connection_connecting,
                         "打开连接")).toString() + "\r\n";
-                // "<Data><![CDATA[<font color=\"yellow\">打开连接</font>]]></Data>\r\n";
                 mHandler.sendMessage(msg);
                 start = System.currentTimeMillis();
                 // 设置连接主机超时
@@ -154,7 +178,6 @@ public class MainActivity extends Activity implements OnClickListener {
                 msg.obj = Html.fromHtml(getString(
                         R.string.connection_connecting,
                         "正在连接")).toString() + "\r\n";
-                // "<Data><![CDATA[<font color=\"yellow\">正在连接</font>]]></Data>\r\n";
                 mHandler.sendMessage(msg);
                 Log.d(TAG, "\tzhang 连接耗时：" + (System.currentTimeMillis() - start));
                 start = System.currentTimeMillis();
@@ -167,7 +190,6 @@ public class MainActivity extends Activity implements OnClickListener {
                     msg.obj = Html.fromHtml(getString(
                             R.string.connection_connected,
                             "连接成功")).toString() + "\r\n";
-                    // "<Data><![CDATA[<font color=\"green\">连接成功</font>]]></Data>\r\n";
                     mHandler.sendMessage(msg);
                     // 请求正常
                     int length = connection.getContentLength();
@@ -207,33 +229,31 @@ public class MainActivity extends Activity implements OnClickListener {
                             is.close();
                         }
                     }
+                    long sp = System.currentTimeMillis() - s1;
+                    Log.d(TAG, "\tzhang 总共耗时：" + sp);
+                    msg = new Message();
+                    msg.what = 4;
+                    msg.obj = sp;
+                    mHandler.sendMessage(msg);
+                    msg = new Message();
+                    msg.what = 5;
+                    msg.obj = "\r\n\r\n下载成功，耗时:" + sp + " ms\r\n";
+                    mHandler.sendMessage(msg);
+                    if (null != file && file.exists()) {
+                        file.delete();
+                    }
                 } else {
                     msg = new Message();
                     msg.what = 5;
-                    msg.obj = "连接失败,响应码:" + code + "\r\n";
+                    msg.obj = "\r\n连接失败,响应码:" + code + "\r\n";
                     mHandler.sendMessage(msg);
-                    mHandler.sendEmptyMessage(3);
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
                 msg = new Message();
                 msg.what = 5;
-                msg.obj = "连接异常:" + e.getMessage() + "\r\n";
+                msg.obj = "\r\n连接异常:" + e.getMessage() + "\r\n";
                 mHandler.sendMessage(msg);
-            } finally {
-                long sp = System.currentTimeMillis() - s1;
-                Log.d(TAG, "\tzhang 总共耗时：" + sp);
-                msg = new Message();
-                msg.what = 4;
-                msg.obj = sp;
-                mHandler.sendMessage(msg);
-                msg = new Message();
-                msg.what = 5;
-                msg.obj = "\r\n\r\n下载成功，耗时:" + sp + " ms\r\n";
-                mHandler.sendMessage(msg);
-                if (null != file && file.exists()) {
-                    file.delete();
-                }
             }
         }
     };
@@ -255,6 +275,8 @@ public class MainActivity extends Activity implements OnClickListener {
                     fileSize.setText("0");
                     fileDownloading.setText("0");
                     showLog.setText("");
+                    downloadUrl.setText("");
+                    rateText.setText("");
                     break;
             }
         }

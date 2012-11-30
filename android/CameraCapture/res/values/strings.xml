@@ -19,5 +19,7 @@
     <string name="connection_connected"><Data><![CDATA[<font color="green">%1$s</font>]]></Data></string>
     <string name="rate_notice">下载缓存大小倍率</string>
     <string name="label_rate">下载倍率:</string>
+    <string name="download_url">下载地址</string>
+    <string name="default_download_url">http://www.6188.com/upload_6188s/flashAll/20121129/1354150405qsHrfp.jpg</string>
     
 </resources>
