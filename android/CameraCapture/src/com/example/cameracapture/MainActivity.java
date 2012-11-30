@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ public class MainActivity extends Activity implements OnClickListener {
     TextView fileSize = null;
     TextView fileDownloading = null;
     TextView showLog = null;
+    EditText rateText = null;
     Button btnStart = null;
     Button btnPause = null;
     ScrollView scrollView = null;
@@ -97,6 +99,8 @@ public class MainActivity extends Activity implements OnClickListener {
         fileDownloading = (TextView) findViewById(R.id.downloading);
         fileDownloading.setText("0");
 
+        rateText = (EditText) findViewById(R.id.edit_rate);
+
         scrollView = (ScrollView) findViewById(R.id.scrollView);
         mLayout = (LinearLayout) findViewById(R.id.linearlayout);
 
@@ -114,7 +118,13 @@ public class MainActivity extends Activity implements OnClickListener {
     private final Runnable rDownload = new Runnable() {
         @Override
         public void run() {
+            int it = 2;
             mHandler.sendEmptyMessage(-1);
+            String rate = rateText.getText().toString();
+            if (null == rate || rate.equals("")) {
+                rate = "2";
+            }
+            it = Integer.parseInt(rate);
             File file = null;
             URL nUrl = null;
             HttpURLConnection connection = null;
@@ -167,7 +177,7 @@ public class MainActivity extends Activity implements OnClickListener {
                     mHandler.sendMessage(msg);
                     is = connection.getInputStream();
                     OutputStream os = null;
-                    byte[] buffer = new byte[10 * 1024];
+                    byte[] buffer = new byte[it * 1024];
                     file = new File(Environment.getExternalStorageDirectory()
                             + File.separator + "1354150405qsHrfp.jpg");
                     if (file.exists()) {

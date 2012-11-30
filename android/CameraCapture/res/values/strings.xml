@@ -17,5 +17,7 @@
     <string name="connection_open"><Data><![CDATA[<font color="yellow">%1$s</font>]]></Data></string>
     <string name="connection_connecting"><Data><![CDATA[<font color="yellow">%1$s</font>]]></Data></string>
     <string name="connection_connected"><Data><![CDATA[<font color="green">%1$s</font>]]></Data></string>
+    <string name="rate_notice">下载缓存大小倍率</string>
+    <string name="label_rate">下载倍率:</string>
     
 </resources>
