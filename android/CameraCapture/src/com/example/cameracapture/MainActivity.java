@@ -27,17 +27,16 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener {
 
-    private static String TAG = MainActivity.class.getSimpleName();
-	private static int BASE_MSG_CODE = 0x1000;
+    static String TAG = MainActivity.class.getSimpleName();
 	
-	public final static int MSG_CODE_01 = 0x1001;
-	public final static int MSG_CODE_02 = MSG_CODE_01+1;
-	public final static int MSG_CODE_03 = MSG_CODE_02+1;
-	public final static int MSG_CODE_04 = MSG_CODE_03+1;
-	public final static int MSG_CODE_05 = MSG_CODE_04+1;
-	public final static int MSG_CODE_06 = MSG_CODE_05+1;
-	public final static int MSG_CODE_07 = MSG_CODE_06+1;
-	public final static int MSG_CODE_99 = MSG_CODE_01+98;
+	private final static int MSG_CODE_01 = 0x1001;
+	private final static int MSG_CODE_02 = MSG_CODE_01+1;
+	private final static int MSG_CODE_03 = MSG_CODE_02+1;
+	private final static int MSG_CODE_04 = MSG_CODE_03+1;
+	private final static int MSG_CODE_05 = MSG_CODE_04+1;
+	private final static int MSG_CODE_06 = MSG_CODE_05+1;
+	private final static int MSG_CODE_07 = MSG_CODE_06+1;
+	private final static int MSG_CODE_99 = MSG_CODE_01+98;
 
     TextView fileSize = null;
     TextView fileDownloading = null;
@@ -95,15 +94,15 @@ public class MainActivity extends Activity implements OnClickListener {
                         fileDownloading.setText("0");
                         break;
                 }
-//                mHandler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
+                post(new Runnable() {
+                    @Override
+                    public void run() {
                         int off = mLayout.getMeasuredHeight() - scrollView.getHeight();
                         if (off > 0) {
                             scrollView.scrollTo(0, off);
                         }
-//                    }
-//                });
+                    }
+                });
             }
         }
 
@@ -121,7 +120,7 @@ public class MainActivity extends Activity implements OnClickListener {
         fileDownloading.setText("0");
 
         rateText = (EditText) findViewById(R.id.edit_rate);
-        rateText.setText("2");
+        rateText.setText("10");
         
         downloadUrl = (EditText) findViewById(R.id.edit_download_url);
         downloadUrl.setText("");
@@ -259,6 +258,7 @@ public class MainActivity extends Activity implements OnClickListener {
         if (null != v) {
             switch (v.getId()) {
                 case R.id.btn_start:
+                	mHandler.sendEmptyMessage(MSG_CODE_99);
                     // 开始
                     new Thread(rDownload).start();
                     break;
