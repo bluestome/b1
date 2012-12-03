@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import org.bluestome.satelliteweather.utils.HttpClientUtils;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
 import org.htmlparser.filters.HasAttributeFilter;
@@ -38,6 +39,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -135,7 +137,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
         btnPlay = (Button) findViewById(R.id.btn_play);
         btnPlay.setOnClickListener(this);
-        btnPlay.setEnabled(false);
+//        btnPlay.setEnabled(false);
 
         btnClearConsole = (Button) findViewById(R.id.btn_clear_console);
         btnClearConsole.setOnClickListener(this);
@@ -170,10 +172,26 @@ public class MainActivity extends Activity implements OnClickListener {
      */
     List<String> catalog() throws Exception { // WebsiteBean bean
         List<String> urlList = new ArrayList<String>();
+    	Message msg = new Message();
+    	msg.what = 0x0102;
+    	msg.obj = "开始获取网页";
+    	mHandler.sendMessage(msg);
+        byte[] body = HttpClientUtils.getBody(mURL);
+        if(null == body || body.length == 0){
+        	msg = new Message();
+        	msg.what = 0x0102;
+        	msg.obj = "获取服务端返回的内容为空";
+        	mHandler.sendMessage(msg);
+        	return urlList;
+        }
         Parser parser = new Parser();
-        parser.setURL(mURL);
+        String html = new String(body,"GB2312");
+        parser.setInputHTML(html);
         parser.setEncoding("GB2312");
-
+        msg = new Message();
+    	msg.what = 0x0102;
+    	msg.obj = "开始分析网页";
+    	mHandler.sendMessage(msg);
         NodeFilter fileter = new NodeClassFilter(CompositeTag.class);
         NodeList list = parser.extractAllNodesThatMatch(fileter)
                 .extractAllNodesThatMatch(
@@ -185,6 +203,10 @@ public class MainActivity extends Activity implements OnClickListener {
             parser.setInputHTML(div.toHtml());
             NodeFilter linkFilter = new NodeClassFilter(LinkTag.class);
             NodeList linkList = parser.extractAllNodesThatMatch(linkFilter);
+            msg = new Message();
+        	msg.what = 0x0102;
+        	msg.obj = "开始分析页面子元素";
+        	mHandler.sendMessage(msg);
             if (linkList != null && linkList.size() > 0) {
                 for (int i = 0; i < linkList.size(); i++) {
                     LinkTag link = (LinkTag) linkList.elementAt(i);
@@ -208,6 +230,10 @@ public class MainActivity extends Activity implements OnClickListener {
         }
         if (null != parser)
             parser = null;
+        msg = new Message();
+    	msg.what = 0x0102;
+    	msg.obj = "解析结束";
+    	mHandler.sendMessage(msg);
         return urlList;
     }
 
@@ -216,24 +242,33 @@ public class MainActivity extends Activity implements OnClickListener {
         public void run() {
             Message msg = null;
             try {
-                long s1 = System.currentTimeMillis();
-                mList = catalog();
-                msg = new Message();
-                msg.what = 0x0102;
-                msg.obj = "从网页解析耗时:" + (System.currentTimeMillis() - s1) + " ms";
-                mHandler.sendMessage(msg);
-                if (null != mList && mList.size() > 0) {
+            	String lastModifyTime = HttpClientUtils.getLastModifiedByUrl(mURL);
+            	if(null != lastModifyTime && !lastModifyTime.equals(MainApp.i().getLastModifyTime())){
+	                long s1 = System.currentTimeMillis();
+	                mList = catalog();
+	                msg = new Message();
+	                msg.what = 0x0102;
+	                msg.obj = "从网页解析耗时:" + (System.currentTimeMillis() - s1) + " ms";
+	                mHandler.sendMessage(msg);
+	                if (null != mList && mList.size() > 0) {
+	                	MainApp.i().setLastModifyTime(lastModifyTime);
+	                    msg = new Message();
+	                    msg.what = 0x0102;
+	                    msg.obj = "从站点获取图片地址成功，数量为:" + mList.size();
+	                    mHandler.sendMessage(msg);
+//	                    mHandler.sendEmptyMessage(0x0104);
+	                } else {
+	                    msg = new Message();
+	                    msg.what = 0x0102;
+	                    msg.obj = "从站点获取图片地址失败，数量为:" + mList.size();
+	                    mHandler.sendMessage(msg);
+	                }
+            	}else{
                     msg = new Message();
                     msg.what = 0x0102;
-                    msg.obj = "从站点获取图片地址成功，数量为:" + mList.size();
+                    msg.obj = "当前数据已经是最新数据不需要再处理\r\n";
                     mHandler.sendMessage(msg);
-                    mHandler.sendEmptyMessage(0x0104);
-                } else {
-                    msg = new Message();
-                    msg.what = 0x0102;
-                    msg.obj = "从站点获取图片地址失败，数量为:" + mList.size();
-                    mHandler.sendMessage(msg);
-                }
+            	}
             } catch (Exception e) {
                 msg = new Message();
                 msg.what = 0x0102;
@@ -268,8 +303,7 @@ public class MainActivity extends Activity implements OnClickListener {
                         msg.what = 0x0105;
                         msg.obj = drawable;
                         mHandler.sendMessage(msg);
-                        Log.d(TAG, "通知更新图片");
-                        SystemClock.sleep(40L);
+                        SystemClock.sleep(250L);
                     }
                 }
             } else {
@@ -283,7 +317,7 @@ public class MainActivity extends Activity implements OnClickListener {
                             msg.obj = drawable;
                             mHandler.sendMessage(msg);
                             Log.d(TAG, "通知更新图片");
-                            SystemClock.sleep(40L);
+                            SystemClock.sleep(250L);
                         }
                     }
                 } else {
@@ -303,7 +337,6 @@ public class MainActivity extends Activity implements OnClickListener {
                 case R.id.btn_start:
                     scrollView.setVisibility(View.VISIBLE);
                     mLayout2.setVisibility(View.GONE);
-                    btnPlay.setEnabled(false);
                     if (null != mList) {
                         mList.clear();
                     }
@@ -358,13 +391,14 @@ public class MainActivity extends Activity implements OnClickListener {
             msg.what = 0x0102;
             msg.obj = e.getMessage();
             mHandler.sendMessage(msg);
-        } finally {
-            if (null == drawable) {
-                Log.d(TAG, "处理完后的数据还是为空...");
-                imageCache.remove(imageUrl);
-                drawable = loadImageFromUrl(imageUrl);
-            }
-        }
+        } 
+//            finally {
+//            if (null == drawable) {
+//                Log.d(TAG, "处理完后的数据还是为空...");
+//                imageCache.remove(imageUrl);
+//                drawable = loadImageFromUrl(imageUrl);
+//            }
+//        }
         return drawable;
     }
 
