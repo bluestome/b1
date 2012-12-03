@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
@@ -18,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
@@ -28,7 +28,14 @@ import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.NodeList;
 
-import java.lang.ref.SoftReference;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,14 +49,20 @@ public class MainActivity extends Activity implements OnClickListener {
     static String TAG = MainActivity.class.getSimpleName();
     static String mURL = "http://www.nmc.gov.cn/publish/satellite/fy2.htm";
     static String mPrefix = "http://image.weather.gov.cn/";
-    Map<String, SoftReference<Drawable>> imageCache = new HashMap<String, SoftReference<Drawable>>();
+    static Map<String, String> imageCache = new HashMap<String, String>();
     ExecutorService executorService = Executors.newSingleThreadExecutor();
+    static String APP_FILE_NAME = ".salteliteweather";
+    static String APP_PATH = Environment.getExternalStorageDirectory()
+            .getAbsolutePath() + File.separator + APP_FILE_NAME;
+    static String IMAGE_PATH = APP_PATH + File.separator + "images/";
 
     TextView showLog = null;
     Button btnStart = null;
     Button btnPlay = null;
+    Button btnClearConsole = null;
     ScrollView scrollView = null;
     LinearLayout mLayout;
+    LinearLayout mLayout2;
     ImageView imgView = null;
     List<String> mList = null;
 
@@ -68,8 +81,6 @@ public class MainActivity extends Activity implements OnClickListener {
                         String old = showLog.getText().toString();
                         showLog.setText(old + "\r\n" + ex);
                         break;
-                    case 0x0103:
-                        break;
                     case 0x0104:
                         if (!btnPlay.isEnabled()) {
                             btnPlay.setEnabled(true);
@@ -82,11 +93,12 @@ public class MainActivity extends Activity implements OnClickListener {
                         imgView.setImageBitmap(bm);
                         break;
                     case 0x0106:
-                        Toast.makeText(getContext(), "开始播放", Toast.LENGTH_SHORT).show();
                         break;
                     case 0x0107:
-                        Toast.makeText(getContext(), "结束播放", Toast.LENGTH_SHORT).show();
                         break;
+                }
+                if (showLog.getText().toString().length() > 0) {
+                    btnClearConsole.setEnabled(true);
                 }
                 post(new Runnable() {
                     @Override
@@ -108,7 +120,12 @@ public class MainActivity extends Activity implements OnClickListener {
         setContentView(R.layout.main);
 
         scrollView = (ScrollView) findViewById(R.id.scrollView);
+        scrollView.setVisibility(View.VISIBLE);
+
         mLayout = (LinearLayout) findViewById(R.id.linearlayout);
+
+        mLayout2 = (LinearLayout) findViewById(R.id.linearlayout_image);
+        mLayout2.setVisibility(View.GONE);
 
         showLog = (TextView) findViewById(R.id.text_show_log);
         showLog.setText("");
@@ -120,7 +137,32 @@ public class MainActivity extends Activity implements OnClickListener {
         btnPlay.setOnClickListener(this);
         btnPlay.setEnabled(false);
 
+        btnClearConsole = (Button) findViewById(R.id.btn_clear_console);
+        btnClearConsole.setOnClickListener(this);
+        btnClearConsole.setEnabled(false);
+
         imgView = (ImageView) findViewById(R.id.imageView1);
+
+        init();
+    }
+
+    /**
+     * 初始化文件目录
+     */
+    private void init() {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            // 创建目录
+            File path = new File(APP_PATH);
+            if (!path.exists()) {
+                path.mkdirs();
+            }
+            // 创建图片目录
+            path = new File(IMAGE_PATH);
+            if (!path.exists()) {
+                path.mkdirs();
+            }
+        }
+
     }
 
     /**
@@ -151,17 +193,14 @@ public class MainActivity extends Activity implements OnClickListener {
                     if (null != str && str.length() > 0) {
                         final String[] tmps = str.split(",");
                         urlList.add(0, tmps[0]);
-                        // executorService.execute(new Runnable() {
-                        // @Override
-                        // public void run() {
-                        // Log.d(TAG, "正在下载图片:" + tmps[0]);
-                        // Message msg = new Message();
-                        // msg.what = 0x0102;
-                        // msg.obj = "正在下载图片:" + tmps[0];
-                        // mHandler.sendMessage(msg);
-                        // loadImageFromUrl(mPrefix + tmps[0]);
-                        // }
-                        // });
+                        if (!imageCache.containsKey(tmps[0])) {
+                            executorService.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loadImageFromUrl(mPrefix + tmps[0]);
+                                }
+                            });
+                        }
                     }
 
                 }
@@ -175,22 +214,28 @@ public class MainActivity extends Activity implements OnClickListener {
     Runnable rParserHtml = new Runnable() {
         @Override
         public void run() {
+            Message msg = null;
             try {
+                long s1 = System.currentTimeMillis();
                 mList = catalog();
+                msg = new Message();
+                msg.what = 0x0102;
+                msg.obj = "从网页解析耗时:" + (System.currentTimeMillis() - s1) + " ms";
+                mHandler.sendMessage(msg);
                 if (null != mList && mList.size() > 0) {
-                    Message msg = new Message();
+                    msg = new Message();
                     msg.what = 0x0102;
                     msg.obj = "从站点获取图片地址成功，数量为:" + mList.size();
                     mHandler.sendMessage(msg);
                     mHandler.sendEmptyMessage(0x0104);
                 } else {
-                    Message msg = new Message();
+                    msg = new Message();
                     msg.what = 0x0102;
                     msg.obj = "从站点获取图片地址失败，数量为:" + mList.size();
                     mHandler.sendMessage(msg);
                 }
             } catch (Exception e) {
-                Message msg = new Message();
+                msg = new Message();
                 msg.what = 0x0102;
                 msg.obj = e.getMessage();
                 mHandler.sendMessage(msg);
@@ -201,10 +246,22 @@ public class MainActivity extends Activity implements OnClickListener {
     Runnable rDownloadImg = new Runnable() {
         @Override
         public void run() {
-            if (null != mList && mList.size() > 0) {
-                mHandler.sendEmptyMessage(0x0106);
-                for (String tmp : mList) {
-                    Drawable drawable = loadImageFromUrl(mPrefix + tmp);
+            // 先从本地文件开始入手
+            File dir = new File(IMAGE_PATH);
+            File[] files = dir.listFiles();
+            if (files.length > 0) {
+                for (int i = files.length - 1; i >= 0; i--) {
+                    File s = files[i];
+                    Drawable drawable = null;
+                    try {
+                        drawable = Drawable.createFromStream(
+                                new FileInputStream(new File(s.getAbsolutePath())), "image.png");
+                    } catch (FileNotFoundException e) {
+                        Message msg = new Message();
+                        msg.what = 0x0102;
+                        msg.obj = s.getName() + "找不到\r\n";
+                        mHandler.sendMessage(msg);
+                    }
                     if (null != drawable) {
                         Message msg = new Message();
                         msg = new Message();
@@ -212,15 +269,29 @@ public class MainActivity extends Activity implements OnClickListener {
                         msg.obj = drawable;
                         mHandler.sendMessage(msg);
                         Log.d(TAG, "通知更新图片");
-                        SystemClock.sleep(1000L);
+                        SystemClock.sleep(40L);
                     }
                 }
-                mHandler.sendEmptyMessage(0x0107);
             } else {
-                Message msg = new Message();
-                msg.what = 0x0102;
-                msg.obj = "没有可用图片\r\n";
-                mHandler.sendMessage(msg);
+                if (null != mList && mList.size() > 0) {
+                    for (String tmp : mList) {
+                        Drawable drawable = loadImageFromUrl(mPrefix + tmp);
+                        if (null != drawable) {
+                            Message msg = new Message();
+                            msg = new Message();
+                            msg.what = 0x0105;
+                            msg.obj = drawable;
+                            mHandler.sendMessage(msg);
+                            Log.d(TAG, "通知更新图片");
+                            SystemClock.sleep(40L);
+                        }
+                    }
+                } else {
+                    Message msg = new Message();
+                    msg.what = 0x0102;
+                    msg.obj = "没有可用图片\r\n";
+                    mHandler.sendMessage(msg);
+                }
             }
         }
     };
@@ -230,6 +301,8 @@ public class MainActivity extends Activity implements OnClickListener {
         if (null != v) {
             switch (v.getId()) {
                 case R.id.btn_start:
+                    scrollView.setVisibility(View.VISIBLE);
+                    mLayout2.setVisibility(View.GONE);
                     btnPlay.setEnabled(false);
                     if (null != mList) {
                         mList.clear();
@@ -238,7 +311,13 @@ public class MainActivity extends Activity implements OnClickListener {
                     new Thread(rParserHtml).start();
                     break;
                 case R.id.btn_play:
+                    mLayout2.setVisibility(View.VISIBLE);
+                    scrollView.setVisibility(View.GONE);
                     new Thread(rDownloadImg).start();
+                    break;
+                case R.id.btn_clear_console:
+                    showLog.setText("");
+                    btnClearConsole.setEnabled(false);
                     break;
             }
         }
@@ -247,21 +326,31 @@ public class MainActivity extends Activity implements OnClickListener {
     // 从网络上取数据方法
     protected Drawable loadImageFromUrl(String imageUrl) {
         Drawable drawable = null;
-        SoftReference<Drawable> softReference = null;
+        FileInputStream fis = null;
         try {
             if (!imageCache.containsKey(imageUrl)) {
-                Log.d(TAG, "图片缓存中不存在[" + imageUrl + "]，从服务器中下载");
-                drawable = Drawable.createFromStream(new URL(imageUrl).openStream(),
-                        "image.png");
-                if (null != drawable) {
-                    softReference = new SoftReference<Drawable>(drawable);
-                    imageCache.put(imageUrl, softReference);
+                Log.d(TAG, "图片缓存中不存在，从服务器中下载");
+                String name = downloadImage(imageUrl);
+                if (null != name && name.length() > 0 && !name.equals("")) {
+                    String dir = IMAGE_PATH + File.separator + name;
+                    fis = new FileInputStream(new File(dir));
+                    Log.d(TAG, "图片缓存中存在，路径为：" + dir);
+                    drawable = Drawable.createFromStream(fis, "image.png");
+                    if (null != drawable) {
+                        imageCache.put(imageUrl, name);
+                    }
                 }
             } else {
-                Log.d(TAG, "图片缓存中存在[" + imageUrl + "]，直接获取");
-                softReference = imageCache.get(imageUrl);
-                if (null != softReference) {
-                    drawable = softReference.get();
+                Log.d(TAG, "图片缓存中存在，从本地直接获取");
+                String name = imageCache.get(imageUrl);
+                if (null != name && name.length() > 0 && !name.equals("")) {
+                    String dir = IMAGE_PATH + File.separator + name;
+                    Log.d(TAG, "图片缓存中存在，路径为：" + dir);
+                    fis = new FileInputStream(new File(dir));
+                    drawable = Drawable.createFromStream(fis, "image.png");
+                    if (null != drawable) {
+                        imageCache.put(imageUrl, name);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -269,11 +358,99 @@ public class MainActivity extends Activity implements OnClickListener {
             msg.what = 0x0102;
             msg.obj = e.getMessage();
             mHandler.sendMessage(msg);
+        } finally {
+            if (null == drawable) {
+                Log.d(TAG, "处理完后的数据还是为空...");
+                imageCache.remove(imageUrl);
+                drawable = loadImageFromUrl(imageUrl);
+            }
         }
         return drawable;
     }
 
     private Context getContext() {
         return this;
+    }
+
+    /**
+     * 下载图片
+     * 
+     * @param url
+     * @return
+     */
+    private synchronized String downloadImage(String url) {
+        URL cURL = null;
+        HttpURLConnection connection = null;
+        InputStream in = null;
+        Message msg = null;
+        File file = null;
+        try {
+            cURL = new URL(url);
+            connection = (HttpURLConnection) cURL.openConnection();
+            // 获取输出流
+            connection.setDoOutput(true);
+            connection.setConnectTimeout(5 * 1000);
+            connection.setReadTimeout(15 * 1000);
+            connection.connect();
+            int code = connection.getResponseCode();
+            switch (code) {
+                case 200:
+                    String name = analysisURL(url);
+                    file = new File(IMAGE_PATH + File.separator + name);
+                    if (file.exists()) {
+                        msg = new Message();
+                        msg.what = 0x0102;
+                        msg.obj = "已经存在文件:" + name;
+                        mHandler.sendMessage(msg);
+                        return name;
+                    }
+                    in = connection.getInputStream();
+                    byte[] buffer = new byte[2 * 1024];
+                    OutputStream byteBuffer = new FileOutputStream(file, false);
+                    int ch;
+                    while ((ch = in.read(buffer)) != -1) {
+                        byteBuffer.write(buffer, 0, ch);
+                        byteBuffer.flush();
+                    }
+                    byteBuffer.close();
+                    return name;
+                default:
+                    msg = new Message();
+                    msg.what = 0x0102;
+                    msg.obj = "请求到服务端失败,错误码:" + code;
+                    mHandler.sendMessage(msg);
+                    break;
+            }
+        } catch (IOException e) {
+            msg = new Message();
+            msg.what = 0x0102;
+            msg.obj = e.getMessage();
+            mHandler.sendMessage(msg);
+        } catch (Exception e) {
+            msg = new Message();
+            msg.what = 0x0102;
+            msg.obj = e.getMessage();
+            mHandler.sendMessage(msg);
+        } finally {
+            if (null != connection) {
+                connection.disconnect();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 分析URL,获取图片文件名
+     * 
+     * @param url
+     * @return
+     */
+    private String analysisURL(String url) {
+        int s = url.lastIndexOf("/");
+        String name = url.substring(s + 1, url.length());
+        if (null == name || name.equals("")) {
+            name = String.valueOf(System.currentTimeMillis());
+        }
+        return name;
     }
 }

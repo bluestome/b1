@@ -7,5 +7,6 @@
     <string name="label_start">开始</string>
     <string name="label_play">播放</string>
     <string name="label_tmp_show_log"></string>
+    <string name="label_clear_console">清屏</string>
 
 </resources>

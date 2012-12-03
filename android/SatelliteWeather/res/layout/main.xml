@@ -3,11 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:layout_marginBottom="0dp">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center" 
+        android:background="@android:color/transparent">
 
         <Button
             android:id="@+id/btn_start"
@@ -21,41 +24,48 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_play" />
+
+        <Button
+            android:id="@+id/btn_clear_console"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_clear_console" />
 
     </LinearLayout>
-
+    <LinearLayout
+        android:id="@+id/linearlayout_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="0dp"
+        android:visibility="gone"
+        android:background="@android:color/black">
+	    <ImageView
+	        android:id="@+id/imageView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingTop="0dp"
+	        android:src="@drawable/default_img" />
+
+    </LinearLayout>
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="189dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="0dp"
-        android:background="@android:color/black" >
-
+        android:background="@android:color/black">
         <LinearLayout
             android:id="@+id/linearlayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="23dp"
             android:orientation="vertical" >
-
             <TextView
                 android:id="@+id/text_show_log"
-                android:layout_width="319dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="45.30"
                 android:text="@string/label_tmp_show_log"
                 android:textColor="@android:color/white" />
         </LinearLayout>
     </ScrollView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:layout_marginBottom="0dp">
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/default_img" />
-    </LinearLayout>
 
 </LinearLayout>
