@@ -47,17 +47,15 @@
                 android:textColor="@android:color/white" />
         </LinearLayout>
     </ScrollView>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-    </LinearLayout>
-
+        android:layout_height="wrap_content" 
+        android:layout_marginBottom="0dp">
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/default_img" />
+    </LinearLayout>
 
 </LinearLayout>
