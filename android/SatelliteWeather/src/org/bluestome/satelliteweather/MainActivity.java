@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import org.bluestome.satelliteweather.common.Constants;
 import org.bluestome.satelliteweather.utils.FileUtils;
 import org.bluestome.satelliteweather.utils.HttpClientUtils;
 import org.htmlparser.NodeFilter;
@@ -50,8 +49,14 @@ import java.util.concurrent.Executors;
 public class MainActivity extends Activity implements OnClickListener {
 
     static String TAG = MainActivity.class.getSimpleName();
+    static String mURL = "http://www.nmc.gov.cn/publish/satellite/fy2.htm";
+    static String mPrefix = "http://image.weather.gov.cn/";
     static Map<String, String> imageCache = new HashMap<String, String>();
     ExecutorService executorService = Executors.newSingleThreadExecutor();
+    static String APP_FILE_NAME = ".salteliteweather";
+    static String APP_PATH = Environment.getExternalStorageDirectory()
+            .getAbsolutePath() + File.separator + APP_FILE_NAME;
+    static String IMAGE_PATH = APP_PATH + File.separator + "images/";
 
     TextView showLog = null;
     Button btnStart = null;
@@ -150,12 +155,12 @@ public class MainActivity extends Activity implements OnClickListener {
     private void init() {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             // 创建目录
-            File path = new File(Constants.APP_PATH);
+            File path = new File(APP_PATH);
             if (!path.exists()) {
                 path.mkdirs();
             }
             // 创建图片目录
-            path = new File(Constants.SATELINE_CLOUD_IMAGE_PATH);
+            path = new File(IMAGE_PATH);
             if (!path.exists()) {
                 path.mkdirs();
             }
@@ -172,7 +177,7 @@ public class MainActivity extends Activity implements OnClickListener {
         msg.what = 0x0102;
         msg.obj = "开始获取网页";
         mHandler.sendMessage(msg);
-        byte[] body = HttpClientUtils.getBody(Constants.SATELINE_CLOUD_URL);
+        byte[] body = HttpClientUtils.getBody(mURL);
         if (null == body || body.length == 0) {
             msg = new Message();
             msg.what = 0x0102;
@@ -215,8 +220,7 @@ public class MainActivity extends Activity implements OnClickListener {
                             executorService.execute(new Runnable() {
                                 @Override
                                 public void run() {
-                                    loadImageFromUrl(Constants.PREFIX_SATELINE_CLOUD_IMG_URL
-                                            + tmps[0]);
+                                    loadImageFromUrl(mPrefix + tmps[0]);
                                 }
                             });
                         }
@@ -239,8 +243,7 @@ public class MainActivity extends Activity implements OnClickListener {
         public void run() {
             Message msg = null;
             try {
-                String lastModifyTime = HttpClientUtils
-                        .getLastModifiedByUrl(Constants.SATELINE_CLOUD_URL);
+                String lastModifyTime = HttpClientUtils.getLastModifiedByUrl(mURL);
                 if (null != lastModifyTime
                         && !lastModifyTime.equals(MainApp.i().getLastModifyTime())) {
                     long s1 = System.currentTimeMillis();
@@ -280,7 +283,7 @@ public class MainActivity extends Activity implements OnClickListener {
         @Override
         public void run() {
             // 先从本地文件开始入手
-            File dir = new File(Constants.SATELINE_CLOUD_IMAGE_PATH);
+            File dir = new File(IMAGE_PATH);
             File[] files = dir.listFiles();
             FileUtils.sortFilesByFileName(files);
             if (files.length > 0) {
@@ -309,8 +312,7 @@ public class MainActivity extends Activity implements OnClickListener {
             } else {
                 if (null != mList && mList.size() > 0) {
                     for (String tmp : mList) {
-                        Drawable drawable = loadImageFromUrl(Constants.PREFIX_SATELINE_CLOUD_IMG_URL
-                                + tmp);
+                        Drawable drawable = loadImageFromUrl(mPrefix + tmp);
                         if (null != drawable) {
                             Message msg = new Message();
                             msg = new Message();
@@ -334,7 +336,7 @@ public class MainActivity extends Activity implements OnClickListener {
         @Override
         public void run() {
             // 先从本地文件开始入手
-            File dir = new File(Constants.SATELINE_CLOUD_IMAGE_PATH);
+            File dir = new File(IMAGE_PATH);
             File[] files = dir.listFiles();
             FileUtils.sortFilesByFileName(files);
             if (files.length > 0) {
@@ -363,8 +365,7 @@ public class MainActivity extends Activity implements OnClickListener {
             } else {
                 if (null != mList && mList.size() > 0) {
                     for (String tmp : mList) {
-                        Drawable drawable = loadImageFromUrl(Constants.PREFIX_SATELINE_CLOUD_IMG_URL
-                                + tmp);
+                        Drawable drawable = loadImageFromUrl(mPrefix + tmp);
                         if (null != drawable) {
                             Message msg = new Message();
                             msg = new Message();
@@ -419,7 +420,7 @@ public class MainActivity extends Activity implements OnClickListener {
                 Log.d(TAG, "图片缓存中不存在，从服务器中下载");
                 String name = downloadImage(imageUrl);
                 if (null != name && name.length() > 0 && !name.equals("")) {
-                    String dir = Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + name;
+                    String dir = IMAGE_PATH + File.separator + name;
                     fis = new FileInputStream(new File(dir));
                     Log.d(TAG, "图片缓存中存在，路径为：" + dir);
                     drawable = Drawable.createFromStream(fis, "image.png");
@@ -431,7 +432,7 @@ public class MainActivity extends Activity implements OnClickListener {
                 Log.d(TAG, "图片缓存中存在，从本地直接获取");
                 String name = imageCache.get(imageUrl);
                 if (null != name && name.length() > 0 && !name.equals("")) {
-                    String dir = Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + name;
+                    String dir = IMAGE_PATH + File.separator + name;
                     Log.d(TAG, "图片缓存中存在，路径为：" + dir);
                     fis = new FileInputStream(new File(dir));
                     drawable = Drawable.createFromStream(fis, "image.png");
@@ -477,7 +478,7 @@ public class MainActivity extends Activity implements OnClickListener {
             switch (code) {
                 case 200:
                     String name = analysisURL(url);
-                    file = new File(Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + name);
+                    file = new File(IMAGE_PATH + File.separator + name);
                     if (file.exists()) {
                         msg = new Message();
                         msg.what = 0x0102;
