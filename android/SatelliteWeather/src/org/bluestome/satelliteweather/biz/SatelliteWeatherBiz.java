@@ -1,16 +1,17 @@
 
 package org.bluestome.satelliteweather.biz;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Environment;
+import android.os.SystemClock;
+import android.text.format.DateUtils;
 
 import org.bluestome.satelliteweather.MainApp;
 import org.bluestome.satelliteweather.R;
@@ -24,18 +25,16 @@ import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.NodeList;
 
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Environment;
-import android.os.SystemClock;
-import android.text.format.DateUtils;
-import android.widget.Toast;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName: Biz
@@ -101,44 +100,48 @@ public class SatelliteWeatherBiz {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase(ACTION_ALARM)) {
                 try {
-                	String lastModifyTime = HttpClientUtils.getLastModifiedByUrl(mURL);
-                	if(null != lastModifyTime && !lastModifyTime.equals(MainApp.i().getLastModifyTime())){
-	                	notifyNS("服务端有最新数据,["+lastModifyTime+"]");
-	                    catalog(lastModifyTime);
-                	}
+                    String lastModifyTime = HttpClientUtils.getLastModifiedByUrl(mURL);
+                    if (null != lastModifyTime
+                            && !lastModifyTime.equals(MainApp.i().getLastModifyTime())) {
+                        notifyNS("服务端有最新数据,[" + lastModifyTime + "]");
+                        catalog(lastModifyTime);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
     }
-    
-    private void notifyNS(String content){
-    	String ns = Context.NOTIFICATION_SERVICE;
-    	 NotificationManager mNotificationManager = (NotificationManager) MainApp.i().getSystemService(ns);
-    	 int icon = R.drawable.ic_launcher;
-    	 CharSequence tickerText = "卫星云图";
-    	 long when = System.currentTimeMillis();
-    	 Notification notification = new Notification(icon, tickerText, when);
-    	 Context context = MainApp.i();
-    	 CharSequence contentTitle = "同步数据";
-    	 Intent notificationIntent = new Intent(MainApp.i(), SatelliteWeatherBiz.class);
-    	 PendingIntent contentIntent = PendingIntent.getActivity(MainApp.i(), 0,notificationIntent, 0);
-    	 notification.setLatestEventInfo(context, contentTitle, content,contentIntent);
-    	 mNotificationManager.notify(Constants.NOTIFY_ID, notification);
+
+    private void notifyNS(String content) {
+        String ns = Context.NOTIFICATION_SERVICE;
+        NotificationManager mNotificationManager = (NotificationManager) MainApp.i()
+                .getSystemService(ns);
+        int icon = R.drawable.ic_launcher;
+        CharSequence tickerText = "卫星云图";
+        long when = System.currentTimeMillis();
+        Notification notification = new Notification(icon, tickerText, when);
+        Context context = MainApp.i();
+        CharSequence contentTitle = "同步数据";
+        Intent notificationIntent = new Intent(MainApp.i(), SatelliteWeatherBiz.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(MainApp.i(), 0, notificationIntent,
+                0);
+        notification.setLatestEventInfo(context, contentTitle, content, contentIntent);
+        mNotificationManager.notify(Constants.NOTIFY_ID, notification);
     }
 
     /**
      * @throws Exception
      */
-    List<String> catalog(String lastModifyTime) throws Exception { // WebsiteBean bean
+    List<String> catalog(String lastModifyTime) throws Exception { // WebsiteBean
+                                                                   // bean
         List<String> urlList = new ArrayList<String>();
         byte[] body = HttpClientUtils.getBody(mURL, "If-Modified-Since", new Date().toGMTString());
-        if(null == body || body.length == 0){
-        	return urlList;
+        if (null == body || body.length == 0) {
+            return urlList;
         }
         Parser parser = new Parser();
-        String html = new String(body,"GB2312");
+        String html = new String(body, "GB2312");
         parser.setInputHTML(html);
         parser.setEncoding("GB2312");
 
@@ -160,11 +163,11 @@ public class SatelliteWeatherBiz {
                             .replace(")", "").replace("'", "");
                     if (null != str && str.length() > 0) {
                         final String[] tmps = str.split(",");
-                        urlList.add(0, tmps[1]);
+                        urlList.add(0, tmps[0]);
                         MainApp.i().getExecutorService().execute(new Runnable() {
                             @Override
                             public void run() {
-                                downloadImage(mPrefix + tmps[1]);
+                                downloadImage(mPrefix + tmps[0]);
                             }
                         });
                     }
