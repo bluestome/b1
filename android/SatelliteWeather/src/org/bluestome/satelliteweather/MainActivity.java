@@ -104,6 +104,8 @@ public class MainActivity extends Activity implements OnClickListener {
                     case 0x0107:
                         break;
                     case 0x0200:
+                    	imgView.setVisibility(View.INVISIBLE);
+                    	scrollView.setVisibility(View.INVISIBLE);
                         // 选择时间
                         initSpinner();
                         break;
@@ -198,17 +200,7 @@ public class MainActivity extends Activity implements OnClickListener {
      * 初始化Spinner空间
      */
     private void initSpinner() {
-        View view = getLayoutInflater().inflate(R.layout.horizontal_spinner,
-                null);
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
-                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_APPLICATION,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSLUCENT);
-        ((WindowManager) getSystemService(Context.WINDOW_SERVICE))
-                .addView(view, lp);
-        spinner = (Spinner) view.findViewById(R.id.spin_date);
+        spinner = (Spinner) findViewById(R.id.spin_date);
         spinner.setVisibility(View.VISIBLE);
         init();
     }
@@ -250,6 +242,9 @@ public class MainActivity extends Activity implements OnClickListener {
                                 String value = (String) parent.getAdapter().getItem(position);
                                 date = value;
                                 if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                    play();
+                                }else if(getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+                                	imgView.setVisibility(View.VISIBLE);
                                     play();
                                 }
                             }
@@ -467,15 +462,16 @@ public class MainActivity extends Activity implements OnClickListener {
         @Override
         public void run() {
             Message msg = null;
-            if (null == date || date.length() == 0 || date.equals("")) {
-                msg = new Message();
-                msg.what = 0x0106;
-                msg.obj = "请选择目录";
-                mHandler.sendMessage(msg);
-            }
             if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 mHandler.sendEmptyMessage(0x0200);
             } else if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            	if (null == date || date.length() == 0 || date.equals("")) {
+            		msg = new Message();
+            		msg.what = 0x0106;
+            		msg.obj = "请选择目录";
+            		mHandler.sendMessage(msg);
+            		return;
+            	}
                 play();
             }
         }
@@ -485,15 +481,16 @@ public class MainActivity extends Activity implements OnClickListener {
         @Override
         public void run() {
             Message msg = null;
-            if (null == date || date.length() == 0 || date.equals("")) {
-                msg = new Message();
-                msg.what = 0x0106;
-                msg.obj = "请选择目录";
-                mHandler.sendMessage(msg);
-            }
             if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 mHandler.sendEmptyMessage(0x0200);
             } else if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            	if (null == date || date.length() == 0 || date.equals("")) {
+            		msg = new Message();
+            		msg.what = 0x0106;
+            		msg.obj = "请选择目录";
+            		mHandler.sendMessage(msg);
+            		return;
+            	}
                 play();
             }
         }

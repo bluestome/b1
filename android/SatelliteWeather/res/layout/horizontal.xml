@@ -36,7 +36,7 @@
         android:layout_width="fill_parent"
         android:background="@android:color/black"
         android:layout_height="wrap_content" android:visibility="gone">
-
+
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="fill_parent"
@@ -50,7 +50,7 @@
         android:id="@+id/scrollView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@android:color/black" >
+        android:background="@android:color/black" android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/linearlayout"
@@ -68,4 +68,17 @@
                 android:textColor="@android:color/white"/>
         </LinearLayout>
     </ScrollView>
+    <LinearLayout
+        android:id="@+id/linearlayout_spinner"
+        android:layout_width="fill_parent"
+        android:background="@android:color/black"
+        android:layout_height="wrap_content">
+        <Spinner
+            android:id="@+id/spin_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:visibility="gone"
+         />
+
+    </LinearLayout>
 </LinearLayout>

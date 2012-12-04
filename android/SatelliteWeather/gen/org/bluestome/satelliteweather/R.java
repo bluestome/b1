@@ -28,9 +28,10 @@ public final class R {
         public static final int imageView1=0x7f080004;
         public static final int linearlayout=0x7f080006;
         public static final int linearlayout_image=0x7f080003;
-        public static final int menu_settings=0x7f080009;
+        public static final int linearlayout_spinner=0x7f080008;
+        public static final int menu_settings=0x7f08000a;
         public static final int scrollView=0x7f080005;
-        public static final int spin_date=0x7f080008;
+        public static final int spin_date=0x7f080009;
         public static final int text_show_log=0x7f080007;
     }
     public static final class layout {
