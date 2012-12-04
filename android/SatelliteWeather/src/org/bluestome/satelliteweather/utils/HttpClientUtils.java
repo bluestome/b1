@@ -706,7 +706,7 @@ public class HttpClientUtils {
      * @return
      */
     public static String getLastModifiedByUrl(String url) {
-        String value = "1970-01-01 00:00:00";
+        String value = null;
         URL cURL = null;
         try {
             cURL = new URL(url);

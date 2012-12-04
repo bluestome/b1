@@ -28,12 +28,15 @@ public final class R {
         public static final int imageView1=0x7f080004;
         public static final int linearlayout=0x7f080006;
         public static final int linearlayout_image=0x7f080003;
-        public static final int menu_settings=0x7f080008;
+        public static final int menu_settings=0x7f080009;
         public static final int scrollView=0x7f080005;
+        public static final int spin_date=0x7f080008;
         public static final int text_show_log=0x7f080007;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
+        public static final int horizontal=0x7f030000;
+        public static final int horizontal_spinner=0x7f030001;
+        public static final int main=0x7f030002;
     }
     public static final class menu {
         public static final int main=0x7f070000;

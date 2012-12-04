@@ -13,9 +13,9 @@ import android.os.Environment;
 import android.os.SystemClock;
 import android.text.format.DateUtils;
 
+import org.bluestome.satelliteweather.MainActivity;
 import org.bluestome.satelliteweather.MainApp;
 import org.bluestome.satelliteweather.R;
-import org.bluestome.satelliteweather.common.Constants;
 import org.bluestome.satelliteweather.utils.HttpClientUtils;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
@@ -123,11 +123,12 @@ public class SatelliteWeatherBiz {
         Notification notification = new Notification(icon, tickerText, when);
         Context context = MainApp.i();
         CharSequence contentTitle = "同步数据";
-        Intent notificationIntent = new Intent(MainApp.i(), SatelliteWeatherBiz.class);
+        Intent notificationIntent = new Intent(MainApp.i(), MainActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(MainApp.i(), 0, notificationIntent,
-                0);
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        notification.defaults = notification.defaults | Notification.DEFAULT_SOUND;
         notification.setLatestEventInfo(context, contentTitle, content, contentIntent);
-        mNotificationManager.notify(Constants.NOTIFY_ID, notification);
+        mNotificationManager.notify(MainApp.i().getAtomicInteger().getAndIncrement(), notification);
     }
 
     /**

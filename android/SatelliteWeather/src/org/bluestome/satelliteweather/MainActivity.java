@@ -3,7 +3,9 @@ package org.bluestome.satelliteweather;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -14,13 +16,21 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.bluestome.satelliteweather.common.Constants;
+import org.bluestome.satelliteweather.utils.DateUtils;
 import org.bluestome.satelliteweather.utils.FileUtils;
 import org.bluestome.satelliteweather.utils.HttpClientUtils;
 import org.htmlparser.NodeFilter;
@@ -41,18 +51,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class MainActivity extends Activity implements OnClickListener {
 
     static String TAG = MainActivity.class.getSimpleName();
-    static Map<String, String> imageCache = new HashMap<String, String>();
-    ExecutorService executorService = Executors.newSingleThreadExecutor();
-
     TextView showLog = null;
     Button btnStart = null;
     Button btnPlay = null;
@@ -62,6 +66,9 @@ public class MainActivity extends Activity implements OnClickListener {
     LinearLayout mLayout2;
     ImageView imgView = null;
     List<String> mList = null;
+    Spinner spinner = null;
+    ArrayAdapter<String> adapter = null;
+    String date = null;
 
     private final Handler mHandler = new Handler() {
         @Override
@@ -91,8 +98,14 @@ public class MainActivity extends Activity implements OnClickListener {
                         System.gc();
                         break;
                     case 0x0106:
+                        String t = (String) msg.obj;
+                        Toast.makeText(getContext(), t, Toast.LENGTH_SHORT).show();
                         break;
                     case 0x0107:
+                        break;
+                    case 0x0200:
+                        // 选择时间
+                        initSpinner();
                         break;
                 }
                 if (showLog.getText().toString().length() > 0) {
@@ -116,7 +129,14 @@ public class MainActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        initVUI();
+        init();
+    }
 
+    /**
+     * 竖屏初始化UI
+     */
+    private void initVUI() {
         scrollView = (ScrollView) findViewById(R.id.scrollView);
         scrollView.setVisibility(View.VISIBLE);
 
@@ -141,6 +161,55 @@ public class MainActivity extends Activity implements OnClickListener {
 
         imgView = (ImageView) findViewById(R.id.imageView1);
 
+        spinner = (Spinner) findViewById(R.id.spin_date);
+        spinner.setEnabled(false);
+    }
+
+    /**
+     * 横屏初始化UI
+     */
+    private void initHUI() {
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
+        scrollView.setVisibility(View.VISIBLE);
+
+        mLayout = (LinearLayout) findViewById(R.id.linearlayout);
+
+        mLayout2 = (LinearLayout) findViewById(R.id.linearlayout_image);
+        mLayout2.setVisibility(View.GONE);
+
+        showLog = (TextView) findViewById(R.id.text_show_log);
+        showLog.setText("");
+
+        btnStart = (Button) findViewById(R.id.btn_start);
+        btnStart.setOnClickListener(this);
+
+        btnPlay = (Button) findViewById(R.id.btn_play);
+        btnPlay.setOnClickListener(this);
+
+        btnClearConsole = (Button) findViewById(R.id.btn_clear_console);
+        btnClearConsole.setOnClickListener(this);
+        btnClearConsole.setEnabled(false);
+
+        imgView = (ImageView) findViewById(R.id.imageView1);
+
+    }
+
+    /**
+     * 初始化Spinner空间
+     */
+    private void initSpinner() {
+        View view = getLayoutInflater().inflate(R.layout.horizontal_spinner,
+                null);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_APPLICATION,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
+        ((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+                .addView(view, lp);
+        spinner = (Spinner) view.findViewById(R.id.spin_date);
+        spinner.setVisibility(View.VISIBLE);
         init();
     }
 
@@ -159,8 +228,71 @@ public class MainActivity extends Activity implements OnClickListener {
             if (!path.exists()) {
                 path.mkdirs();
             }
+            if (path.isDirectory()) {
+                adapter = new ArrayAdapter<String>(
+                        this,
+                        android.R.layout.simple_spinner_item);
+                adapter.setDropDownViewResource(
+                        android.R.layout.simple_spinner_dropdown_item);
+                adapter.add("请选择");
+                for (File f : path.listFiles()) {
+                    Log.d(TAG, "\t>" + f.getName());
+                    adapter.add(f.getName());
+                }
+                if (adapter.getCount() > 0) {
+                    spinner.setEnabled(true);
+                    spinner.setAdapter(adapter);
+                    spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int
+                                position, long id) {
+                            if (position > 0) {
+                                String value = (String) parent.getAdapter().getItem(position);
+                                date = value;
+                                if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                    play();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                            // TODO Auto-generated method stub
+
+                        }
+                    });
+                }
+
+            }
         }
 
+    }
+
+    /**
+     * @param newConfig, The new device configuration.
+     *            当设备配置信息有改动（比如屏幕方向的改变，实体键盘的推开或合上等）时，
+     *            并且如果此时有activity正在运行，系统会调用这个函数。
+     *            注意：onConfigurationChanged只会监测应用程序在AnroidMainifest.xml中通过
+     *            android:configChanges="xxxx"指定的配置类型的改动；
+     *            而对于其他配置的更改，则系统会onDestroy()当前Activity，然后重启一个新的Activity实例。
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // 检测屏幕的方向：纵向或横向
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.d(TAG, "横屏");
+            // 当前为横屏， 在此处添加额外的处理代码
+            setContentView(R.layout.horizontal);
+            initHUI();
+            init();
+        } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Log.d(TAG, "竖屏");
+            // 当前为竖屏， 在此处添加额外的处理代码
+            setContentView(R.layout.main);
+            initVUI();
+            init();
+        }
     }
 
     /**
@@ -210,15 +342,17 @@ public class MainActivity extends Activity implements OnClickListener {
                             .replace(")", "").replace("'", "");
                     if (null != str && str.length() > 0) {
                         final String[] tmps = str.split(",");
-                        urlList.add(0, tmps[0]);
-                        if (!imageCache.containsKey(tmps[0])) {
-                            executorService.execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    loadImageFromUrl(Constants.PREFIX_SATELINE_CLOUD_IMG_URL
-                                            + tmps[0]);
-                                }
-                            });
+                        if (null != tmps[0] && tmps[0].length() > 0 && !tmps[0].equals("")) {
+                            urlList.add(0, tmps[0]);
+                            if (!MainApp.i().getImageCache().containsKey(tmps[0])) {
+                                MainApp.i().getExecutorService().execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loadImageFromUrl(Constants.PREFIX_SATELINE_CLOUD_IMG_URL
+                                                + tmps[0]);
+                                    }
+                                });
+                            }
                         }
                     }
 
@@ -276,29 +410,43 @@ public class MainActivity extends Activity implements OnClickListener {
         }
     };
 
-    Runnable rDownloadImg = new Runnable() {
-        @Override
-        public void run() {
-            // 先从本地文件开始入手
-            File dir = new File(Constants.SATELINE_CLOUD_IMAGE_PATH);
-            File[] files = dir.listFiles();
-            FileUtils.sortFilesByFileName(files);
-            if (files.length > 0) {
-                for (int i = 0; i < files.length; i++) {
-                    File s = files[i];
-                    Log.d(TAG, s.getName());
-                    Drawable drawable = null;
-                    try {
-                        drawable = Drawable.createFromStream(
-                                new FileInputStream(new File(s.getAbsolutePath())), "image.png");
-                    } catch (FileNotFoundException e) {
-                        Message msg = new Message();
-                        msg.what = 0x0102;
-                        msg.obj = s.getName() + "找不到\r\n";
-                        mHandler.sendMessage(msg);
-                    }
+    private void play() {
+        Message msg = null;
+        // 先从本地文件开始入手
+        File dir = new File(Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + date);
+        File[] files = dir.listFiles();
+        FileUtils.sortFilesByFileName(files);
+        if (files.length > 0) {
+            for (int i = 0; i < files.length; i++) {
+                File s = files[i];
+                Log.d(TAG, s.getName());
+                Drawable drawable = null;
+                try {
+                    drawable = Drawable
+                            .createFromStream(
+                                    new FileInputStream(new File(s.getAbsolutePath())),
+                                    "image.png");
+                } catch (FileNotFoundException e) {
+                    msg = new Message();
+                    msg.what = 0x0102;
+                    msg.obj = s.getName() + "找不到\r\n";
+                    mHandler.sendMessage(msg);
+                }
+                if (null != drawable) {
+                    msg = new Message();
+                    msg.what = 0x0105;
+                    msg.obj = drawable;
+                    mHandler.sendMessage(msg);
+                    SystemClock.sleep(30L);
+                }
+            }
+        } else {
+            if (null != mList && mList.size() > 0) {
+                for (String tmp : mList) {
+                    Drawable drawable = loadImageFromUrl(Constants.PREFIX_SATELINE_CLOUD_IMG_URL
+                            + tmp);
                     if (null != drawable) {
-                        Message msg = new Message();
+                        msg = new Message();
                         msg = new Message();
                         msg.what = 0x0105;
                         msg.obj = drawable;
@@ -307,25 +455,28 @@ public class MainActivity extends Activity implements OnClickListener {
                     }
                 }
             } else {
-                if (null != mList && mList.size() > 0) {
-                    for (String tmp : mList) {
-                        Drawable drawable = loadImageFromUrl(Constants.PREFIX_SATELINE_CLOUD_IMG_URL
-                                + tmp);
-                        if (null != drawable) {
-                            Message msg = new Message();
-                            msg = new Message();
-                            msg.what = 0x0105;
-                            msg.obj = drawable;
-                            mHandler.sendMessage(msg);
-                            SystemClock.sleep(30L);
-                        }
-                    }
-                } else {
-                    Message msg = new Message();
-                    msg.what = 0x0102;
-                    msg.obj = "没有可用图片\r\n";
-                    mHandler.sendMessage(msg);
-                }
+                msg = new Message();
+                msg.what = 0x0102;
+                msg.obj = "没有可用图片\r\n";
+                mHandler.sendMessage(msg);
+            }
+        }
+    }
+
+    Runnable rDownloadImg = new Runnable() {
+        @Override
+        public void run() {
+            Message msg = null;
+            if (null == date || date.length() == 0 || date.equals("")) {
+                msg = new Message();
+                msg.what = 0x0106;
+                msg.obj = "请选择目录";
+                mHandler.sendMessage(msg);
+            }
+            if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                mHandler.sendEmptyMessage(0x0200);
+            } else if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                play();
             }
         }
     };
@@ -333,53 +484,17 @@ public class MainActivity extends Activity implements OnClickListener {
     Runnable rPlayImg = new Runnable() {
         @Override
         public void run() {
-            // 先从本地文件开始入手
-            File dir = new File(Constants.SATELINE_CLOUD_IMAGE_PATH);
-            File[] files = dir.listFiles();
-            FileUtils.sortFilesByFileName(files);
-            if (files.length > 0) {
-                for (int i = 0; i < files.length; i++) {
-                    File s = files[i];
-                    Log.d(TAG, s.getName());
-                    Drawable drawable = null;
-                    try {
-                        drawable = Drawable.createFromStream(
-                                new FileInputStream(new File(s.getAbsolutePath())), "image.png");
-                    } catch (FileNotFoundException e) {
-                        Message msg = new Message();
-                        msg.what = 0x0102;
-                        msg.obj = s.getName() + "找不到\r\n";
-                        mHandler.sendMessage(msg);
-                    }
-                    if (null != drawable) {
-                        Message msg = new Message();
-                        msg = new Message();
-                        msg.what = 0x0105;
-                        msg.obj = drawable;
-                        mHandler.sendMessage(msg);
-                        SystemClock.sleep(30L);
-                    }
-                }
-            } else {
-                if (null != mList && mList.size() > 0) {
-                    for (String tmp : mList) {
-                        Drawable drawable = loadImageFromUrl(Constants.PREFIX_SATELINE_CLOUD_IMG_URL
-                                + tmp);
-                        if (null != drawable) {
-                            Message msg = new Message();
-                            msg = new Message();
-                            msg.what = 0x0105;
-                            msg.obj = drawable;
-                            mHandler.sendMessage(msg);
-                            SystemClock.sleep(30L);
-                        }
-                    }
-                } else {
-                    Message msg = new Message();
-                    msg.what = 0x0102;
-                    msg.obj = "没有可用图片\r\n";
-                    mHandler.sendMessage(msg);
-                }
+            Message msg = null;
+            if (null == date || date.length() == 0 || date.equals("")) {
+                msg = new Message();
+                msg.what = 0x0106;
+                msg.obj = "请选择目录";
+                mHandler.sendMessage(msg);
+            }
+            if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                mHandler.sendEmptyMessage(0x0200);
+            } else if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                play();
             }
         }
     };
@@ -413,30 +528,23 @@ public class MainActivity extends Activity implements OnClickListener {
     // 从网络上取数据方法
     protected Drawable loadImageFromUrl(String imageUrl) {
         Drawable drawable = null;
-        FileInputStream fis = null;
         try {
-            if (!imageCache.containsKey(imageUrl)) {
+            if (!MainApp.i().getImageCache().containsKey(imageUrl)) {
                 Log.d(TAG, "图片缓存中不存在，从服务器中下载");
                 String name = downloadImage(imageUrl);
                 if (null != name && name.length() > 0 && !name.equals("")) {
-                    String dir = Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + name;
-                    fis = new FileInputStream(new File(dir));
-                    Log.d(TAG, "图片缓存中存在，路径为：" + dir);
-                    drawable = Drawable.createFromStream(fis, "image.png");
+                    drawable = loadDrawableFromLocal(name);
                     if (null != drawable) {
-                        imageCache.put(imageUrl, name);
+                        MainApp.i().getImageCache().put(imageUrl, name);
                     }
                 }
             } else {
                 Log.d(TAG, "图片缓存中存在，从本地直接获取");
-                String name = imageCache.get(imageUrl);
+                String name = MainApp.i().getImageCache().get(imageUrl);
                 if (null != name && name.length() > 0 && !name.equals("")) {
-                    String dir = Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + name;
-                    Log.d(TAG, "图片缓存中存在，路径为：" + dir);
-                    fis = new FileInputStream(new File(dir));
-                    drawable = Drawable.createFromStream(fis, "image.png");
+                    drawable = loadDrawableFromLocal(name);
                     if (null != drawable) {
-                        imageCache.put(imageUrl, name);
+                        MainApp.i().getImageCache().put(imageUrl, name);
                     }
                 }
             }
@@ -477,7 +585,9 @@ public class MainActivity extends Activity implements OnClickListener {
             switch (code) {
                 case 200:
                     String name = analysisURL(url);
-                    file = new File(Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + name);
+                    String date = analysisURL2(name);
+                    file = new File(Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + date
+                            + File.separator + name);
                     if (file.exists()) {
                         msg = new Message();
                         msg.what = 0x0102;
@@ -533,5 +643,62 @@ public class MainActivity extends Activity implements OnClickListener {
             name = String.valueOf(System.currentTimeMillis());
         }
         return name;
+    }
+
+    /**
+     * 从文件名中分析出时间信息
+     */
+    private static String analysisURL2(String name) {
+        String date = DateUtils.formatDate(new Date(), DateUtils.DEFAULT_PATTERN);
+        if (null != name && name.length() > 0 && !name.equals("")) {
+            String[] tmps = name.substring(0, name.lastIndexOf(".")).split("_");
+            if (tmps.length > 8) {
+                date = tmps[8];
+            }
+        }
+        if (null != date && date.length() > 8 && !date.equals("")) {
+            date = date.substring(0, 8);
+        }
+        return date;
+    }
+
+    /**
+     * 根据文件名从本地读取图片
+     * 
+     * @param name
+     * @return
+     */
+    private Drawable loadDrawableFromLocal(String name) {
+        Drawable drawable = null;
+        FileInputStream fis = null;
+        try {
+            String date = analysisURL2(name);
+            String dir = Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + date
+                    + File.separator + name;
+            fis = new FileInputStream(new File(dir));
+            drawable = Drawable.createFromStream(fis, "image.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return drawable;
+    }
+
+    /**
+     * 补充措施，将根目录下的文件拷贝到对应日期文件夹下
+     */
+    private void pathch() {
+        // 先从本地文件开始入手
+        File dir = new File(Constants.SATELINE_CLOUD_IMAGE_PATH);
+        File[] files = dir.listFiles();
+        for (File f : files) {
+            String name = f.getName();
+            String date = analysisURL2(name);
+            String dst = Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + date
+                    + File.separator + name;
+            String src = f.getAbsolutePath();
+            boolean b = FileUtils.copyFile(src, dst);
+            Log.d(TAG, "文件[" + name + "]复制" + b);
+        }
+
     }
 }
