@@ -160,13 +160,20 @@ public class SatelliteWeatherBiz {
                             .replace(")", "").replace("'", "");
                     if (null != str && str.length() > 0) {
                         final String[] tmps = str.split(",");
-                        urlList.add(0, tmps[0]);
-                        MainApp.i().getExecutorService().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                downloadImage(Constants.PREFIX_SATELINE_CLOUD_IMG_URL + tmps[0]);
+                        final String largeImgUrl = tmps[1];
+                        if (null != largeImgUrl && largeImgUrl.length() > 0
+                                && !largeImgUrl.equals("")) {
+                            urlList.add(0, largeImgUrl);
+                            if (!MainApp.i().getImageCache().containsKey(largeImgUrl)) {
+                                MainApp.i().getExecutorService().execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        downloadImage(Constants.PREFIX_SATELINE_CLOUD_IMG_URL
+                                                + largeImgUrl);
+                                    }
+                                });
                             }
-                        });
+                        }
                     }
 
                 }
