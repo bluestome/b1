@@ -119,6 +119,9 @@ public class MainActivity extends Activity implements OnClickListener {
                         }
                         play();
                         break;
+                    case 0x0202:
+                    	init();
+                    	adapter.notifyDataSetChanged();
                 }
                 if (showLog.getText().toString().length() > 0) {
                     btnClearConsole.setEnabled(true);
@@ -648,7 +651,6 @@ public class MainActivity extends Activity implements OnClickListener {
             cURL = new URL(url);
             connection = (HttpURLConnection) cURL.openConnection();
             // 获取输出流
-            connection.setDoOutput(true);
             connection.setConnectTimeout(5 * 1000);
             connection.setReadTimeout(15 * 1000);
             connection.connect();
@@ -661,6 +663,12 @@ public class MainActivity extends Activity implements OnClickListener {
                             + File.separator + name);
                     if (!file.getParentFile().exists()) {
                         file.getParentFile().mkdirs();
+                        if(file.isDirectory()){
+	                        msg = new Message();
+	                        msg.what = 0x0202;
+	                        msg.obj = file.getName();
+	                        mHandler.sendMessage(msg);
+                        }
                     }
                     if (file.exists()) {
                         msg = new Message();
@@ -677,6 +685,10 @@ public class MainActivity extends Activity implements OnClickListener {
                         byteBuffer.write(buffer, 0, ch);
                         byteBuffer.flush();
                     }
+                    msg = new Message();
+                    msg.what = 0x0102;
+                    msg.obj = "下载文件["+file.getName()+"]成功!";
+                    mHandler.sendMessage(msg);
                     byteBuffer.close();
                     return name;
                 default:

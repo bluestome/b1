@@ -5,6 +5,7 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">卫星云图</string>
     <string name="label_start">开始</string>
+    <string name="label_update">更新</string>
     <string name="label_play">播放</string>
     <string name="label_stop">停止</string>
     <string name="label_forward">跳转</string>

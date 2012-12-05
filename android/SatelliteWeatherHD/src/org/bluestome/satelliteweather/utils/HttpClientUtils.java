@@ -33,7 +33,7 @@ public class HttpClientUtils {
             sUrl = new URL(url);
             conn = (HttpURLConnection) sUrl.openConnection();
             conn.addRequestProperty("Cache-Control", "no-cache");
-            conn.addRequestProperty("Connection", "keep-alive");
+            conn.addRequestProperty("Connection", "close");
             conn.setConnectTimeout(5 * 1000);
             conn.setReadTimeout(10 * 1000);
             conn.connect();
@@ -63,7 +63,7 @@ public class HttpClientUtils {
             sUrl = new URL(url);
             conn = (HttpURLConnection) sUrl.openConnection();
             conn.addRequestProperty("Cache-Control", "no-cache");
-            conn.addRequestProperty("Connection", "keep-alive");
+            conn.addRequestProperty("Connection", "close");
             conn.setConnectTimeout(5 * 1000);
             conn.setReadTimeout(10 * 1000);
             conn.connect();
@@ -97,7 +97,7 @@ public class HttpClientUtils {
             urlO = new URL(url);
             http = (HttpURLConnection) urlO.openConnection();
             http.addRequestProperty("Cache-Control", "no-cache");
-            http.addRequestProperty("Connection", "keep-alive");
+            http.addRequestProperty("Connection", "close");
             http.setConnectTimeout(5 * 1000);
             http.setReadTimeout(10 * 1000);
             http.connect();
@@ -148,7 +148,7 @@ public class HttpClientUtils {
                 conn.addRequestProperty("Cookie", cookie);
             }
             conn.addRequestProperty("Cache-Control", "no-cache");
-            conn.addRequestProperty("Connection", "keep-alive");
+            conn.addRequestProperty("Connection", "close");
             conn.setConnectTimeout(5 * 1000);
             conn.setReadTimeout(10 * 1000);
             conn.connect();
@@ -182,7 +182,7 @@ public class HttpClientUtils {
             conn = (HttpURLConnection) urlc.openConnection();
             conn.setDoInput(true);
             conn.addRequestProperty("Cache-Control", "no-cache");
-            conn.addRequestProperty("Connection", "keep-alive");
+            conn.addRequestProperty("Connection", "close");
             conn.setConnectTimeout(5 * 1000);
             conn.setReadTimeout(10 * 1000);
             conn.connect();
@@ -215,7 +215,7 @@ public class HttpClientUtils {
             urlO = new URL(url);
             http = (HttpURLConnection) urlO.openConnection();
             http.addRequestProperty("Cache-Control", "no-cache");
-            http.addRequestProperty("Connection", "keep-alive");
+            http.addRequestProperty("Connection", "close");
             http.setConnectTimeout(5 * 1000);
             http.setReadTimeout(10 * 1000);
             http.connect();
@@ -262,7 +262,7 @@ public class HttpClientUtils {
             urlO = new URL(url);
             http = (HttpURLConnection) urlO.openConnection();
             http.addRequestProperty("Cache-Control", "no-cache");
-            http.addRequestProperty("Connection", "keep-alive");
+            http.addRequestProperty("Connection", "close");
             http.setConnectTimeout(5 * 1000);
             http.setReadTimeout(10 * 1000);
             http.connect();
@@ -304,7 +304,7 @@ public class HttpClientUtils {
             urlO = new URL(url);
             http = (HttpURLConnection) urlO.openConnection();
             http.addRequestProperty("Cache-Control", "no-cache");
-            http.addRequestProperty("Connection", "keep-alive");
+            http.addRequestProperty("Connection", "close");
             http.setConnectTimeout(5 * 1000);
             http.setReadTimeout(10 * 1000);
             http.connect();
@@ -394,7 +394,7 @@ public class HttpClientUtils {
             // 获取输出流
             connection.setDoOutput(true);
             connection.addRequestProperty("Cache-Control", "no-cache");
-            connection.addRequestProperty("Connection", "keep-alive");
+            connection.addRequestProperty("Connection", "close");
             connection.setConnectTimeout(5 * 1000);
             connection.setReadTimeout(10 * 1000);
             connection.connect();
@@ -458,7 +458,7 @@ public class HttpClientUtils {
             // 获取输出流
             connection.setDoOutput(true);
             connection.addRequestProperty(headerName, headerValue);
-            connection.addRequestProperty("Connection", "keep-alive");
+            connection.addRequestProperty("Connection", "close");
             connection
                     .addRequestProperty(
                             "User-Agent",
@@ -507,14 +507,11 @@ public class HttpClientUtils {
         try {
             cURL = new URL(url);
             connection = cURL.openConnection();
-            // 获取输出流
-            connection.setDoOutput(true);
             connection
                     .addRequestProperty(
                             "User-Agent",
                             "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.94 Safari/537.4");
-            connection.addRequestProperty("Cache-Control", "no-cache");
-            connection.addRequestProperty("Connection", "keep-alive");
+            connection.addRequestProperty("Connection", "close");
             connection.setConnectTimeout(10 * 1000);
             connection.setReadTimeout(10 * 1000);
             connection.connect();
@@ -533,6 +530,7 @@ public class HttpClientUtils {
             }
         } catch (Exception e) {
             System.err.println("ERROR:" + e);
+            e.printStackTrace();
         } finally {
             if (null != is) {
                 try {
@@ -570,7 +568,7 @@ public class HttpClientUtils {
                 http.addRequestProperty("Cookie", cookie);
             }
             http.addRequestProperty("Cache-Control", "no-cache");
-            http.addRequestProperty("Connection", "keep-alive");
+            http.addRequestProperty("Connection", "close");
             http.setConnectTimeout(5 * 1000);
             http.setReadTimeout(10 * 1000);
             http.connect();
@@ -636,7 +634,7 @@ public class HttpClientUtils {
             }
 
             http.addRequestProperty("Cache-Control", "no-cache");
-            http.addRequestProperty("Connection", "keep-alive");
+            http.addRequestProperty("Connection", "close");
             http.setConnectTimeout(5 * 1000);
             http.setReadTimeout(10 * 1000);
             http.connect();

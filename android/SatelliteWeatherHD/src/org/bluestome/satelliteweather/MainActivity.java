@@ -120,6 +120,10 @@ public class MainActivity extends Activity implements OnClickListener {
                         }
                         play();
                         break;
+                    case 0x0202:
+                    	init();
+                    	adapter.notifyDataSetChanged();
+                    	break;
                 }
                 if (showLog.getText().toString().length() > 0) {
                     btnClearConsole.setEnabled(true);
@@ -128,20 +132,14 @@ public class MainActivity extends Activity implements OnClickListener {
                     @Override
                     public void run() {
                         if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            Log.d(TAG, "scrollView.getHeight()=" + scrollView.getHeight());
-                            Log.d(TAG, "mLayout.getMeasuredHeight()=" + mLayout.getMeasuredHeight());
                             // 横屏
                             int off = mLayout.getMeasuredHeight() - scrollView.getHeight();
-                            Log.d(TAG, " 横屏的计算结果" + off);
                             if (off > 0) {
                                 scrollView.scrollTo(0, off);
                             }
                         } else if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                            Log.d(TAG, "scrollView.getHeight()=" + scrollView.getHeight());
-                            Log.d(TAG, "mLayout.getMeasuredHeight()=" + mLayout.getMeasuredHeight());
                             // 竖屏
                             int off = mLayout.getMeasuredHeight() - scrollView.getHeight();
-                            Log.d(TAG, " 竖屏的计算结果" + off);
                             if (off > 0) {
                                 scrollView.scrollTo(0, off);
                             }
@@ -156,22 +154,43 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pathch();
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Log.d(TAG, "横屏");
             // 当前为横屏， 在此处添加额外的处理代码
             setContentView(R.layout.horizontal);
             initHUI();
             init();
         } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Log.d(TAG, "竖屏");
             // 当前为竖屏， 在此处添加额外的处理代码
             setContentView(R.layout.main);
             initVUI();
             init();
         }
     }
+    
+    
 
-    /**
+    @Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+        pathch();
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // 当前为横屏， 在此处添加额外的处理代码
+            setContentView(R.layout.horizontal);
+            initHUI();
+            init();
+        } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // 当前为竖屏， 在此处添加额外的处理代码
+            setContentView(R.layout.main);
+            initVUI();
+            init();
+        }
+	}
+
+
+
+	/**
      * 竖屏初始化UI
      */
     private void initVUI() {
@@ -265,7 +284,6 @@ public class MainActivity extends Activity implements OnClickListener {
                 adapter.setDropDownViewResource(
                         android.R.layout.simple_spinner_dropdown_item);
                 for (File f : path.listFiles()) {
-                    Log.d(TAG, "\t>" + f.getName());
                     adapter.add(f.getName());
                 }
                 if (adapter.getCount() > 0) {
@@ -310,13 +328,11 @@ public class MainActivity extends Activity implements OnClickListener {
         date = null;
         // 检测屏幕的方向：纵向或横向
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Log.d(TAG, "横屏");
             // 当前为横屏， 在此处添加额外的处理代码
             setContentView(R.layout.horizontal);
             initHUI();
             init();
         } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Log.d(TAG, "竖屏");
             // 当前为竖屏， 在此处添加额外的处理代码
             setContentView(R.layout.main);
             initVUI();
@@ -478,7 +494,6 @@ public class MainActivity extends Activity implements OnClickListener {
 
     private synchronized void play() {
         Message msg = null;
-        Log.d(TAG, "\t play_date=" + date);
         // 先从本地文件开始入手
         File dir = new File(Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + date);
         File[] files = dir.listFiles();
@@ -503,7 +518,7 @@ public class MainActivity extends Activity implements OnClickListener {
                     msg.what = 0x0105;
                     msg.obj = drawable;
                     mHandler.sendMessage(msg);
-                    SystemClock.sleep(30L);
+                    SystemClock.sleep(20L);
                 }
             }
         } else {
@@ -517,7 +532,7 @@ public class MainActivity extends Activity implements OnClickListener {
                         msg.what = 0x0105;
                         msg.obj = drawable;
                         mHandler.sendMessage(msg);
-                        SystemClock.sleep(30L);
+                        SystemClock.sleep(20L);
                     }
                 }
             } else {
@@ -560,10 +575,8 @@ public class MainActivity extends Activity implements OnClickListener {
                     mHandler.sendMessage(msg);
                     scrollView.setVisibility(View.VISIBLE);
                     if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                        Log.d(TAG, "竖屏");
                         mLayout2.setVisibility(View.GONE);
                     } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                        Log.d(TAG, "横屏");
                         mLayout3.setVisibility(View.GONE);
                         imgView.setVisibility(View.GONE);
                     }
@@ -576,10 +589,8 @@ public class MainActivity extends Activity implements OnClickListener {
                     break;
                 case R.id.btn_play:
                     if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                        Log.d(TAG, "竖屏");
                         mLayout2.setVisibility(View.VISIBLE);
                     } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                        Log.d(TAG, "横屏");
                         mLayout3.setVisibility(View.GONE);
                     }
                     if (null == date || date.length() == 0 || date.equals("")) {
@@ -608,6 +619,7 @@ public class MainActivity extends Activity implements OnClickListener {
                     break;
                 case R.id.btn_stop:
                 case R.id.btn_forward:
+                    MainApp.i().getImageCache().clear();
                     msg = new Message();
                     msg.what = 0x0106;
                     msg.obj = "等待开发完成.....";
@@ -669,7 +681,6 @@ public class MainActivity extends Activity implements OnClickListener {
             cURL = new URL(url);
             connection = (HttpURLConnection) cURL.openConnection();
             // 获取输出流
-            connection.setDoOutput(true);
             connection.setConnectTimeout(5 * 1000);
             connection.setReadTimeout(15 * 1000);
             connection.connect();
@@ -680,8 +691,14 @@ public class MainActivity extends Activity implements OnClickListener {
                     String date = analysisURL2(name);
                     file = new File(Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + date
                             + File.separator + name);
-                    if (!file.getParentFile().exists()) {
+                    if (!file.exists()) {
                         file.getParentFile().mkdirs();
+                        if(file.isDirectory()){
+	                        msg = new Message();
+	                        msg.what = 0x0202;
+	                        msg.obj = file.getName();
+	                        mHandler.sendMessage(msg);
+                        }
                     }
                     if (file.exists()) {
                         msg = new Message();
@@ -699,6 +716,10 @@ public class MainActivity extends Activity implements OnClickListener {
                         byteBuffer.flush();
                     }
                     byteBuffer.close();
+                    msg = new Message();
+                    msg.what = 0x0102;
+                    msg.obj = "下载文件["+file.getName()+"]成功!";
+                    mHandler.sendMessage(msg);
                     return name;
                 default:
                     msg = new Message();
@@ -712,11 +733,13 @@ public class MainActivity extends Activity implements OnClickListener {
             msg.what = 0x0102;
             msg.obj = e.getMessage();
             mHandler.sendMessage(msg);
+            e.printStackTrace();
         } catch (Exception e) {
             msg = new Message();
             msg.what = 0x0102;
             msg.obj = e.getMessage();
             mHandler.sendMessage(msg);
+            e.printStackTrace();
         } finally {
             if (null != connection) {
                 connection.disconnect();
@@ -786,13 +809,16 @@ public class MainActivity extends Activity implements OnClickListener {
         File dir = new File(Constants.SATELINE_CLOUD_IMAGE_PATH);
         File[] files = dir.listFiles();
         for (File f : files) {
-            String name = f.getName();
-            String date = analysisURL2(name);
-            String dst = Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + date
-                    + File.separator + name;
-            String src = f.getAbsolutePath();
-            boolean b = FileUtils.copyFile(src, dst);
-            Log.d(TAG, "文件[" + name + "]复制" + b);
+        	if(f.isFile() && f.getName().toLowerCase().endsWith(".jpg")){
+	            String name = f.getName();
+	            String date = analysisURL2(name);
+	            String dst = Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + date
+	                    + File.separator + name;
+	            String src = f.getAbsolutePath();
+	            boolean b = FileUtils.copyFile(src, dst);
+	            Log.d(TAG, "文件[" + name + "]复制" + b);
+	            FileUtils.delFile(f);
+        	}
         }
 
     }

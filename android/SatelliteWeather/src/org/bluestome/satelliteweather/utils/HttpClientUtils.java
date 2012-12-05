@@ -513,7 +513,6 @@ public class HttpClientUtils {
                     .addRequestProperty(
                             "User-Agent",
                             "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.94 Safari/537.4");
-            connection.addRequestProperty("Cache-Control", "no-cache");
             connection.addRequestProperty("Connection", "keep-alive");
             connection.setConnectTimeout(10 * 1000);
             connection.setReadTimeout(10 * 1000);
@@ -533,6 +532,7 @@ public class HttpClientUtils {
             }
         } catch (Exception e) {
             System.err.println("ERROR:" + e);
+            e.printStackTrace();
         } finally {
             if (null != is) {
                 try {
