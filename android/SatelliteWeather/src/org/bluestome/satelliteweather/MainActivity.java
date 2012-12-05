@@ -409,61 +409,61 @@ public class MainActivity extends Activity implements OnClickListener {
                 mHandler.sendMessage(msg);
                 String lastModifyTime = HttpClientUtils
                         .getLastModifiedByUrl(Constants.SATELINE_CLOUD_URL);
-                // if (null != lastModifyTime
-                // && !lastModifyTime.equals(MainApp.i().getLastModifyTime())) {
-                msg = new Message();
-                msg.what = 0x0102;
-                msg.obj = "本地和服务器版本号不一致，执行从服务器下载最新数据";
-                mHandler.sendMessage(msg);
-                long s1 = System.currentTimeMillis();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Message msg = new Message();
-                            msg.what = 0x0102;
-                            msg.obj = "执行下载请求";
-                            mHandler.sendMessage(msg);
-                            mList = catalog();
-                        } catch (Exception e) {
-                            Message msg = new Message();
-                            msg.what = 0x0102;
-                            msg.obj = e.getMessage();
-                            mHandler.sendMessage(msg);
+                if (null != lastModifyTime
+                        && !lastModifyTime.equals(MainApp.i().getLastModifyTime())) {
+                    msg = new Message();
+                    msg.what = 0x0102;
+                    msg.obj = "本地和服务器版本号不一致，执行从服务器下载最新数据";
+                    mHandler.sendMessage(msg);
+                    long s1 = System.currentTimeMillis();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Message msg = new Message();
+                                msg.what = 0x0102;
+                                msg.obj = "执行下载请求";
+                                mHandler.sendMessage(msg);
+                                mList = catalog();
+                            } catch (Exception e) {
+                                Message msg = new Message();
+                                msg.what = 0x0102;
+                                msg.obj = e.getMessage();
+                                mHandler.sendMessage(msg);
+                            }
                         }
+                    }).start();
+                    int i = 1;
+                    do {
+                        msg = new Message();
+                        msg.what = 0x0102;
+                        msg.obj = "正在连接到服务器...500ms " + i;
+                        mHandler.sendMessage(msg);
+                        i++;
+                        SystemClock.sleep(500L);
+                    } while (mList == null);
+                    msg = new Message();
+                    msg.what = 0x0102;
+                    msg.obj = "从网页解析耗时:" + (System.currentTimeMillis() - s1) + " ms";
+                    mHandler.sendMessage(msg);
+                    if (null != mList && mList.size() > 0) {
+                        MainApp.i().setLastModifyTime(lastModifyTime);
+                        msg = new Message();
+                        msg.what = 0x0102;
+                        msg.obj = "从站点获取图片地址成功，数量为:" + mList.size();
+                        mHandler.sendMessage(msg);
+                    } else {
+                        msg = new Message();
+                        msg.what = 0x0102;
+                        msg.obj = "从站点获取图片地址失败，数量为:" + mList.size();
+                        mHandler.sendMessage(msg);
                     }
-                }).start();
-                int i = 1;
-                do {
-                    msg = new Message();
-                    msg.what = 0x0102;
-                    msg.obj = "正在连接到服务器...500ms " + i;
-                    mHandler.sendMessage(msg);
-                    i++;
-                    SystemClock.sleep(500L);
-                } while (mList == null);
-                msg = new Message();
-                msg.what = 0x0102;
-                msg.obj = "从网页解析耗时:" + (System.currentTimeMillis() - s1) + " ms";
-                mHandler.sendMessage(msg);
-                if (null != mList && mList.size() > 0) {
-                    MainApp.i().setLastModifyTime(lastModifyTime);
-                    msg = new Message();
-                    msg.what = 0x0102;
-                    msg.obj = "从站点获取图片地址成功，数量为:" + mList.size();
-                    mHandler.sendMessage(msg);
                 } else {
                     msg = new Message();
                     msg.what = 0x0102;
-                    msg.obj = "从站点获取图片地址失败，数量为:" + mList.size();
+                    msg.obj = "当前数据已经是最新数据不需要再处理\r\n";
                     mHandler.sendMessage(msg);
                 }
-                // } else {
-                // msg = new Message();
-                // msg.what = 0x0102;
-                // msg.obj = "当前数据已经是最新数据不需要再处理\r\n";
-                // mHandler.sendMessage(msg);
-                // }
             } catch (Exception e) {
                 msg = new Message();
                 msg.what = 0x0102;
