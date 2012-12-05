@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -16,8 +15,6 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -61,9 +58,12 @@ public class MainActivity extends Activity implements OnClickListener {
     Button btnStart = null;
     Button btnPlay = null;
     Button btnClearConsole = null;
+    Button btnStop = null;
+    Button btnForward = null;
     ScrollView scrollView = null;
     LinearLayout mLayout;
     LinearLayout mLayout2;
+    LinearLayout mLayout3;
     ImageView imgView = null;
     List<String> mList = null;
     Spinner spinner = null;
@@ -95,7 +95,6 @@ public class MainActivity extends Activity implements OnClickListener {
                         BitmapDrawable bd = (BitmapDrawable) drawable;
                         Bitmap bm = bd.getBitmap();
                         imgView.setImageBitmap(bm);
-                        System.gc();
                         break;
                     case 0x0106:
                         String t = (String) msg.obj;
@@ -104,10 +103,22 @@ public class MainActivity extends Activity implements OnClickListener {
                     case 0x0107:
                         break;
                     case 0x0200:
-                    	imgView.setVisibility(View.INVISIBLE);
-                    	scrollView.setVisibility(View.INVISIBLE);
-                        // 选择时间
-                        initSpinner();
+                        // 将下拉空间设置为可见
+                        mLayout3.setVisibility(View.VISIBLE);
+                        if (!btnPlay.isEnabled()) {
+                            btnPlay.setEnabled(true);
+                        }
+                        if (!btnStart.isEnabled()) {
+                            btnStart.setEnabled(true);
+                        }
+                        break;
+                    case 0x0201:
+                        // 将图片空间设置为可见
+                        if (imgView.getVisibility() == View.INVISIBLE
+                                || imgView.getVisibility() == View.GONE) {
+                            imgView.setVisibility(View.VISIBLE);
+                        }
+                        play();
                         break;
                 }
                 if (showLog.getText().toString().length() > 0) {
@@ -116,9 +127,24 @@ public class MainActivity extends Activity implements OnClickListener {
                 post(new Runnable() {
                     @Override
                     public void run() {
-                        int off = mLayout.getMeasuredHeight() - scrollView.getHeight();
-                        if (off > 0) {
-                            scrollView.scrollTo(0, off);
+                        if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                            Log.d(TAG, "scrollView.getHeight()=" + scrollView.getHeight());
+                            Log.d(TAG, "mLayout.getMeasuredHeight()=" + mLayout.getMeasuredHeight());
+                            // 横屏
+                            int off = mLayout.getMeasuredHeight() - scrollView.getHeight();
+                            Log.d(TAG, " 横屏的计算结果" + off);
+                            if (off > 0) {
+                                scrollView.scrollTo(0, off);
+                            }
+                        } else if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            Log.d(TAG, "scrollView.getHeight()=" + scrollView.getHeight());
+                            Log.d(TAG, "mLayout.getMeasuredHeight()=" + mLayout.getMeasuredHeight());
+                            // 竖屏
+                            int off = mLayout.getMeasuredHeight() - scrollView.getHeight();
+                            Log.d(TAG, " 竖屏的计算结果" + off);
+                            if (off > 0) {
+                                scrollView.scrollTo(0, off);
+                            }
                         }
                     }
                 });
@@ -130,9 +156,19 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        initVUI();
-        init();
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.d(TAG, "横屏");
+            // 当前为横屏， 在此处添加额外的处理代码
+            setContentView(R.layout.horizontal);
+            initHUI();
+            init();
+        } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Log.d(TAG, "竖屏");
+            // 当前为竖屏， 在此处添加额外的处理代码
+            setContentView(R.layout.main);
+            initVUI();
+            init();
+        }
     }
 
     /**
@@ -176,8 +212,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
         mLayout = (LinearLayout) findViewById(R.id.linearlayout);
 
-        mLayout2 = (LinearLayout) findViewById(R.id.linearlayout_image);
-        mLayout2.setVisibility(View.GONE);
+        mLayout3 = (LinearLayout) findViewById(R.id.linearlayout_v1);
 
         showLog = (TextView) findViewById(R.id.text_show_log);
         showLog.setText("");
@@ -188,21 +223,24 @@ public class MainActivity extends Activity implements OnClickListener {
         btnPlay = (Button) findViewById(R.id.btn_play);
         btnPlay.setOnClickListener(this);
 
+        btnStop = (Button) findViewById(R.id.btn_stop);
+        btnStop.setOnClickListener(this);
+        btnStop.setEnabled(false);
+
+        btnForward = (Button) findViewById(R.id.btn_forward);
+        btnForward.setOnClickListener(this);
+        btnForward.setEnabled(false);
+
         btnClearConsole = (Button) findViewById(R.id.btn_clear_console);
         btnClearConsole.setOnClickListener(this);
         btnClearConsole.setEnabled(false);
 
         imgView = (ImageView) findViewById(R.id.imageView1);
+        imgView.setVisibility(View.GONE);
 
-    }
-
-    /**
-     * 初始化Spinner空间
-     */
-    private void initSpinner() {
         spinner = (Spinner) findViewById(R.id.spin_date);
         spinner.setVisibility(View.VISIBLE);
-        init();
+
     }
 
     /**
@@ -226,7 +264,6 @@ public class MainActivity extends Activity implements OnClickListener {
                         android.R.layout.simple_spinner_item);
                 adapter.setDropDownViewResource(
                         android.R.layout.simple_spinner_dropdown_item);
-                adapter.add("请选择");
                 for (File f : path.listFiles()) {
                     Log.d(TAG, "\t>" + f.getName());
                     adapter.add(f.getName());
@@ -238,22 +275,18 @@ public class MainActivity extends Activity implements OnClickListener {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int
                                 position, long id) {
-                            if (position > 0) {
-                                String value = (String) parent.getAdapter().getItem(position);
-                                date = value;
-                                if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                                    play();
-                                }else if(getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-                                	imgView.setVisibility(View.VISIBLE);
-                                    play();
-                                }
+                            String value = (String) parent.getAdapter().getItem(position);
+                            date = value;
+                            if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                // 横屏
+                            } else if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                                // 竖屏
+                                imgView.setVisibility(View.VISIBLE);
                             }
                         }
 
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {
-                            // TODO Auto-generated method stub
-
                         }
                     });
                 }
@@ -274,6 +307,7 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        date = null;
         // 检测屏幕的方向：纵向或横向
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Log.d(TAG, "横屏");
@@ -293,13 +327,13 @@ public class MainActivity extends Activity implements OnClickListener {
     /**
      * @throws Exception
      */
-    List<String> catalog() throws Exception { // WebsiteBean bean
+    synchronized List<String> catalog() throws Exception { // WebsiteBean bean
         List<String> urlList = new ArrayList<String>();
+        byte[] body = HttpClientUtils.getBody(Constants.SATELINE_CLOUD_URL);
         Message msg = new Message();
         msg.what = 0x0102;
-        msg.obj = "开始获取网页";
+        msg.obj = "正在获取网页页面内容";
         mHandler.sendMessage(msg);
-        byte[] body = HttpClientUtils.getBody(Constants.SATELINE_CLOUD_URL);
         if (null == body || body.length == 0) {
             msg = new Message();
             msg.what = 0x0102;
@@ -313,7 +347,7 @@ public class MainActivity extends Activity implements OnClickListener {
         parser.setEncoding("GB2312");
         msg = new Message();
         msg.what = 0x0102;
-        msg.obj = "开始分析网页";
+        msg.obj = "正在解析页面内容";
         mHandler.sendMessage(msg);
         NodeFilter fileter = new NodeClassFilter(CompositeTag.class);
         NodeList list = parser.extractAllNodesThatMatch(fileter)
@@ -328,7 +362,7 @@ public class MainActivity extends Activity implements OnClickListener {
             NodeList linkList = parser.extractAllNodesThatMatch(linkFilter);
             msg = new Message();
             msg.what = 0x0102;
-            msg.obj = "开始分析页面子元素";
+            msg.obj = "正在解析页面子元素";
             mHandler.sendMessage(msg);
             if (linkList != null && linkList.size() > 0) {
                 for (int i = 0; i < linkList.size(); i++) {
@@ -358,7 +392,7 @@ public class MainActivity extends Activity implements OnClickListener {
             parser = null;
         msg = new Message();
         msg.what = 0x0102;
-        msg.obj = "解析结束";
+        msg.obj = "解析页面结束";
         mHandler.sendMessage(msg);
         return urlList;
     }
@@ -366,47 +400,83 @@ public class MainActivity extends Activity implements OnClickListener {
     Runnable rParserHtml = new Runnable() {
         @Override
         public void run() {
+            mList = null;
             Message msg = null;
             try {
+                msg = new Message();
+                msg.what = 0x0102;
+                msg.obj = "正在比较本地和服务器版本号";
+                mHandler.sendMessage(msg);
                 String lastModifyTime = HttpClientUtils
                         .getLastModifiedByUrl(Constants.SATELINE_CLOUD_URL);
-                if (null != lastModifyTime
-                        && !lastModifyTime.equals(MainApp.i().getLastModifyTime())) {
-                    long s1 = System.currentTimeMillis();
-                    mList = catalog();
+                // if (null != lastModifyTime
+                // && !lastModifyTime.equals(MainApp.i().getLastModifyTime())) {
+                msg = new Message();
+                msg.what = 0x0102;
+                msg.obj = "本地和服务器版本号不一致，执行从服务器下载最新数据";
+                mHandler.sendMessage(msg);
+                long s1 = System.currentTimeMillis();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Message msg = new Message();
+                            msg.what = 0x0102;
+                            msg.obj = "执行下载请求";
+                            mHandler.sendMessage(msg);
+                            mList = catalog();
+                        } catch (Exception e) {
+                            Message msg = new Message();
+                            msg.what = 0x0102;
+                            msg.obj = e.getMessage();
+                            mHandler.sendMessage(msg);
+                        }
+                    }
+                }).start();
+                int i = 1;
+                do {
                     msg = new Message();
                     msg.what = 0x0102;
-                    msg.obj = "从网页解析耗时:" + (System.currentTimeMillis() - s1) + " ms";
+                    msg.obj = "正在连接到服务器...500ms " + i;
                     mHandler.sendMessage(msg);
-                    if (null != mList && mList.size() > 0) {
-                        MainApp.i().setLastModifyTime(lastModifyTime);
-                        msg = new Message();
-                        msg.what = 0x0102;
-                        msg.obj = "从站点获取图片地址成功，数量为:" + mList.size();
-                        mHandler.sendMessage(msg);
-                    } else {
-                        msg = new Message();
-                        msg.what = 0x0102;
-                        msg.obj = "从站点获取图片地址失败，数量为:" + mList.size();
-                        mHandler.sendMessage(msg);
-                    }
+                    i++;
+                    SystemClock.sleep(500L);
+                } while (mList == null);
+                msg = new Message();
+                msg.what = 0x0102;
+                msg.obj = "从网页解析耗时:" + (System.currentTimeMillis() - s1) + " ms";
+                mHandler.sendMessage(msg);
+                if (null != mList && mList.size() > 0) {
+                    MainApp.i().setLastModifyTime(lastModifyTime);
+                    msg = new Message();
+                    msg.what = 0x0102;
+                    msg.obj = "从站点获取图片地址成功，数量为:" + mList.size();
+                    mHandler.sendMessage(msg);
                 } else {
                     msg = new Message();
                     msg.what = 0x0102;
-                    msg.obj = "当前数据已经是最新数据不需要再处理\r\n";
+                    msg.obj = "从站点获取图片地址失败，数量为:" + mList.size();
                     mHandler.sendMessage(msg);
                 }
+                // } else {
+                // msg = new Message();
+                // msg.what = 0x0102;
+                // msg.obj = "当前数据已经是最新数据不需要再处理\r\n";
+                // mHandler.sendMessage(msg);
+                // }
             } catch (Exception e) {
                 msg = new Message();
                 msg.what = 0x0102;
                 msg.obj = e.getMessage();
                 mHandler.sendMessage(msg);
             }
+            mHandler.sendEmptyMessageDelayed(0x0200, 1000L);
         }
     };
 
-    private void play() {
+    private synchronized void play() {
         Message msg = null;
+        Log.d(TAG, "\t play_date=" + date);
         // 先从本地文件开始入手
         File dir = new File(Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + date);
         File[] files = dir.listFiles();
@@ -414,7 +484,6 @@ public class MainActivity extends Activity implements OnClickListener {
         if (files.length > 0) {
             for (int i = 0; i < files.length; i++) {
                 File s = files[i];
-                Log.d(TAG, s.getName());
                 Drawable drawable = null;
                 try {
                     drawable = Drawable
@@ -456,22 +525,13 @@ public class MainActivity extends Activity implements OnClickListener {
                 mHandler.sendMessage(msg);
             }
         }
+        mHandler.sendEmptyMessageDelayed(0x0200, 1000L);
     }
 
     Runnable rDownloadImg = new Runnable() {
         @Override
         public void run() {
-            Message msg = null;
-            if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                mHandler.sendEmptyMessage(0x0200);
-            } else if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            	if (null == date || date.length() == 0 || date.equals("")) {
-            		msg = new Message();
-            		msg.what = 0x0106;
-            		msg.obj = "请选择目录";
-            		mHandler.sendMessage(msg);
-            		return;
-            	}
+            synchronized (this) {
                 play();
             }
         }
@@ -480,17 +540,7 @@ public class MainActivity extends Activity implements OnClickListener {
     Runnable rPlayImg = new Runnable() {
         @Override
         public void run() {
-            Message msg = null;
-            if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                mHandler.sendEmptyMessage(0x0200);
-            } else if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            	if (null == date || date.length() == 0 || date.equals("")) {
-            		msg = new Message();
-            		msg.what = 0x0106;
-            		msg.obj = "请选择目录";
-            		mHandler.sendMessage(msg);
-            		return;
-            	}
+            synchronized (this) {
                 play();
             }
         }
@@ -499,24 +549,67 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     public void onClick(View v) {
         if (null != v) {
+            Message msg = null;
             switch (v.getId()) {
                 case R.id.btn_start:
+                    msg = new Message();
+                    msg.what = 0x0102;
+                    msg.obj = "正在启动....";
+                    mHandler.sendMessage(msg);
                     scrollView.setVisibility(View.VISIBLE);
-                    mLayout2.setVisibility(View.GONE);
+                    if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        Log.d(TAG, "竖屏");
+                        mLayout2.setVisibility(View.GONE);
+                    } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        Log.d(TAG, "横屏");
+                        mLayout3.setVisibility(View.GONE);
+                        imgView.setVisibility(View.GONE);
+                    }
                     if (null != mList) {
                         mList.clear();
                     }
+                    btnPlay.setEnabled(false);
                     showLog.setText("");
                     new Thread(rParserHtml).start();
                     break;
                 case R.id.btn_play:
-                    mLayout2.setVisibility(View.VISIBLE);
+                    if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        Log.d(TAG, "竖屏");
+                        mLayout2.setVisibility(View.VISIBLE);
+                    } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        Log.d(TAG, "横屏");
+                        mLayout3.setVisibility(View.GONE);
+                    }
+                    if (null == date || date.length() == 0 || date.equals("")) {
+                        msg = new Message();
+                        msg.what = 0x0106;
+                        msg.obj = "请选择目录";
+                        mHandler.sendMessage(msg);
+                        mHandler.sendEmptyMessage(0x0200);
+                        imgView.setVisibility(View.GONE);
+                        return;
+                    }
+                    btnStart.setEnabled(false);
+                    btnPlay.setEnabled(false);
                     scrollView.setVisibility(View.GONE);
-                    new Thread(rDownloadImg).start();
+                    imgView.setVisibility(View.VISIBLE);
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            new Thread(rDownloadImg).start();
+                        }
+                    }, 500L);
                     break;
                 case R.id.btn_clear_console:
                     showLog.setText("");
                     btnClearConsole.setEnabled(false);
+                    break;
+                case R.id.btn_stop:
+                case R.id.btn_forward:
+                    msg = new Message();
+                    msg.what = 0x0106;
+                    msg.obj = "等待开发完成.....";
+                    mHandler.sendMessage(msg);
                     break;
             }
         }
@@ -585,6 +678,9 @@ public class MainActivity extends Activity implements OnClickListener {
                     String date = analysisURL2(name);
                     file = new File(Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + date
                             + File.separator + name);
+                    if (!file.getParentFile().exists()) {
+                        file.getParentFile().mkdirs();
+                    }
                     if (file.exists()) {
                         msg = new Message();
                         msg.what = 0x0102;

@@ -22,4 +22,7 @@ public class Constants {
     // 卫星云图完整路径
     public static String SATELINE_CLOUD_IMAGE_PATH = APP_PATH + File.separator
             + SATELINE_CLOUD_FILENAME + File.separator + "images/";
+
+    // 定时器提醒ACTION名称
+    public final static String ACTION_ALARM = "org.bluestome.satelliteweather.alarm";
 }

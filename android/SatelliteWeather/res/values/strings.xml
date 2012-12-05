@@ -6,7 +6,10 @@
     <string name="title_activity_main">卫星云图</string>
     <string name="label_start">开始</string>
     <string name="label_play">播放</string>
+    <string name="label_stop">停止</string>
+    <string name="label_forward">跳转</string>
     <string name="label_tmp_show_log"></string>
     <string name="label_clear_console">清屏</string>
-
+    <string name="label_choose_date">选择日期:</string>
+    
 </resources>

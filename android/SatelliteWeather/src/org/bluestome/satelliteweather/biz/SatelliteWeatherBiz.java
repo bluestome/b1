@@ -9,13 +9,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Environment;
 import android.os.SystemClock;
 import android.text.format.DateUtils;
 
 import org.bluestome.satelliteweather.MainActivity;
 import org.bluestome.satelliteweather.MainApp;
 import org.bluestome.satelliteweather.R;
+import org.bluestome.satelliteweather.common.Constants;
 import org.bluestome.satelliteweather.utils.HttpClientUtils;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
@@ -44,13 +44,6 @@ import java.util.List;
  */
 public class SatelliteWeatherBiz {
 
-    private final String mURL = "http://www.nmc.gov.cn/publish/satellite/fy2.htm";
-    private final String mPrefix = "http://image.weather.gov.cn/";
-    private final String ACTION_ALARM = "org.bluestome.satelliteweather.alarm";
-    private final String APP_FILE_NAME = ".salteliteweather";
-    private final String APP_PATH = Environment.getExternalStorageDirectory()
-            .getAbsolutePath() + File.separator + APP_FILE_NAME;
-    private final String IMAGE_PATH = APP_PATH + File.separator + "images/";
     // 发送统计日志
     private PendingIntent mSender;
     private AlarmRecevier mAlarmRecevier;
@@ -63,13 +56,14 @@ public class SatelliteWeatherBiz {
         if (null != MainApp.i()) {
             mAlarmRecevier = new AlarmRecevier();
             IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(ACTION_ALARM);
+            intentFilter.addAction(Constants.ACTION_ALARM);
             MainApp.i().registerReceiver(mAlarmRecevier, intentFilter);
             long firstTime = 0L;
             am = (AlarmManager) MainApp.i().getSystemService(Context.ALARM_SERVICE);
             if (am != null) {
                 // 发送终端统计数据
-                mSender = PendingIntent.getBroadcast(MainApp.i(), 0, new Intent(ACTION_ALARM),
+                mSender = PendingIntent.getBroadcast(MainApp.i(), 0, new Intent(
+                        Constants.ACTION_ALARM),
                         0);
                 firstTime = SystemClock.elapsedRealtime();
                 firstTime += 30 * DateUtils.MINUTE_IN_MILLIS;
@@ -98,9 +92,10 @@ public class SatelliteWeatherBiz {
     private class AlarmRecevier extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equalsIgnoreCase(ACTION_ALARM)) {
+            if (intent.getAction().equalsIgnoreCase(Constants.ACTION_ALARM)) {
                 try {
-                    String lastModifyTime = HttpClientUtils.getLastModifiedByUrl(mURL);
+                    String lastModifyTime = HttpClientUtils
+                            .getLastModifiedByUrl(Constants.SATELINE_CLOUD_URL);
                     if (null != lastModifyTime
                             && !lastModifyTime.equals(MainApp.i().getLastModifyTime())) {
                         notifyNS("服务端有最新数据,[" + lastModifyTime + "]");
@@ -137,7 +132,8 @@ public class SatelliteWeatherBiz {
     List<String> catalog(String lastModifyTime) throws Exception { // WebsiteBean
                                                                    // bean
         List<String> urlList = new ArrayList<String>();
-        byte[] body = HttpClientUtils.getBody(mURL, "If-Modified-Since", new Date().toGMTString());
+        byte[] body = HttpClientUtils.getBody(Constants.SATELINE_CLOUD_URL, "If-Modified-Since",
+                new Date().toGMTString());
         if (null == body || body.length == 0) {
             return urlList;
         }
@@ -168,7 +164,7 @@ public class SatelliteWeatherBiz {
                         MainApp.i().getExecutorService().execute(new Runnable() {
                             @Override
                             public void run() {
-                                downloadImage(mPrefix + tmps[0]);
+                                downloadImage(Constants.PREFIX_SATELINE_CLOUD_IMG_URL + tmps[0]);
                             }
                         });
                     }
@@ -205,7 +201,12 @@ public class SatelliteWeatherBiz {
             switch (code) {
                 case 200:
                     String name = analysisURL(url);
-                    file = new File(IMAGE_PATH + File.separator + name);
+                    String date = analysisURL2(name);
+                    file = new File(Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + date
+                            + File.separator + name);
+                    if (!file.getParentFile().exists()) {
+                        file.getParentFile().mkdirs();
+                    }
                     if (file.exists()) {
                         return name;
                     }
@@ -245,6 +246,24 @@ public class SatelliteWeatherBiz {
             name = String.valueOf(System.currentTimeMillis());
         }
         return name;
+    }
+
+    /**
+     * 从文件名中分析出时间信息
+     */
+    private static String analysisURL2(String name) {
+        String date = org.bluestome.satelliteweather.utils.DateUtils.formatDate(new Date(),
+                org.bluestome.satelliteweather.utils.DateUtils.DEFAULT_PATTERN);
+        if (null != name && name.length() > 0 && !name.equals("")) {
+            String[] tmps = name.substring(0, name.lastIndexOf(".")).split("_");
+            if (tmps.length > 8) {
+                date = tmps[8];
+            }
+        }
+        if (null != date && date.length() > 8 && !date.equals("")) {
+            date = date.substring(0, 8);
+        }
+        return date;
     }
 
 }
