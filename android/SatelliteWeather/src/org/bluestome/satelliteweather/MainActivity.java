@@ -110,6 +110,9 @@ public class MainActivity extends Activity implements OnClickListener {
                         if (!btnStart.isEnabled()) {
                             btnStart.setEnabled(true);
                         }
+                        if (!btnStart.isEnabled()) {
+                            btnStart.setEnabled(true);
+                        }
                         break;
                     case 0x0201:
                         // 将图片空间设置为可见
@@ -556,6 +559,7 @@ public class MainActivity extends Activity implements OnClickListener {
                     if (null != mList) {
                         mList.clear();
                     }
+                    btnStart.setEnabled(false);
                     btnPlay.setEnabled(false);
                     showLog.setText("");
                     new Thread(rParserHtml).start();
