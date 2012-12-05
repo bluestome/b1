@@ -12,7 +12,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -128,20 +127,14 @@ public class MainActivity extends Activity implements OnClickListener {
                     @Override
                     public void run() {
                         if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            Log.d(TAG, "scrollView.getHeight()=" + scrollView.getHeight());
-                            Log.d(TAG, "mLayout.getMeasuredHeight()=" + mLayout.getMeasuredHeight());
                             // 横屏
                             int off = mLayout.getMeasuredHeight() - scrollView.getHeight();
-                            Log.d(TAG, " 横屏的计算结果" + off);
                             if (off > 0) {
                                 scrollView.scrollTo(0, off);
                             }
                         } else if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                            Log.d(TAG, "scrollView.getHeight()=" + scrollView.getHeight());
-                            Log.d(TAG, "mLayout.getMeasuredHeight()=" + mLayout.getMeasuredHeight());
                             // 竖屏
                             int off = mLayout.getMeasuredHeight() - scrollView.getHeight();
-                            Log.d(TAG, " 竖屏的计算结果" + off);
                             if (off > 0) {
                                 scrollView.scrollTo(0, off);
                             }
@@ -157,13 +150,11 @@ public class MainActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Log.d(TAG, "横屏");
             // 当前为横屏， 在此处添加额外的处理代码
             setContentView(R.layout.horizontal);
             initHUI();
             init();
         } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Log.d(TAG, "竖屏");
             // 当前为竖屏， 在此处添加额外的处理代码
             setContentView(R.layout.main);
             initVUI();
@@ -265,7 +256,6 @@ public class MainActivity extends Activity implements OnClickListener {
                 adapter.setDropDownViewResource(
                         android.R.layout.simple_spinner_dropdown_item);
                 for (File f : path.listFiles()) {
-                    Log.d(TAG, "\t>" + f.getName());
                     adapter.add(f.getName());
                 }
                 if (adapter.getCount() > 0) {
@@ -310,13 +300,11 @@ public class MainActivity extends Activity implements OnClickListener {
         date = null;
         // 检测屏幕的方向：纵向或横向
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Log.d(TAG, "横屏");
             // 当前为横屏， 在此处添加额外的处理代码
             setContentView(R.layout.horizontal);
             initHUI();
             init();
         } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Log.d(TAG, "竖屏");
             // 当前为竖屏， 在此处添加额外的处理代码
             setContentView(R.layout.main);
             initVUI();
@@ -476,7 +464,6 @@ public class MainActivity extends Activity implements OnClickListener {
 
     private synchronized void play() {
         Message msg = null;
-        Log.d(TAG, "\t play_date=" + date);
         // 先从本地文件开始入手
         File dir = new File(Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + date);
         File[] files = dir.listFiles();
@@ -558,10 +545,8 @@ public class MainActivity extends Activity implements OnClickListener {
                     mHandler.sendMessage(msg);
                     scrollView.setVisibility(View.VISIBLE);
                     if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                        Log.d(TAG, "竖屏");
                         mLayout2.setVisibility(View.GONE);
                     } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                        Log.d(TAG, "横屏");
                         mLayout3.setVisibility(View.GONE);
                         imgView.setVisibility(View.GONE);
                     }
@@ -574,10 +559,8 @@ public class MainActivity extends Activity implements OnClickListener {
                     break;
                 case R.id.btn_play:
                     if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                        Log.d(TAG, "竖屏");
                         mLayout2.setVisibility(View.VISIBLE);
                     } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                        Log.d(TAG, "横屏");
                         mLayout3.setVisibility(View.GONE);
                     }
                     if (null == date || date.length() == 0 || date.equals("")) {
@@ -620,7 +603,6 @@ public class MainActivity extends Activity implements OnClickListener {
         Drawable drawable = null;
         try {
             if (!MainApp.i().getImageCache().containsKey(imageUrl)) {
-                Log.d(TAG, "图片缓存中不存在，从服务器中下载");
                 String name = downloadImage(imageUrl);
                 if (null != name && name.length() > 0 && !name.equals("")) {
                     drawable = loadDrawableFromLocal(name);
@@ -629,7 +611,6 @@ public class MainActivity extends Activity implements OnClickListener {
                     }
                 }
             } else {
-                Log.d(TAG, "图片缓存中存在，从本地直接获取");
                 String name = MainApp.i().getImageCache().get(imageUrl);
                 if (null != name && name.length() > 0 && !name.equals("")) {
                     drawable = loadDrawableFromLocal(name);
@@ -790,7 +771,6 @@ public class MainActivity extends Activity implements OnClickListener {
                     + File.separator + name;
             String src = f.getAbsolutePath();
             boolean b = FileUtils.copyFile(src, dst);
-            Log.d(TAG, "文件[" + name + "]复制" + b);
         }
 
     }
