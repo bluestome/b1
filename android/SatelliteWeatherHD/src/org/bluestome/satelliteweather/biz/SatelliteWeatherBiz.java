@@ -48,6 +48,7 @@ public class SatelliteWeatherBiz {
     private PendingIntent mSender;
     private AlarmRecevier mAlarmRecevier;
     private AlarmManager am;
+    private final int RATE_TIMES = 5;
 
     /*
      * 初始化设置
@@ -66,9 +67,9 @@ public class SatelliteWeatherBiz {
                         Constants.ACTION_ALARM),
                         0);
                 firstTime = SystemClock.elapsedRealtime();
-                firstTime += 30 * DateUtils.MINUTE_IN_MILLIS;
+                firstTime += RATE_TIMES * DateUtils.MINUTE_IN_MILLIS;
                 am.setRepeating(AlarmManager.ELAPSED_REALTIME, firstTime,
-                        30 * DateUtils.MINUTE_IN_MILLIS, mSender);
+                        RATE_TIMES * DateUtils.MINUTE_IN_MILLIS, mSender);
             }
         }
     }

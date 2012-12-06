@@ -4,8 +4,6 @@ package org.bluestome.satelliteweather;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
@@ -48,6 +46,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -92,9 +91,10 @@ public class MainActivity extends Activity implements OnClickListener {
                         break;
                     case 0x0105:
                         Drawable drawable = (Drawable) msg.obj;
-                        BitmapDrawable bd = (BitmapDrawable) drawable;
-                        Bitmap bm = bd.getBitmap();
-                        imgView.setImageBitmap(bm);
+                        // BitmapDrawable bd = (BitmapDrawable) drawable;
+                        // Bitmap bm = bd.getBitmap();
+                        // imgView.setImageBitmap(bm);
+                        imgView.setImageDrawable(drawable);
                         break;
                     case 0x0106:
                         String t = (String) msg.obj;
@@ -121,9 +121,9 @@ public class MainActivity extends Activity implements OnClickListener {
                         play();
                         break;
                     case 0x0202:
-                    	init();
-                    	adapter.notifyDataSetChanged();
-                    	break;
+                        init();
+                        adapter.notifyDataSetChanged();
+                        break;
                 }
                 if (showLog.getText().toString().length() > 0) {
                     btnClearConsole.setEnabled(true);
@@ -167,13 +167,11 @@ public class MainActivity extends Activity implements OnClickListener {
             init();
         }
     }
-    
-    
 
     @Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
         pathch();
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             // 当前为横屏， 在此处添加额外的处理代码
@@ -186,11 +184,9 @@ public class MainActivity extends Activity implements OnClickListener {
             initVUI();
             init();
         }
-	}
+    }
 
-
-
-	/**
+    /**
      * 竖屏初始化UI
      */
     private void initVUI() {
@@ -287,6 +283,12 @@ public class MainActivity extends Activity implements OnClickListener {
                     adapter.add(f.getName());
                 }
                 if (adapter.getCount() > 0) {
+                    adapter.sort(new Comparator<String>() {
+                        @Override
+                        public int compare(String lhs, String rhs) {
+                            return lhs.compareTo(rhs);
+                        }
+                    });
                     spinner.setEnabled(true);
                     spinner.setAdapter(adapter);
                     spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -452,6 +454,7 @@ public class MainActivity extends Activity implements OnClickListener {
                         }
                     }).start();
                     int i = 1;
+                    long ss = System.currentTimeMillis();
                     do {
                         msg = new Message();
                         msg.what = 0x0102;
@@ -459,7 +462,7 @@ public class MainActivity extends Activity implements OnClickListener {
                         mHandler.sendMessage(msg);
                         i++;
                         SystemClock.sleep(500L);
-                    } while (mList == null);
+                    } while (mList == null && (System.currentTimeMillis() <= (ss + 5000L)));
                     msg = new Message();
                     msg.what = 0x0102;
                     msg.obj = "从网页解析耗时:" + (System.currentTimeMillis() - s1) + " ms";
@@ -518,7 +521,7 @@ public class MainActivity extends Activity implements OnClickListener {
                     msg.what = 0x0105;
                     msg.obj = drawable;
                     mHandler.sendMessage(msg);
-                    SystemClock.sleep(20L);
+                    SystemClock.sleep(500L);
                 }
             }
         } else {
@@ -532,7 +535,7 @@ public class MainActivity extends Activity implements OnClickListener {
                         msg.what = 0x0105;
                         msg.obj = drawable;
                         mHandler.sendMessage(msg);
-                        SystemClock.sleep(20L);
+                        SystemClock.sleep(500L);
                     }
                 }
             } else {
@@ -693,11 +696,11 @@ public class MainActivity extends Activity implements OnClickListener {
                             + File.separator + name);
                     if (!file.exists()) {
                         file.getParentFile().mkdirs();
-                        if(file.isDirectory()){
-	                        msg = new Message();
-	                        msg.what = 0x0202;
-	                        msg.obj = file.getName();
-	                        mHandler.sendMessage(msg);
+                        if (file.isDirectory()) {
+                            msg = new Message();
+                            msg.what = 0x0202;
+                            msg.obj = file.getName();
+                            mHandler.sendMessage(msg);
                         }
                     }
                     if (file.exists()) {
@@ -718,7 +721,7 @@ public class MainActivity extends Activity implements OnClickListener {
                     byteBuffer.close();
                     msg = new Message();
                     msg.what = 0x0102;
-                    msg.obj = "下载文件["+file.getName()+"]成功!";
+                    msg.obj = "下载文件[" + file.getName() + "]成功!";
                     mHandler.sendMessage(msg);
                     return name;
                 default:
@@ -809,16 +812,16 @@ public class MainActivity extends Activity implements OnClickListener {
         File dir = new File(Constants.SATELINE_CLOUD_IMAGE_PATH);
         File[] files = dir.listFiles();
         for (File f : files) {
-        	if(f.isFile() && f.getName().toLowerCase().endsWith(".jpg")){
-	            String name = f.getName();
-	            String date = analysisURL2(name);
-	            String dst = Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + date
-	                    + File.separator + name;
-	            String src = f.getAbsolutePath();
-	            boolean b = FileUtils.copyFile(src, dst);
-	            Log.d(TAG, "文件[" + name + "]复制" + b);
-	            FileUtils.delFile(f);
-        	}
+            if (f.isFile() && f.getName().toLowerCase().endsWith(".jpg")) {
+                String name = f.getName();
+                String date = analysisURL2(name);
+                String dst = Constants.SATELINE_CLOUD_IMAGE_PATH + File.separator + date
+                        + File.separator + name;
+                String src = f.getAbsolutePath();
+                boolean b = FileUtils.copyFile(src, dst);
+                Log.d(TAG, "文件[" + name + "]复制" + b);
+                FileUtils.delFile(f);
+            }
         }
 
     }

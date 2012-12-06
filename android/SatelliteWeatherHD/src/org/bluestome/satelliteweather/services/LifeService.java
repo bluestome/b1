@@ -5,6 +5,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+import org.bluestome.satelliteweather.biz.SatelliteWeatherBiz;
+
 /**
  * 维持手信在后台运行的Service,被杀死后能够进行重启
  * 
@@ -12,9 +14,8 @@ import android.os.IBinder;
  */
 public class LifeService extends Service {
 
-    private static final String TAG = LifeService.class.getSimpleName();
-
     private static boolean isRunning = false;
+    private SatelliteWeatherBiz biz = null;
 
     @Override
     public void onCreate() {
@@ -27,6 +28,10 @@ public class LifeService extends Service {
         super.onStartCommand(intent, flags, startId);
         isRunning = true;
         flags = START_STICKY;
+        if (null == biz) {
+            biz = new SatelliteWeatherBiz();
+        }
+        biz.initAlarmRecevier();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -34,6 +39,9 @@ public class LifeService extends Service {
     public void onDestroy() {
         super.onDestroy();
         isRunning = false;
+        if (null != biz) {
+            biz.uninitAlarmRecevier();
+        }
         // 进程被关闭后能够自动启动
         Intent serviceIntent = new Intent(this, LifeService.class);
         serviceIntent.putExtra("caller", "LifeService");
@@ -48,4 +56,19 @@ public class LifeService extends Service {
     public static boolean isRunning() {
         return isRunning;
     }
+
+    /**
+     * @return the biz
+     */
+    public SatelliteWeatherBiz getBiz() {
+        return biz;
+    }
+
+    /**
+     * @param biz the biz to set
+     */
+    public void setBiz(SatelliteWeatherBiz biz) {
+        this.biz = biz;
+    }
+
 }

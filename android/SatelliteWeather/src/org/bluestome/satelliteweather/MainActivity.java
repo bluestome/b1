@@ -47,6 +47,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -123,8 +124,8 @@ public class MainActivity extends Activity implements OnClickListener {
                         play();
                         break;
                     case 0x0202:
-                    	init();
-                    	adapter.notifyDataSetChanged();
+                        init();
+                        adapter.notifyDataSetChanged();
                 }
                 if (showLog.getText().toString().length() > 0) {
                     btnClearConsole.setEnabled(true);
@@ -265,6 +266,12 @@ public class MainActivity extends Activity implements OnClickListener {
                     adapter.add(f.getName());
                 }
                 if (adapter.getCount() > 0) {
+                    adapter.sort(new Comparator<String>() {
+                        @Override
+                        public int compare(String lhs, String rhs) {
+                            return lhs.compareTo(rhs);
+                        }
+                    });
                     spinner.setEnabled(true);
                     spinner.setAdapter(adapter);
                     spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -667,11 +674,11 @@ public class MainActivity extends Activity implements OnClickListener {
                             + File.separator + name);
                     if (!file.getParentFile().exists()) {
                         file.getParentFile().mkdirs();
-                        if(file.isDirectory()){
-	                        msg = new Message();
-	                        msg.what = 0x0202;
-	                        msg.obj = file.getName();
-	                        mHandler.sendMessage(msg);
+                        if (file.isDirectory()) {
+                            msg = new Message();
+                            msg.what = 0x0202;
+                            msg.obj = file.getName();
+                            mHandler.sendMessage(msg);
                         }
                     }
                     if (file.exists()) {
@@ -691,7 +698,7 @@ public class MainActivity extends Activity implements OnClickListener {
                     }
                     msg = new Message();
                     msg.what = 0x0102;
-                    msg.obj = "下载文件["+file.getName()+"]成功!";
+                    msg.obj = "下载文件[" + file.getName() + "]成功!";
                     mHandler.sendMessage(msg);
                     byteBuffer.close();
                     return name;
