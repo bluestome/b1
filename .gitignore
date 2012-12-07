@@ -15,6 +15,7 @@ tmp/
 !.classpath
 !.settings/
 !.loadpath
+!.fatjar
 
 # External tool builders
 .externalToolBuilders/
