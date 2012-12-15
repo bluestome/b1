@@ -57,25 +57,32 @@ public class SatelliteParser {
 					if (null != str && str.length() > 0) {
 						String[] tmps = str.split(",");
 						logger.info("\t 字符串长度:" + tmps.length);
+						int k = 0;
+						for (String st : tmps) {
+							logger.info(k + "=" + st);
+							k++;
+						}
 						/**
 						 * 0:小图 1:大图
 						 */
 						String name = analysisURL(tmps[0]);
+						logger.info("\tzhang:" + name);
 						String date = analysisURL2(name);
-						body = HttpClientUtils
-								.getBody(PREFIX_SATELINE_CLOUD_IMG_URL
-										+ tmps[0]);
-						logger.info("\t小图[" + name + "],时间[" + date + "],大小:"
-								+ body.length);
-
-						name = analysisURL(tmps[1]);
-						date = analysisURL2(name);
-						body = HttpClientUtils
-								.getBody(PREFIX_SATELINE_CLOUD_IMG_URL
-										+ tmps[1]);
-						if (null != body)
-							logger.info("\t大图[" + name + "],时间[" + date
-									+ "],大小:" + body.length);
+						logger.info("\tzhang:" + date);
+						// body = HttpClientUtils
+						// .getBody(PREFIX_SATELINE_CLOUD_IMG_URL
+						// + tmps[0]);
+						// logger.info("\t小图[" + name + "],时间[" + date + "],大小:"
+						// + body.length);
+						//
+						// name = analysisURL(tmps[1]);
+						// date = analysisURL2(name);
+						// body = HttpClientUtils
+						// .getBody(PREFIX_SATELINE_CLOUD_IMG_URL
+						// + tmps[1]);
+						// if (null != body)
+						// logger.info("\t大图[" + name + "],时间[" + date
+						// + "],大小:" + body.length);
 					}
 					logger.info("\r\n");
 				}

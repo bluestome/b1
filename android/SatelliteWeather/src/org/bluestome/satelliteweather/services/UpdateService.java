@@ -48,13 +48,14 @@ public class UpdateService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.d(TAG, "\tzhang:onStartCommand");
-		initAlarmRecevier();
-		// if ((flags & START_FLAG_RETRY) == 0) {
-		// // TODO 执行当前进程
-		// } else {
-		// // TODO 其他替换逻辑
-		// }
+		Log.d(TAG, "\tzhang:onStartCommand,flags[" + flags + "],startId["
+				+ startId + "]");
+		if ((flags & START_FLAG_RETRY) == 0) {
+			// TODO 执行当前进程
+			initAlarmRecevier();
+		} else {
+			// TODO 其他替换逻辑
+		}
 		return Service.START_STICKY;
 	}
 
@@ -98,9 +99,9 @@ public class UpdateService extends Service {
 			mSender = PendingIntent.getBroadcast(this, 0, new Intent(
 					Constants.ACTION_ALARM), 0);
 			firstTime = SystemClock.elapsedRealtime();
-			firstTime += 3 * DateUtils.MINUTE_IN_MILLIS;
+			firstTime += 1 * DateUtils.MINUTE_IN_MILLIS;
 			am.setRepeating(AlarmManager.ELAPSED_REALTIME, firstTime,
-					3 * DateUtils.MINUTE_IN_MILLIS, mSender);
+					1 * DateUtils.MINUTE_IN_MILLIS, mSender);
 		}
 		Log.d(TAG, "\tzhang:initAlarmRecevier");
 	}
@@ -131,15 +132,18 @@ public class UpdateService extends Service {
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getAction().equalsIgnoreCase(Constants.ACTION_ALARM)) {
 				try {
-					String lastModifyTime = HttpClientUtils
-							.getLastModifiedByUrl(Constants.SATELINE_CLOUD_URL);
-					if (null != lastModifyTime
-							&& !lastModifyTime.equals(MainApp.i()
-									.getLastModifyTime())) {
-						biz.notifyNS("服务端有最新数据,"
-								+ org.bluestome.satelliteweather.utils.DateUtils
-										.getNow());
-						biz.catalog(lastModifyTime);
+					if (MainApp.i().isConnected()) {
+						String lastModifyTime = HttpClientUtils
+								.getLastModifiedByUrl(Constants.SATELINE_CLOUD_URL);
+						if (null != lastModifyTime
+								&& !lastModifyTime.equals(MainApp.i()
+										.getLastModifyTime())) {
+							biz.notifyNS(org.bluestome.satelliteweather.utils.DateUtils
+									.getNow());
+							// 当有网络时触发下载操作
+							Log.d(TAG, "\tzhang 执行更新列表操作");
+							biz.updateList(lastModifyTime);
+						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

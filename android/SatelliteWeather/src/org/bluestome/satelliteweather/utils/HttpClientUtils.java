@@ -15,8 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Http 工具类
@@ -28,8 +26,6 @@ public class HttpClientUtils {
 
 	// HTTP响应头中的文件大小描述
 	public static String CONTENTLENGTH = "Content-Length";
-	private static ScheduledExecutorService exec = Executors
-			.newSingleThreadScheduledExecutor();
 
 	public static boolean validationURL(String url) {
 		boolean success = false;
@@ -38,15 +34,10 @@ public class HttpClientUtils {
 		try {
 			sUrl = new URL(url);
 			conn = (HttpURLConnection) sUrl.openConnection();
-			conn.addRequestProperty("Cache-Control", "no-cache");
-			conn.addRequestProperty("Connection", "keep-alive");
 			conn.setConnectTimeout(5 * 1000);
 			conn.setReadTimeout(10 * 1000);
 			conn.connect();
-			long ss = System.currentTimeMillis();
 			if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-				System.out.println("\t>>>>> 获取状态码耗时:["
-						+ (System.currentTimeMillis() - ss) + "]ms");
 				success = true;
 			}
 		} catch (Exception e) {
@@ -69,8 +60,6 @@ public class HttpClientUtils {
 		try {
 			sUrl = new URL(url);
 			conn = (HttpURLConnection) sUrl.openConnection();
-			conn.addRequestProperty("Cache-Control", "no-cache");
-			conn.addRequestProperty("Connection", "keep-alive");
 			conn.setConnectTimeout(5 * 1000);
 			conn.setReadTimeout(10 * 1000);
 			conn.connect();

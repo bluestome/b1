@@ -144,6 +144,9 @@ public class SatelliteWeatherBiz {
 	 */
 	List<String> catalog(String lastModifyTime) throws Exception {
 		List<String> urlList = new ArrayList<String>();
+		if (!MainApp.i().isConnected()) {
+			return urlList;
+		}
 		byte[] body = HttpClientUtils.getBody(Constants.SATELINE_CLOUD_URL,
 				"If-Modified-Since", new Date().toGMTString());
 		if (null == body || body.length == 0) {

@@ -15,6 +15,9 @@ import org.bluestome.satelliteweather.MainActivity;
 import org.bluestome.satelliteweather.MainApp;
 import org.bluestome.satelliteweather.R;
 import org.bluestome.satelliteweather.common.Constants;
+import org.bluestome.satelliteweather.db.DaoFactory;
+import org.bluestome.satelliteweather.db.dao.FY2DAO;
+import org.bluestome.satelliteweather.utils.DateUtils;
 import org.bluestome.satelliteweather.utils.HttpClientUtils;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
@@ -30,6 +33,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 
 /**
  * 简单卫星云图业务类
@@ -38,6 +42,8 @@ import android.os.Handler;
  * 
  */
 public class SatelliteWeatherSimpleBiz {
+
+	private static String TAG = SatelliteWeatherSimpleBiz.class.getSimpleName();
 
 	Handler mHandler = null;
 
@@ -58,10 +64,11 @@ public class SatelliteWeatherSimpleBiz {
 	 * 
 	 * @throws Exception
 	 */
-	public void catalog(final String lastModifyTime) throws Exception {
+	public void updateList(final String lastModifyTime) throws Exception {
 		MainApp.i().getExecutorService().execute(new Runnable() {
 			@Override
 			public void run() {
+				DaoFactory factory = DaoFactory.getInstance(MainApp.i());
 				List<String> urlList = new ArrayList<String>();
 				try {
 					byte[] body = HttpClientUtils.getBody(
@@ -96,6 +103,20 @@ public class SatelliteWeatherSimpleBiz {
 										.replace(")", "").replace("'", "");
 								if (null != str && str.length() > 0) {
 									final String[] tmps = str.split(",");
+
+									FY2DAO dao = factory.getFY2DAO();
+									String name = analysisURL(tmps[0]);
+									if (!dao.checkNImage(name)) {
+										// 数据库操作
+										String date = analysisURL2(name);
+										String spath = analysisURL3(tmps[0]);
+										String bpath = analysisURL3(tmps[1]);
+										int id = dao.insert(name, spath, bpath,
+												date);
+										if (id > 0) {
+											Log.d(TAG, "\tzhang 添加数据成功");
+										}
+									}
 									urlList.add(0, tmps[0]);
 									MainApp.i().getExecutorService()
 											.execute(new Runnable() {
@@ -208,6 +229,20 @@ public class SatelliteWeatherSimpleBiz {
 			date = date.substring(0, 8);
 		}
 		return date;
+	}
+
+	/**
+	 * 分析URL,获取路径
+	 */
+	private String analysisURL3(String url) {
+		int s = url.lastIndexOf("/");
+		String name = url.substring(0, s + 1);
+		if (null == name || name.equals("")) {
+			name = "/product/2012/201212/"
+					+ DateUtils.getShortNow().replace("-", "").trim()
+					+ "/WXCL/";
+		}
+		return name;
 	}
 
 	/**

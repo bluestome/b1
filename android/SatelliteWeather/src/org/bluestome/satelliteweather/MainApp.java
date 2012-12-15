@@ -18,6 +18,7 @@ public class MainApp extends Application {
 	private Map<String, String> imageCache = new HashMap<String, String>();
 	private String lastModifyTime = null;
 	private AtomicInteger atomicInteger = new AtomicInteger(0x0101);
+	private boolean isConnected = true;
 
 	public static MainApp i() {
 		if (instance == null) {
@@ -75,6 +76,14 @@ public class MainApp extends Application {
 	 */
 	public void setAtomicInteger(AtomicInteger atomicInteger) {
 		this.atomicInteger = atomicInteger;
+	}
+
+	public boolean isConnected() {
+		return isConnected;
+	}
+
+	public void setConnected(boolean isConnected) {
+		this.isConnected = isConnected;
 	}
 
 }

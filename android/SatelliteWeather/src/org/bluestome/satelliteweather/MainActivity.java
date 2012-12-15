@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.bluestome.satelliteweather.common.Constants;
+import org.bluestome.satelliteweather.db.DaoFactory;
+import org.bluestome.satelliteweather.db.dao.FY2DAO;
 import org.bluestome.satelliteweather.services.UpdateService;
 import org.bluestome.satelliteweather.utils.DateUtils;
 import org.bluestome.satelliteweather.utils.FileUtils;
@@ -71,6 +73,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	Spinner spinner = null;
 	ArrayAdapter<String> adapter = null;
 	String date = null;
+	byte[] lock = new byte[0];
+	DaoFactory factory;
 
 	private final Handler mHandler = new Handler() {
 		@Override
@@ -106,7 +110,9 @@ public class MainActivity extends Activity implements OnClickListener {
 					break;
 				case 0x0200:
 					// 将下拉空间设置为可见
-					mLayout3.setVisibility(View.VISIBLE);
+					if (null != mLayout3) {
+						mLayout3.setVisibility(View.VISIBLE);
+					}
 					if (!btnPlay.isEnabled()) {
 						btnPlay.setEnabled(true);
 					}
@@ -128,6 +134,22 @@ public class MainActivity extends Activity implements OnClickListener {
 				case 0x0202:
 					init();
 					adapter.notifyDataSetChanged();
+				case 0x0203:
+					// 执行更新操作
+					MainApp.i().getExecutorService().execute(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								updateList();
+							} catch (Exception e) {
+								Message msg = new Message();
+								msg.what = 0x0102;
+								msg.obj = e.getMessage();
+								sendMessage(msg);
+							}
+						}
+					});
+					break;
 				}
 				if (showLog.getText().toString().length() > 0) {
 					btnClearConsole.setEnabled(true);
@@ -162,7 +184,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		Log.d(TAG, "\tzhang: onCreate");
 		super.onCreate(savedInstanceState);
-		startService(new Intent(MainActivity.this, UpdateService.class));
+		factory = DaoFactory.getInstance(getContext());
 		if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			// 当前为横屏， 在此处添加额外的处理代码
 			setContentView(R.layout.horizontal);
@@ -173,6 +195,21 @@ public class MainActivity extends Activity implements OnClickListener {
 			setContentView(R.layout.main);
 			initVUI();
 			init();
+		}
+		// 异步启动服务
+		MainApp.i().getExecutorService().execute(new Runnable() {
+			@Override
+			public void run() {
+				startService(new Intent(MainActivity.this, UpdateService.class));
+			}
+		});
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (null == factory) {
+			factory = DaoFactory.getInstance(getContext());
 		}
 	}
 
@@ -337,76 +374,100 @@ public class MainActivity extends Activity implements OnClickListener {
 	/**
 	 * @throws Exception
 	 */
-	synchronized List<String> catalog() throws Exception { // WebsiteBean bean
+	List<String> updateList() throws Exception { // WebsiteBean bean
 		List<String> urlList = new ArrayList<String>();
-		byte[] body = HttpClientUtils.getBody(Constants.SATELINE_CLOUD_URL);
-		Message msg = new Message();
-		msg.what = 0x0102;
-		msg.obj = "正在获取网页页面内容";
-		mHandler.sendMessage(msg);
-		if (null == body || body.length == 0) {
-			msg = new Message();
-			msg.what = 0x0102;
-			msg.obj = "获取服务端返回的内容为空";
-			mHandler.sendMessage(msg);
-			return urlList;
-		}
-		Parser parser = new Parser();
-		String html = new String(body, "GB2312");
-		parser.setInputHTML(html);
-		parser.setEncoding("GB2312");
-		msg = new Message();
-		msg.what = 0x0102;
-		msg.obj = "正在解析页面内容";
-		mHandler.sendMessage(msg);
-		NodeFilter fileter = new NodeClassFilter(CompositeTag.class);
-		NodeList list = parser.extractAllNodesThatMatch(fileter)
-				.extractAllNodesThatMatch(
-						new HasAttributeFilter("id", "mycarousel")); // id
-
-		if (null != list && list.size() > 0) {
-			CompositeTag div = (CompositeTag) list.elementAt(0);
-			parser = new Parser();
-			parser.setInputHTML(div.toHtml());
-			NodeFilter linkFilter = new NodeClassFilter(LinkTag.class);
-			NodeList linkList = parser.extractAllNodesThatMatch(linkFilter);
-			msg = new Message();
-			msg.what = 0x0102;
-			msg.obj = "正在解析页面子元素";
-			mHandler.sendMessage(msg);
-			if (linkList != null && linkList.size() > 0) {
-				for (int i = 0; i < linkList.size(); i++) {
-					LinkTag link = (LinkTag) linkList.elementAt(i);
-					String str = link.getLink().replace("view_text_img(", "")
-							.replace(")", "").replace("'", "");
-					if (null != str && str.length() > 0) {
-						final String[] tmps = str.split(",");
-						if (null != tmps[0] && tmps[0].length() > 0
-								&& !tmps[0].equals("")) {
-							urlList.add(0, tmps[0]);
-							if (!MainApp.i().getImageCache()
-									.containsKey(tmps[0])) {
-								MainApp.i().getExecutorService()
-										.execute(new Runnable() {
-											@Override
-											public void run() {
-												loadImageFromUrl(Constants.PREFIX_SATELINE_CLOUD_IMG_URL
-														+ tmps[0]);
-											}
-										});
-							}
-						}
-					}
-
+		synchronized (lock) {
+			String lastModifyTime = HttpClientUtils
+					.getLastModifiedByUrl(Constants.SATELINE_CLOUD_URL);
+			if (null != lastModifyTime
+					&& !lastModifyTime.equals(MainApp.i().getLastModifyTime())) {
+				byte[] body = HttpClientUtils
+						.getBody(Constants.SATELINE_CLOUD_URL);
+				Message msg = new Message();
+				msg.what = 0x0102;
+				msg.obj = "正在获取网页页面内容";
+				mHandler.sendMessage(msg);
+				if (null == body || body.length == 0) {
+					msg = new Message();
+					msg.what = 0x0102;
+					msg.obj = "获取服务端返回的内容为空";
+					mHandler.sendMessage(msg);
+					return urlList;
 				}
+				Parser parser = new Parser();
+				String html = new String(body, "GB2312");
+				parser.setInputHTML(html);
+				parser.setEncoding("GB2312");
+				msg = new Message();
+				msg.what = 0x0102;
+				msg.obj = "正在解析页面内容";
+				mHandler.sendMessage(msg);
+				NodeFilter fileter = new NodeClassFilter(CompositeTag.class);
+				NodeList list = parser.extractAllNodesThatMatch(fileter)
+						.extractAllNodesThatMatch(
+								new HasAttributeFilter("id", "mycarousel")); // id
+
+				if (null != list && list.size() > 0) {
+					CompositeTag div = (CompositeTag) list.elementAt(0);
+					parser = new Parser();
+					parser.setInputHTML(div.toHtml());
+					NodeFilter linkFilter = new NodeClassFilter(LinkTag.class);
+					NodeList linkList = parser
+							.extractAllNodesThatMatch(linkFilter);
+					msg = new Message();
+					msg.what = 0x0102;
+					msg.obj = "正在解析页面子元素";
+					mHandler.sendMessage(msg);
+					if (linkList != null && linkList.size() > 0) {
+						for (int i = 0; i < linkList.size(); i++) {
+							LinkTag link = (LinkTag) linkList.elementAt(i);
+							String str = link.getLink()
+									.replace("view_text_img(", "")
+									.replace(")", "").replace("'", "");
+							if (null != str && str.length() > 0) {
+								final String[] tmps = str.split(",");
+								FY2DAO dao = factory.getFY2DAO();
+								if (null != tmps[0] && tmps[0].length() > 0
+										&& !tmps[0].equals("")) {
+									String name = analysisURL(tmps[0]);
+									if (!dao.checkNImage(name)) {
+										// 数据库操作
+										String date = analysisURL2(name);
+										String spath = analysisURL3(tmps[0]);
+										String bpath = analysisURL3(tmps[1]);
+										int id = dao.insert(name, spath, bpath,
+												date);
+										if (id > 0) {
+											Log.d(TAG, "\tzhang 添加数据成功");
+										}
+									}
+									urlList.add(0, tmps[0]);
+									if (!MainApp.i().getImageCache()
+											.containsKey(tmps[0])) {
+										MainApp.i().getExecutorService()
+												.execute(new Runnable() {
+													@Override
+													public void run() {
+														loadImageFromUrl(Constants.PREFIX_SATELINE_CLOUD_IMG_URL
+																+ tmps[0]);
+													}
+												});
+									}
+								}
+							}
+
+						}
+						MainApp.i().setLastModifyTime(lastModifyTime);
+					}
+				}
+				if (null != parser)
+					parser = null;
+				msg = new Message();
+				msg.what = 0x0102;
+				msg.obj = "解析页面结束";
+				mHandler.sendMessage(msg);
 			}
 		}
-		if (null != parser)
-			parser = null;
-		msg = new Message();
-		msg.what = 0x0102;
-		msg.obj = "解析页面结束";
-		mHandler.sendMessage(msg);
 		return urlList;
 	}
 
@@ -438,7 +499,7 @@ public class MainActivity extends Activity implements OnClickListener {
 								msg.what = 0x0102;
 								msg.obj = "执行下载请求";
 								mHandler.sendMessage(msg);
-								mList = catalog();
+								mList = updateList();
 							} catch (Exception e) {
 								Message msg = new Message();
 								msg.what = 0x0102;
@@ -695,10 +756,10 @@ public class MainActivity extends Activity implements OnClickListener {
 					}
 				}
 				if (file.exists()) {
-					msg = new Message();
-					msg.what = 0x0102;
-					msg.obj = "已经存在文件:" + name;
-					mHandler.sendMessage(msg);
+					// msg = new Message();
+					// msg.what = 0x0102;
+					// msg.obj = "已经存在文件:" + name;
+					// mHandler.sendMessage(msg);
 					return name;
 				}
 				in = connection.getInputStream();
@@ -771,6 +832,20 @@ public class MainActivity extends Activity implements OnClickListener {
 			date = date.substring(0, 8);
 		}
 		return date;
+	}
+
+	/**
+	 * 分析URL,获取路径
+	 */
+	private static String analysisURL3(String url) {
+		int s = url.lastIndexOf("/");
+		String name = url.substring(0, s + 1);
+		if (null == name || name.equals("")) {
+			name = "/product/2012/201212/"
+					+ DateUtils.getShortNow().replace("-", "").trim()
+					+ "/WXCL/";
+		}
+		return name;
 	}
 
 	/**
