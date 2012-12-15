@@ -16,6 +16,7 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * 后台定时更新列表
@@ -32,6 +33,7 @@ public class UpdateService extends Service {
 	private PendingIntent mSender;
 	private AlarmRecevier mAlarmRecevier;
 	private AlarmManager am;
+	private boolean isRegisterAlarm;
 
 	public UpdateService() {
 		Log.d(TAG, "\tzhang:无参数构造函数");
@@ -51,10 +53,19 @@ public class UpdateService extends Service {
 		Log.d(TAG, "\tzhang:onStartCommand,flags[" + flags + "],startId["
 				+ startId + "]");
 		if ((flags & START_FLAG_RETRY) == 0) {
+			Toast.makeText(getApplicationContext(),
+					"服务被重启，或者2次调用,register:" + isRegisterAlarm,
+					Toast.LENGTH_SHORT).show();
 			// TODO 执行当前进程
-			initAlarmRecevier();
+			uninitAlarmRecevier();
 		} else {
 			// TODO 其他替换逻辑
+			Toast.makeText(getApplicationContext(),
+					"其他服务启动状态:" + flags + ",registerAlarm:" + isRegisterAlarm,
+					Toast.LENGTH_SHORT).show();
+		}
+		if (!isRegisterAlarm) {
+			initAlarmRecevier();
 		}
 		return Service.START_STICKY;
 	}
@@ -99,10 +110,11 @@ public class UpdateService extends Service {
 			mSender = PendingIntent.getBroadcast(this, 0, new Intent(
 					Constants.ACTION_ALARM), 0);
 			firstTime = SystemClock.elapsedRealtime();
-			firstTime += 1 * DateUtils.MINUTE_IN_MILLIS;
+			firstTime += 30 * DateUtils.MINUTE_IN_MILLIS;
 			am.setRepeating(AlarmManager.ELAPSED_REALTIME, firstTime,
-					1 * DateUtils.MINUTE_IN_MILLIS, mSender);
+					30 * DateUtils.MINUTE_IN_MILLIS, mSender);
 		}
+		isRegisterAlarm = true;
 		Log.d(TAG, "\tzhang:initAlarmRecevier");
 	}
 
@@ -118,6 +130,7 @@ public class UpdateService extends Service {
 		if (mSender != null) {
 			am.cancel(mSender);
 		}
+		isRegisterAlarm = false;
 		Log.d(TAG, "\tzhang:uninitAlarmRecevier");
 	}
 
