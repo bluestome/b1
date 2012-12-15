@@ -25,8 +25,8 @@ public class HttpClientUtils {
 	private static GetMethod getMethod = null;
 
 	private static PostMethod postMethod = null;
-	
-	//HTTP响应头中的文件大小描述
+
+	// HTTP响应头中的文件大小描述
 	public static String CONTENTLENGTH = "Content-Length";
 
 	/**
@@ -121,37 +121,38 @@ public class HttpClientUtils {
 		long end = System.currentTimeMillis();
 		return result;
 	}
-	
+
 	/**
 	 * 调用HttpURLConnection获取文件大小
+	 * 
 	 * @param url
 	 * @return
 	 */
-	public static String getHttpConentLength(String url){
+	public static String getHttpConentLength(String url) {
 		long start = System.currentTimeMillis();
 		String result = null;
 		URL urlc = null;
 		HttpURLConnection conn = null;
-		try{
+		try {
 			urlc = new URL(url);
-			conn = (HttpURLConnection)urlc.openConnection();
-			conn.setDoInput(true);
+			conn = (HttpURLConnection) urlc.openConnection();
 			conn.connect();
 			int code = conn.getResponseCode();
-			if(code == HttpURLConnection.HTTP_OK){
+			if (code == HttpURLConnection.HTTP_OK) {
 				result = String.valueOf(conn.getContentLength());
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally{
-			System.out.println(" > 获取文件大小耗时:["+(System.currentTimeMillis()-start)+"]ms");
-			if(null != conn){
+		} finally {
+			System.out.println(" > 获取文件大小耗时:["
+					+ (System.currentTimeMillis() - start) + "]ms");
+			if (null != conn) {
 				conn.disconnect();
 			}
 		}
 		return result;
 	}
-	
+
 	/**
 	 * 获取响应体
 	 * 
@@ -185,7 +186,7 @@ public class HttpClientUtils {
 	 * @param url
 	 * @return
 	 */
-	public static String getResponseBody(String url,String charset) {
+	public static String getResponseBody(String url, String charset) {
 		String value = "";
 		try {
 			httpclient = new HttpClient();
@@ -204,31 +205,32 @@ public class HttpClientUtils {
 		}
 		return value;
 	}
+
 	/**
 	 * 获取页面的最后修改时间
+	 * 
 	 * @param url
 	 * @return
 	 */
-	public static String getLastModifiedByUrl(String url){
+	public static String getLastModifiedByUrl(String url) {
 		String value = "1970-01-01 00:00:00";
 		URL cURL = null;
-		try{
+		try {
 			cURL = new URL(url);
 			URLConnection connection = cURL.openConnection();
-			//获取输出流
-			connection.setDoOutput(true);
-			connection.setConnectTimeout(5*1000);
+			connection.setConnectTimeout(15 * 1000);
 			connection.connect();
-			
+
 			String time = connection.getHeaderField("Last-Modified");
 			Date date = DateUtils.parserDate(time);
-			value = DateUtils.formatDate(date, DateUtils.FULL_STANDARD_PATTERN2);
-		}catch(Exception e){
-			System.err.println("ERROR:"+e);
-		}		
+			value = DateUtils
+					.formatDate(date, DateUtils.FULL_STANDARD_PATTERN2);
+		} catch (Exception e) {
+			System.err.println("ERROR:" + e);
+		}
 		return value;
 	}
-	
+
 	/**
 	 * 获取响应体
 	 * 
@@ -257,7 +259,8 @@ public class HttpClientUtils {
 		return value;
 	}
 
-	public static String encodeURL(String url, String encode) throws UnsupportedEncodingException {
+	public static String encodeURL(String url, String encode)
+			throws UnsupportedEncodingException {
 		StringBuilder sb = new StringBuilder();
 		StringBuilder noAsciiPart = new StringBuilder();
 		for (int i = 0; i < url.length(); i++) {
@@ -266,9 +269,7 @@ public class HttpClientUtils {
 				noAsciiPart.append(c);
 			} else {
 				if (noAsciiPart.length() != 0) {
-					sb
-							.append(URLEncoder.encode(noAsciiPart.toString(),
-									encode));
+					sb.append(URLEncoder.encode(noAsciiPart.toString(), encode));
 					noAsciiPart.delete(0, noAsciiPart.length());
 				}
 				sb.append(c);
@@ -295,7 +296,7 @@ public class HttpClientUtils {
 		try {
 			httpclient = new HttpClient();
 			// params.setContentCharset("GBK");
-			getMethod = new GetMethod(encodeURL(url,"UTF-8"));
+			getMethod = new GetMethod(encodeURL(url, "UTF-8"));
 			// getMethod.setParams(params);
 
 			// 破解防盗链配置
@@ -305,12 +306,12 @@ public class HttpClientUtils {
 				getMethod.setRequestHeader("Cookie", cookie);
 			int statusCode = httpclient.executeMethod(getMethod);
 			if (statusCode == HttpStatus.SC_OK) {
-//				charset = getMethod.getResponseHeader("charset");
-//				if(null ==  charset){
-//					
-//				}else{
-					value = getMethod.getResponseBody();
-//				}
+				// charset = getMethod.getResponseHeader("charset");
+				// if(null == charset){
+				//
+				// }else{
+				value = getMethod.getResponseBody();
+				// }
 			}
 		} catch (Exception e) {
 			System.err.println(e);
@@ -331,25 +332,25 @@ public class HttpClientUtils {
 		String imgurl = "http://bizhi.zhuoku.com/2009//03/25/lvye/Lvye43.jpg";
 		String website = "http://www.sky-mobi.com/";
 		try {
-			
-			String length = getHttpHeaderResponse(website,CONTENTLENGTH);
-			
-			System.out.println(length == null ? "NULL" : length );
-			
-//			boolean suc = validationURL(url);
-//			boolean suc = validationURL(pushUrl);
-			
-//			System.out.println("suc:"+suc);
-			
-//			httpclient = new HttpClient();
-//			getMethod = new GetMethod(
-//					url);
-//
-//			int statusCode = httpclient.executeMethod(getMethod);
-//			if (statusCode == HttpStatus.SC_OK) {
-//				value = new String(getMethod.getResponseBody(), "UTF-8");
-//				// result = getMethod.getResponseHeader(headerName).getValue();
-//			}
+
+			String length = getHttpHeaderResponse(website, CONTENTLENGTH);
+
+			System.out.println(length == null ? "NULL" : length);
+
+			// boolean suc = validationURL(url);
+			// boolean suc = validationURL(pushUrl);
+
+			// System.out.println("suc:"+suc);
+
+			// httpclient = new HttpClient();
+			// getMethod = new GetMethod(
+			// url);
+			//
+			// int statusCode = httpclient.executeMethod(getMethod);
+			// if (statusCode == HttpStatus.SC_OK) {
+			// value = new String(getMethod.getResponseBody(), "UTF-8");
+			// // result = getMethod.getResponseHeader(headerName).getValue();
+			// }
 		} catch (Exception e) {
 			System.err.println(e);
 		} finally {
@@ -358,12 +359,12 @@ public class HttpClientUtils {
 			if (null != httpclient)
 				httpclient = null;
 		}
-//		if (!"".equalsIgnoreCase(value)) {
-//			int start = value.indexOf("intro=") + 6;
-//			int end = value.indexOf("comment");
-//			String tmp = value.substring(start, end);
-//			System.out.println("value:" + value.replace(tmp, "\"\" "));
-//		}
+		// if (!"".equalsIgnoreCase(value)) {
+		// int start = value.indexOf("intro=") + 6;
+		// int end = value.indexOf("comment");
+		// String tmp = value.substring(start, end);
+		// System.out.println("value:" + value.replace(tmp, "\"\" "));
+		// }
 	}
 
 }

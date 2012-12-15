@@ -24,125 +24,41 @@ import org.htmlparser.tags.CompositeTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.NodeList;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.SystemClock;
-import android.text.format.DateUtils;
+import android.os.Handler;
 
 /**
- * @ClassName: Biz
- * @Description: TODO
- * @author Bluestome.Zhang
- * @date 2012-12-3 下午05:28:38
+ * 简单卫星云图业务类
+ * 
+ * @author bluestome
+ * 
  */
-public class SatelliteWeatherBiz {
+public class SatelliteWeatherSimpleBiz {
 
-	// 发送统计日志
-	private PendingIntent mSender;
-	private AlarmRecevier mAlarmRecevier;
-	private AlarmManager am;
+	Handler mHandler = null;
 
 	/**
-	 * 初始化设置
-	 */
-	public void initAlarmRecevier() {
-		if (null != MainApp.i()) {
-			mAlarmRecevier = new AlarmRecevier();
-			IntentFilter intentFilter = new IntentFilter();
-			intentFilter.addAction(Constants.ACTION_ALARM);
-			MainApp.i().registerReceiver(mAlarmRecevier, intentFilter);
-			long firstTime = 0L;
-			am = (AlarmManager) MainApp.i().getSystemService(
-					Context.ALARM_SERVICE);
-			if (am != null) {
-				// 发送终端统计数据
-				mSender = PendingIntent.getBroadcast(MainApp.i(), 0,
-						new Intent(Constants.ACTION_ALARM), 0);
-				firstTime = SystemClock.elapsedRealtime();
-				firstTime += 30 * DateUtils.MINUTE_IN_MILLIS;
-				am.setRepeating(AlarmManager.ELAPSED_REALTIME, firstTime,
-						30 * DateUtils.MINUTE_IN_MILLIS, mSender);
-			}
-		}
-	}
-
-	/**
-	 * 反注册监听器
-	 */
-	public void uninitAlarmRecevier() {
-		if (null != MainApp.i()) {
-			if (mAlarmRecevier != null) {
-				MainApp.i().unregisterReceiver(mAlarmRecevier);
-			}
-		}
-		if (am == null)
-			return;
-		if (mSender != null) {
-			am.cancel(mSender);
-		}
-	}
-
-	/**
-	 * 定时器，每隔半小时访问一次网站
+	 * 带参数的构造函数
 	 * 
-	 * @author bluestome
-	 * 
+	 * @param mHandler
+	 *            外部传入的处理类，用于同步UI
 	 */
-	private class AlarmRecevier extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equalsIgnoreCase(Constants.ACTION_ALARM)) {
-				try {
-					String lastModifyTime = HttpClientUtils
-							.getLastModifiedByUrl(Constants.SATELINE_CLOUD_URL);
-					if (null != lastModifyTime
-							&& !lastModifyTime.equals(MainApp.i()
-									.getLastModifyTime())) {
-						notifyNS("服务端有最新数据,[" + lastModifyTime + "]");
-						catalog(lastModifyTime);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+	public SatelliteWeatherSimpleBiz(Handler mHandler) {
+		if (null != mHandler) {
+			this.mHandler = mHandler;
 		}
 	}
 
 	/**
-	 * 通知
+	 * 获取云端的更新列表
 	 * 
-	 * @param content
-	 */
-	private void notifyNS(String content) {
-		String ns = Context.NOTIFICATION_SERVICE;
-		NotificationManager mNotificationManager = (NotificationManager) MainApp
-				.i().getSystemService(ns);
-		int icon = R.drawable.ic_launcher;
-		CharSequence tickerText = "卫星云图";
-		long when = System.currentTimeMillis();
-		Notification notification = new Notification(icon, tickerText, when);
-		Context context = MainApp.i();
-		CharSequence contentTitle = "同步数据";
-		Intent notificationIntent = new Intent(MainApp.i(), MainActivity.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(MainApp.i(), 0,
-				notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		notification.defaults = notification.defaults
-				| Notification.DEFAULT_SOUND;
-		notification.setLatestEventInfo(context, contentTitle, content,
-				contentIntent);
-		mNotificationManager.notify(Constants.NOTIFY_ID, notification);
-	}
-
-	/**
 	 * @throws Exception
 	 */
-	List<String> catalog(String lastModifyTime) throws Exception {
+	public List<String> catalog(String lastModifyTime) throws Exception {
 		List<String> urlList = new ArrayList<String>();
 		byte[] body = HttpClientUtils.getBody(Constants.SATELINE_CLOUD_URL,
 				"If-Modified-Since", new Date().toGMTString());
@@ -279,6 +195,31 @@ public class SatelliteWeatherBiz {
 			date = date.substring(0, 8);
 		}
 		return date;
+	}
+
+	/**
+	 * 通知
+	 * 
+	 * @param content
+	 */
+	public void notifyNS(String content) {
+		String ns = Context.NOTIFICATION_SERVICE;
+		NotificationManager mNotificationManager = (NotificationManager) MainApp
+				.i().getSystemService(ns);
+		int icon = R.drawable.ic_launcher;
+		CharSequence tickerText = "卫星云图";
+		long when = System.currentTimeMillis();
+		Notification notification = new Notification(icon, tickerText, when);
+		Context context = MainApp.i();
+		CharSequence contentTitle = "同步数据";
+		Intent notificationIntent = new Intent(MainApp.i(), MainActivity.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(MainApp.i(), 0,
+				notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		notification.defaults = notification.defaults
+				| Notification.DEFAULT_SOUND;
+		notification.setLatestEventInfo(context, contentTitle, content,
+				contentIntent);
+		mNotificationManager.notify(Constants.NOTIFY_ID, notification);
 	}
 
 }

@@ -359,8 +359,8 @@ public class BIZHIParser {
 							}
 							int key = articleDao.insert(article);
 							if (key > 0) {
-								logger.info("添加记录["
-										+ article.getTitle() + "]成功");
+								logger.info("添加记录[" + article.getTitle()
+										+ "]成功");
 								client.add(url, url);
 								article.setId(key);
 								if (getImage(article)) {
@@ -395,11 +395,16 @@ public class BIZHIParser {
 		boolean b = true;
 		ResultBean result = hasPaging2(article.getArticleUrl());
 		if (result.isBool()) {
-			Iterator it = result.getMap().keySet().iterator();
+			Iterator<String> it = result.getMap().keySet().iterator();
 			while (it.hasNext()) {
-				String key = (String) it.next();
+				String key = it.next();
 				LinkBean link = result.getMap().get(key);
-				b = getImage(link, article.getId());
+				try {
+					b = getImage(link, article.getId());
+				} catch (Exception e) {
+					e.printStackTrace();
+					continue;
+				}
 			}
 		}
 
@@ -429,7 +434,7 @@ public class BIZHIParser {
 			Parser p3 = new Parser();
 			p3.setInputHTML(list.toHtml());
 			p3.setEncoding("UTF-8");
-			
+
 			NodeFilter filter2 = new NodeClassFilter(LinkTag.class);
 			NodeList list2 = p3.extractAllNodesThatMatch(filter2)
 					.extractAllNodesThatMatch(
@@ -522,15 +527,11 @@ public class BIZHIParser {
 												+ imgTag.getImageURL());
 									} else {
 										imgBean.setImgUrl(imgTag.getImageURL());
-										imgBean
-												.setHttpUrl(imgTag
-														.getImageURL());
+										imgBean.setHttpUrl(imgTag.getImageURL());
 									}
 								}
 								if (null != imgTag.getAttribute("alt"))
-									imgBean
-											.setTitle(imgTag
-													.getAttribute("alt"));
+									imgBean.setTitle(imgTag.getAttribute("alt"));
 								else
 									imgBean.setTitle("NT:"
 											+ CommonUtil.getDateTimeString());
@@ -585,7 +586,7 @@ public class BIZHIParser {
 			Parser p1 = new Parser();
 			p1.setURL(url);
 			p1.setEncoding("utf-8");
-			
+
 			NodeFilter filter = new NodeClassFilter(ImageTag.class);
 			NodeList list = p1.extractAllNodesThatMatch(filter);
 
@@ -674,8 +675,7 @@ public class BIZHIParser {
 										imgBean.setId(result);
 										client.add(url, url);
 									} else {
-										logger.error(">> 未添加[" + url
-												+ "]到数据库中");
+										logger.error(">> 未添加[" + url + "]到数据库中");
 									}
 								} else {
 									logger.error(">> 缓存中已存在相同的内容 ["
@@ -713,8 +713,8 @@ public class BIZHIParser {
 					if (null == client.get(article.getArticleUrl())) {
 						logger.info("add url[" + article.getArticleUrl()
 								+ "] to cache");
-						client.add(article.getArticleUrl(), article
-								.getArticleUrl());
+						client.add(article.getArticleUrl(),
+								article.getArticleUrl());
 					}
 				}
 			}
@@ -730,9 +730,9 @@ public class BIZHIParser {
 
 			ResultBean result = hasPaging2(bean.getUrl());
 			if (result.isBool()) {
-				Iterator it = result.getMap().keySet().iterator();
+				Iterator<String> it = result.getMap().keySet().iterator();
 				while (it.hasNext()) {
-					String key = (String) it.next();
+					String key = it.next();
 					if (HttpClientUtils.validationURL(key)) {
 						LinkBean link = result.getMap().get(key);
 						try {
@@ -763,10 +763,10 @@ public class BIZHIParser {
 			}
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		try {
-//			update();
+			update();
 			loadImg();
 		} catch (Exception e) {
 			e.printStackTrace();
