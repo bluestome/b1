@@ -16,7 +16,6 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.text.format.DateUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * 后台定时更新列表
@@ -53,16 +52,16 @@ public class UpdateService extends Service {
 		Log.d(TAG, "\tzhang:onStartCommand,flags[" + flags + "],startId["
 				+ startId + "]");
 		if ((flags & START_FLAG_RETRY) == 0) {
-			Toast.makeText(getApplicationContext(),
-					"服务被重启，或者2次调用,register:" + isRegisterAlarm,
-					Toast.LENGTH_SHORT).show();
+			// Toast.makeText(getApplicationContext(),
+			// "服务被重启，或者2次调用,register:" + isRegisterAlarm,
+			// Toast.LENGTH_SHORT).show();
 			// TODO 执行当前进程
 			uninitAlarmRecevier();
 		} else {
 			// TODO 其他替换逻辑
-			Toast.makeText(getApplicationContext(),
-					"其他服务启动状态:" + flags + ",registerAlarm:" + isRegisterAlarm,
-					Toast.LENGTH_SHORT).show();
+			// Toast.makeText(getApplicationContext(),
+			// "其他服务启动状态:" + flags + ",registerAlarm:" + isRegisterAlarm,
+			// Toast.LENGTH_SHORT).show();
 		}
 		if (!isRegisterAlarm) {
 			initAlarmRecevier();

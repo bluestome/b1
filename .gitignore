@@ -17,6 +17,8 @@ tmp/
 !.loadpath
 !.fatjar
 !*.properties
+*.log
+*.log.*
 
 # External tool builders
 .externalToolBuilders/

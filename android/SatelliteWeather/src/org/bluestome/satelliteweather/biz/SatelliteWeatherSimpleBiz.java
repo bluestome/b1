@@ -262,6 +262,9 @@ public class SatelliteWeatherSimpleBiz {
 				long when = System.currentTimeMillis();
 				Notification notification = new Notification(icon, tickerText,
 						when);
+				// 点击后自动清除通知栏的当前通知
+				notification.flags |= Notification.FLAG_AUTO_CANCEL;
+				notification.defaults |= Notification.DEFAULT_SOUND;
 				Context context = MainApp.i();
 				CharSequence contentTitle = "同步数据";
 				Intent notificationIntent = new Intent(MainApp.i(),
@@ -269,8 +272,6 @@ public class SatelliteWeatherSimpleBiz {
 				PendingIntent contentIntent = PendingIntent.getActivity(
 						MainApp.i(), 0, notificationIntent,
 						PendingIntent.FLAG_UPDATE_CURRENT);
-				notification.defaults = notification.defaults
-						| Notification.DEFAULT_SOUND;
 				notification.setLatestEventInfo(context, contentTitle, content,
 						contentIntent);
 				mNotificationManager.notify(Constants.NOTIFY_ID, notification);

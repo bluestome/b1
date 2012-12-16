@@ -206,6 +206,17 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	@Override
+	protected void onStop() {
+		super.onStop();
+		finish();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
+
+	@Override
 	protected void onResume() {
 		super.onResume();
 		if (null == factory) {
