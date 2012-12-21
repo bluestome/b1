@@ -69,20 +69,20 @@ public class SatelliteParser {
 						logger.info("\tzhang:" + name);
 						String date = analysisURL2(name);
 						logger.info("\tzhang:" + date);
-						// body = HttpClientUtils
-						// .getBody(PREFIX_SATELINE_CLOUD_IMG_URL
-						// + tmps[0]);
-						// logger.info("\t小图[" + name + "],时间[" + date + "],大小:"
-						// + body.length);
-						//
-						// name = analysisURL(tmps[1]);
-						// date = analysisURL2(name);
-						// body = HttpClientUtils
-						// .getBody(PREFIX_SATELINE_CLOUD_IMG_URL
-						// + tmps[1]);
-						// if (null != body)
-						// logger.info("\t大图[" + name + "],时间[" + date
-						// + "],大小:" + body.length);
+						body = HttpClientUtils
+								.getBody(PREFIX_SATELINE_CLOUD_IMG_URL
+										+ tmps[0]);
+						logger.info("\t小图[" + name + "],时间[" + date + "],大小:"
+								+ body.length);
+						name = analysisURL(tmps[1]);
+						date = analysisURL2(name);
+						body = HttpClientUtils
+								.getBody(PREFIX_SATELINE_CLOUD_IMG_URL
+										+ tmps[1]);
+						if (null != body) {
+							logger.info("\t大图[" + name + "],时间[" + date
+									+ "],大小:" + body.length);
+						}
 					}
 					logger.info("\r\n");
 				}
