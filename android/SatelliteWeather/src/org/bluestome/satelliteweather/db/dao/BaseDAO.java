@@ -1,5 +1,11 @@
 package org.bluestome.satelliteweather.db.dao;
 
+/**
+ * DAO基类
+ * 
+ * @author bluestome
+ * 
+ */
 public interface BaseDAO {
 
 	/**
