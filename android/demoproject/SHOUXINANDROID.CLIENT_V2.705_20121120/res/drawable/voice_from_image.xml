@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<animation-list android:oneshot="false"
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:duration="210" android:drawable="@drawable/chat_from_voice_play_s3" />
-    <item android:duration="210" android:drawable="@drawable/chat_from_voice_play_s1" />
-    <item android:duration="210" android:drawable="@drawable/chat_from_voice_play_s2" />
-    <item android:duration="210" android:drawable="@drawable/chat_from_voice_play_s3" />
-</animation-list>
